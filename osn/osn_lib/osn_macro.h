@@ -11,4 +11,13 @@
 
 #define SAFE_DELETE(x) if(NULL != x) { delete x; x = NULL; } 
 
+#define MEMBER_VALUE(type, name)    \
+    private:    \
+        type m_##name;  \
+    public: \
+        type get##name() const    \
+        { return m_##name; }    \
+        void set##name(const type &value)   \
+        { m_##name = value; }
+
 #endif /* osn_macro_h */

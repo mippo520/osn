@@ -11,19 +11,25 @@
 
 #include <queue>
 #include "osn.h"
-
-class OsnMessage;
+#include "osn_message.h"
 
 class OsnService {
 public:
     OsnService();
-    ~OsnService();
+    virtual ~OsnService();
 public:
-    void pushMsg(OsnMessage* msg);
+    void init();
     void exit();
 private:
-    std::queue<OsnMessage*> m_QueMsg;
-    oBOOL m_isInGlobal;
+    friend class OsnServiceManager;
+    virtual oBOOL dispatch();
+    void pushMsg(const OsnMessage &msg);
+    oUINT32 getMsgSize();
+private:
+    std::queue<OsnMessage> m_queMsg;
+    MEMBER_VALUE(oBOOL, IsInGlobal)
+    MEMBER_VALUE(oINT32, Id)
+    oINT32 m_nCount;
 };
 
 #endif /* osn_service_hpp */

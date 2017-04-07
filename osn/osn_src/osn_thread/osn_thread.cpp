@@ -11,17 +11,20 @@
 #include <unistd.h>
 
 oBOOL OsnThread::s_isQuit = false;
+std::mutex OsnThread::s_Mutex;
+std::condition_variable OsnThread::s_Cond;
+oINT32 OsnThread::s_SleepCount = 0;
 
 OsnThread::OsnThread()
     : m_Thread(&OsnThread::work, this)
-    , m_nId(0)
+    , m_Id(0)
 {
     
 }
 
 OsnThread::~OsnThread()
 {
-    
+    std::condition_variable condvar;
 }
 
 void OsnThread::init(oBOOL isMainWait)
@@ -35,22 +38,5 @@ void OsnThread::init(oBOOL isMainWait)
     }
 }
 
-void OsnThread::work()
-{
-    while (!s_isQuit) {
-        sleep(1);
-        printf("OsnThread::work!\n");
 
-    }
-}
-
-void OsnThread::setId(oINT32 id)
-{
-    m_nId = id;
-}
-
-oINT32 OsnThread::getId()
-{
-    return m_nId;
-}
 

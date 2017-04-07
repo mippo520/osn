@@ -22,13 +22,13 @@ OsnTimerThread::~OsnTimerThread()
 
 void OsnTimerThread::work()
 {
-    for (; ; ) {
+    for (;;) {
         if (g_OsnStart.checkAbort()) {
             break;
         }
-
-        printf("OsnTimerThread::work! 2.5 id = %d\n", getId());
-        usleep(2500000);
+        usleep(2500);
+        
+        g_OsnStart.wakeup(0);
     }
     
     s_isQuit = true;

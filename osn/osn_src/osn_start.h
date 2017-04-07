@@ -16,11 +16,12 @@ class OsnThread;
 
 class OsnStart {
     const static oINT32 s_nWeightCount = 32;
-    const static oINT32 s_nWorkerCount = 8;
     static int s_WeightArr[s_nWeightCount];
     static oINT32 s_nThreadIdIdx;
     
     OsnStart();
+public:
+    const static oINT32 s_nWorkerCount = 8;
 public:
     friend class Singleton<OsnStart>;
     ~OsnStart();
@@ -30,14 +31,16 @@ public:
     void exit();
     
     oBOOL checkAbort();
+    void wakeup(oINT32 nSleepCount);
 private:
     void clearThread();
     
     template<class T>
-    void createThread()
+    void createThread(oINT32 nWeight = 0)
     {
         T *pThread = new T();
         pThread->setId(++s_nThreadIdIdx);
+        pThread->setWeight(nWeight);
         m_vecThread.push_back(pThread);
     }
 private:

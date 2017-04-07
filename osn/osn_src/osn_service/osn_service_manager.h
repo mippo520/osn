@@ -9,9 +9,14 @@
 #ifndef osn_service_manager_hpp
 #define osn_service_manager_hpp
 
+
+#include <vector>
+#include <queue>
+#include <mutex>
 #include "osn.h"
 #include "osn_singleton.h"
-#include <vector>
+#include "osn_message.h"
+
 
 class OsnService;
 
@@ -23,26 +28,44 @@ public:
     friend class Singleton<OsnServiceManager>;
     ~OsnServiceManager();
 public:
+    void send(oINT32 nTargetId, oINT32 nValue);
+public:
     void init();
     
     template<class T>
     oINT32 startService()
     {
-        oINT32 nId = getId();
+        oINT32 nId = createId();
         if (nId > 0) {
             T *pService = new T();
             addService(nId, pService);
             pService->setId(nId);
+            pService->init();
         }
         return nId;
     }
     
     void removeService(oINT32 nId);
+    OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
 private:
-    oINT32 getId();
+    friend class OsnService;
+    friend class OsnStart;
+    oINT32 createId();
+    
     void addService(oINT32 nId, OsnService *pService);
+    OsnService* getService(oINT32 nId);
+    
+    void pushMsg(oINT32 nTargetId, const OsnMessage &msg);
+    OsnService* popWorkingService();
+    void pushWarkingService(oINT32 nId);
+    
+    void lock();
+    void unlock();
 private:
     std::vector<OsnService*> m_vecServices;
+    std::queue<oINT32> m_queIds;
+    std::queue<oINT32> m_queHadMsgIds;
+    std::mutex m_Mutex;
 };
 
 #define g_ServiceManager Singleton<OsnServiceManager>::instance()

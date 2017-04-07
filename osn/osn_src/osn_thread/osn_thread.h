@@ -10,22 +10,26 @@
 #define osn_thread_hpp
 #include "osn.h"
 #include <thread>
+#include <mutex>
 
 class OsnThread {
+public:
+    static std::condition_variable s_Cond;
+    static oINT32 s_SleepCount;
 protected:
     static oBOOL s_isQuit;
+    static std::mutex s_Mutex;
 public:
     OsnThread();
-    ~OsnThread();
+    virtual ~OsnThread();
 public:
     void init(oBOOL isMainWait = true);
-    void setId(oINT32 id);
-    oINT32 getId();
 private:
-    virtual void work();
+    virtual void work() = 0;
 private:
     std::thread m_Thread;
-    oINT32 m_nId;
+    MEMBER_VALUE(oINT32, Weight)
+    MEMBER_VALUE(oINT32, Id)
 };
 
 #endif /* osn_thread_hpp */
