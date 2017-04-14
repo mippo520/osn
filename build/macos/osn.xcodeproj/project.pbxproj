@@ -14,6 +14,9 @@
 		92C918821E94C373009BF419 /* osn_thread_worker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C9187F1E94C373009BF419 /* osn_thread_worker.cpp */; };
 		92C918861E94E294009BF419 /* osn_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918841E94E294009BF419 /* osn_service.cpp */; };
 		92C918891E94E41B009BF419 /* osn_service_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918871E94E41B009BF419 /* osn_service_manager.cpp */; };
+		92F88F0F1E9B357500E62286 /* osn_coroutine_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F0D1E9B357500E62286 /* osn_coroutine_manager.cpp */; };
+		92F88F161E9B68A600E62286 /* osn_coroutine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F141E9B68A600E62286 /* osn_coroutine.cpp */; };
+		92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F1B1EA0781700E62286 /* osn_prepared_statement.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +50,16 @@
 		92C918851E94E294009BF419 /* osn_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service.h; path = ../../osn/osn_src/osn_service/osn_service.h; sourceTree = "<group>"; };
 		92C918871E94E41B009BF419 /* osn_service_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_service_manager.cpp; path = ../../osn/osn_src/osn_service/osn_service_manager.cpp; sourceTree = "<group>"; };
 		92C918881E94E41B009BF419 /* osn_service_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service_manager.h; path = ../../osn/osn_src/osn_service/osn_service_manager.h; sourceTree = "<group>"; };
+		92C9188E1E972E89009BF419 /* osn_service_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service_head.h; path = ../../osn/osn_src/osn_service/osn_service_head.h; sourceTree = "<group>"; };
+		92F88F0D1E9B357500E62286 /* osn_coroutine_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_coroutine_manager.cpp; path = ../../osn/osn_src/osn_coroutine/osn_coroutine_manager.cpp; sourceTree = "<group>"; };
+		92F88F0E1E9B357500E62286 /* osn_coroutine_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_coroutine_manager.h; path = ../../osn/osn_src/osn_coroutine/osn_coroutine_manager.h; sourceTree = "<group>"; };
+		92F88F101E9B597C00E62286 /* osn_coroutine_head.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osn_coroutine_head.h; path = ../../osn/osn_src/osn_coroutine/osn_coroutine_head.h; sourceTree = "<group>"; };
+		92F88F121E9B5C5100E62286 /* osn_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_arr_manager.h; path = ../../osn/osn_lib/osn_arr_manager.h; sourceTree = "<group>"; };
+		92F88F141E9B68A600E62286 /* osn_coroutine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_coroutine.cpp; path = ../../osn/osn_src/osn_coroutine/osn_coroutine.cpp; sourceTree = "<group>"; };
+		92F88F151E9B68A600E62286 /* osn_coroutine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_coroutine.h; path = ../../osn/osn_src/osn_coroutine/osn_coroutine.h; sourceTree = "<group>"; };
+		92F88F1A1E9DCA5200E62286 /* osn_cache_arr_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osn_cache_arr_manager.h; path = ../../osn/osn_lib/osn_cache_arr_manager.h; sourceTree = "<group>"; };
+		92F88F1B1EA0781700E62286 /* osn_prepared_statement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_prepared_statement.cpp; path = ../../osn/osn_lib/osn_prepared_statement.cpp; sourceTree = "<group>"; };
+		92F88F1C1EA0781700E62286 /* osn_prepared_statement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_prepared_statement.h; path = ../../osn/osn_lib/osn_prepared_statement.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +92,7 @@
 		92C9186C1E949154009BF419 /* osn_src */ = {
 			isa = PBXGroup;
 			children = (
+				92F88F0C1E9B344400E62286 /* osn_coroutine */,
 				92C918831E94E20B009BF419 /* osn_service */,
 				92C918751E9495E9009BF419 /* osn_thread */,
 				92C9186F1E9491F3009BF419 /* osn_main.cpp */,
@@ -100,10 +114,14 @@
 		92C9186E1E949184009BF419 /* osn_lib */ = {
 			isa = PBXGroup;
 			children = (
+				92F88F1B1EA0781700E62286 /* osn_prepared_statement.cpp */,
+				92F88F1C1EA0781700E62286 /* osn_prepared_statement.h */,
 				92C918741E9492AB009BF419 /* osn_singleton.h */,
 				92C918791E949BD4009BF419 /* osn_type.h */,
 				92C9187B1E949DAF009BF419 /* osn.h */,
 				92C9187C1E94C149009BF419 /* osn_macro.h */,
+				92F88F121E9B5C5100E62286 /* osn_arr_manager.h */,
+				92F88F1A1E9DCA5200E62286 /* osn_cache_arr_manager.h */,
 			);
 			name = osn_lib;
 			sourceTree = "<group>";
@@ -128,8 +146,21 @@
 				92C918851E94E294009BF419 /* osn_service.h */,
 				92C918871E94E41B009BF419 /* osn_service_manager.cpp */,
 				92C918881E94E41B009BF419 /* osn_service_manager.h */,
+				92C9188E1E972E89009BF419 /* osn_service_head.h */,
 			);
 			name = osn_service;
+			sourceTree = "<group>";
+		};
+		92F88F0C1E9B344400E62286 /* osn_coroutine */ = {
+			isa = PBXGroup;
+			children = (
+				92F88F0D1E9B357500E62286 /* osn_coroutine_manager.cpp */,
+				92F88F0E1E9B357500E62286 /* osn_coroutine_manager.h */,
+				92F88F101E9B597C00E62286 /* osn_coroutine_head.h */,
+				92F88F141E9B68A600E62286 /* osn_coroutine.cpp */,
+				92F88F151E9B68A600E62286 /* osn_coroutine.h */,
+			);
+			name = osn_coroutine;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,10 +223,13 @@
 				92C918891E94E41B009BF419 /* osn_service_manager.cpp in Sources */,
 				92C918811E94C373009BF419 /* osn_thread_timer.cpp in Sources */,
 				92C918821E94C373009BF419 /* osn_thread_worker.cpp in Sources */,
+				92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */,
+				92F88F0F1E9B357500E62286 /* osn_coroutine_manager.cpp in Sources */,
 				92C918781E949695009BF419 /* osn_thread.cpp in Sources */,
 				92C918701E9491F3009BF419 /* osn_main.cpp in Sources */,
 				92C918861E94E294009BF419 /* osn_service.cpp in Sources */,
 				92C918731E949223009BF419 /* osn_start.cpp in Sources */,
+				92F88F161E9B68A600E62286 /* osn_coroutine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +326,10 @@
 		929736091E948F590067EE20 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_XOPEN_SOURCE=1",
+					"Debug=1",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -299,6 +337,7 @@
 		9297360A1E948F590067EE20 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "_XOPEN_SOURCE=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

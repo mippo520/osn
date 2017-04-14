@@ -38,11 +38,11 @@ void OsnStart::init()
 {
     printf("OsnStart::init \n");
     
-    for (oINT32 i = 0; i < 100; ++i) {
-        g_ServiceManager.startService<OsnService>();
-    }
+//    for (oINT32 i = 0; i < 100; ++i) {
+//        g_ServiceManager.startService<OsnService>();
+//    }
     
-    g_ServiceManager.send(1, -1);
+//    g_ServiceManager.send(1, -1);
     
     clearThread();
     
@@ -51,8 +51,6 @@ void OsnStart::init()
     for (oINT32 i = 0; i < s_nWorkerCount; ++i) {
         createThread<OsnWorkerThread>(s_WeightArr[i]);
     }
-
-
 }
 
 void OsnStart::start()

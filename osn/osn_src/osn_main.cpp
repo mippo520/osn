@@ -10,6 +10,9 @@
 #include "osn_start.h"
 #include <unistd.h>
 #include <queue>
+#include "osn_coroutine_manager.h"
+#include <stdio.h>
+
 
 int main(int argc, const char * argv[]) {
 

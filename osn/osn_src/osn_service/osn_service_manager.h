@@ -15,59 +15,40 @@
 #include <mutex>
 #include "osn.h"
 #include "osn_singleton.h"
-#include "osn_message.h"
+#include "osn_arr_manager.h"
+#include "osn_service_head.h"
 
 
 class OsnService;
 
-class OsnServiceManager {
-    const static oINT32 s_nServiceCountBegin = 750;
-    static oINT32 s_nServiceIdx;
+class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved> {
     OsnServiceManager();
 public:
-    friend class Singleton<OsnServiceManager>;
+    friend class OsnSingleton<OsnServiceManager>;
     ~OsnServiceManager();
 public:
-    void send(oINT32 nTargetId, oINT32 nValue);
+    oINT32 send(oINT32 nTargetId, const OSN_SERVICE_MSG &msg);
 public:
-    void init();
+    virtual void init();
     
     template<class T>
     oINT32 startService()
     {
-        oINT32 nId = createId();
-        if (nId > 0) {
-            T *pService = new T();
-            addService(nId, pService);
-            pService->setId(nId);
-            pService->init();
-        }
-        return nId;
+        return makeObj<T>();
     }
     
-    void removeService(oINT32 nId);
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
 private:
     friend class OsnService;
     friend class OsnStart;
-    oINT32 createId();
-    
-    void addService(oINT32 nId, OsnService *pService);
-    OsnService* getService(oINT32 nId);
-    
-    void pushMsg(oINT32 nTargetId, const OsnMessage &msg);
+        
+    oINT32 pushMsg(oINT32 nTargetId, const OSN_SERVICE_MSG &msg);
     OsnService* popWorkingService();
     void pushWarkingService(oINT32 nId);
-    
-    void lock();
-    void unlock();
 private:
-    std::vector<OsnService*> m_vecServices;
-    std::queue<oINT32> m_queIds;
     std::queue<oINT32> m_queHadMsgIds;
-    std::mutex m_Mutex;
 };
 
-#define g_ServiceManager Singleton<OsnServiceManager>::instance()
+#define g_ServiceManager OsnSingleton<OsnServiceManager>::instance()
 
 #endif /* osn_service_manager_hpp */

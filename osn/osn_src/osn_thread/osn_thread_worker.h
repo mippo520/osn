@@ -8,8 +8,12 @@
 
 #ifndef osn_thread_worker_hpp
 #define osn_thread_worker_hpp
+#include <vector>
+#include <mutex>
+#include <queue>
 #include "osn.h"
 #include "osn_thread.h"
+#include "osn_coroutine_head.h"
 
 class OsnWorkerThread : public OsnThread {
 public:
@@ -17,8 +21,6 @@ public:
     ~OsnWorkerThread();
 private:
     virtual void work();
-private:
-
 };
 
 #endif /* osn_thread_worker_hpp */

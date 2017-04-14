@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <mutex>
 #include "osn_service_manager.h"
+#include "osn_coroutine_manager.h"
+
 
 OsnWorkerThread::OsnWorkerThread()
 {
@@ -26,6 +28,7 @@ OsnWorkerThread::~OsnWorkerThread()
 void OsnWorkerThread::work()
 {
     OsnService *pService = NULL;
+
     while (!s_isQuit) {
         pService = g_ServiceManager.dispatchMessage(pService, getWeight());
         if (NULL == pService) {

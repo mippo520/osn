@@ -23,7 +23,7 @@ class OsnStart {
 public:
     const static oINT32 s_nWorkerCount = 8;
 public:
-    friend class Singleton<OsnStart>;
+    friend class OsnSingleton<OsnStart>;
     ~OsnStart();
 public:
     void init();
@@ -47,6 +47,6 @@ private:
     std::vector<OsnThread*> m_vecThread;
 };
 
-#define g_OsnStart Singleton<OsnStart>::instance()
+#define g_OsnStart OsnSingleton<OsnStart>::instance()
 
 #endif /* osn_start_hpp */

@@ -10,14 +10,14 @@
 #define osn_singleton_h
 
 template <typename T>
-class Singleton
+class OsnSingleton
 {
 protected:
     struct object_creator
     {
         object_creator()
         {
-            Singleton<T>::instance();
+            OsnSingleton<T>::instance();
         }
         inline void do_nothing()const {};
     };
@@ -43,6 +43,6 @@ public:
 
 //因为create_object_是类的静态变量，必须有一个通用的声明
 template<typename T>
-typename Singleton<T>::object_creator Singleton<T>::create_object_;
+typename OsnSingleton<T>::object_creator OsnSingleton<T>::create_object_;
 
 #endif /* osn_singleton_h */

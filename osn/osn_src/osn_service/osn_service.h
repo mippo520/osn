@@ -11,25 +11,39 @@
 
 #include <queue>
 #include "osn.h"
-#include "osn_message.h"
+#include "osn_arr_manager.h"
+#include "osn_coroutine_head.h"
+#include "osn_service_head.h"
 
 class OsnService {
+    enum eYieldType
+    {
+        eYT_None = 0,
+        eYT_Call,
+        eYT_Return,
+        eYT_Exit,
+        eYT_Response,
+    };
 public:
-    OsnService();
     virtual ~OsnService();
-public:
-    void init();
-    void exit();
 private:
     friend class OsnServiceManager;
+    friend class OsnArrManager<OsnService, eThread_Saved>;
+    OsnService();
+    virtual void init();
+    virtual void exit();
     virtual oBOOL dispatch();
-    void pushMsg(const OsnMessage &msg);
+    oINT32 pushMsg(const OSN_SERVICE_MSG &msg);
     oUINT32 getMsgSize();
 private:
-    std::queue<OsnMessage> m_queMsg;
+    oINT32 createCO(OSN_COROUTINE_FUNC func);
+    void suspend(oINT32 co, const OSN_CO_ARG &arg);
+private:
+    std::queue<OSN_SERVICE_MSG> m_queMsg;
     MEMBER_VALUE(oBOOL, IsInGlobal)
     MEMBER_VALUE(oINT32, Id)
-    oINT32 m_nCount;
+    std::queue<oINT32> m_queCO;
+    oINT32 m_nSessionCount;
 };
 
 #endif /* osn_service_hpp */
