@@ -29,7 +29,7 @@ private:
     ucontext_t* getCtxPtr();
     OSN_CO_ARG run(const OSN_CO_ARG &arg);
 private:
-    MEMBER_VALUE(oINT32, Id);
+    MEMBER_VALUE(oUINT32, Id);
     MEMBER_VALUE(OSN_COROUTINE_FUNC, Func);
     MEMBER_VALUE(oINT32, State);
     MEMBER_VALUE(ucontext_t, Ctx);

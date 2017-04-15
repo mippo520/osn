@@ -61,7 +61,7 @@ OsnService* OsnServiceManager::popWorkingService()
     return pService;
 }
 
-void OsnServiceManager::pushWarkingService(oINT32 nId)
+void OsnServiceManager::pushWarkingService(oUINT32 nId)
 {
     if (nId > 0)
     {

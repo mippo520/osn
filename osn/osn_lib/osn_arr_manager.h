@@ -59,54 +59,54 @@ public:
         return nId;
     }
 
-    virtual oINT32 createId()
+    virtual oUINT32 createId()
     {
-        oINT32 nId = 0;
+		oUINT32 unId = 0;
         lock();
         if (m_queFreeIds.size() > 0) {
-            nId = m_queFreeIds.front();
+            unId = m_queFreeIds.front();
             m_queFreeIds.pop();
         }
         else
         {
-            nId = ++s_nObjIdx;
+            unId = ++s_nObjIdx;
         }
         unlock();
-        return nId;    
+        return unId;    
     }
     
-    virtual void addObject(oINT32 nId, T *pObj)
+    virtual void addObject(oUINT32 unId, T *pObj)
     {
         lock();
         oUINT32 nCurCount = m_vecObjs.size();
-        if (nId >= nCurCount) {
+        if (unId >= nCurCount) {
             if (0 == nCurCount) {
                 nCurCount = s_nObjCountBegin;
             }
             m_vecObjs.resize(nCurCount * 2);
         }
-        m_vecObjs[nId] = pObj;
+        m_vecObjs[unId] = pObj;
         unlock();
     }
     
-    virtual T* getObject(oINT32 nId)
+    virtual T* getObject(oUINT32 unId)
     {
         T *pObj = NULL;
-        if (nId < m_vecObjs.size()) {
-            pObj = m_vecObjs[nId];
+        if (unId < m_vecObjs.size()) {
+            pObj = m_vecObjs[unId];
         }
         return pObj;
     }
     
-    virtual void removeObj(oINT32 nId)
+    virtual void removeObj(oUINT32 unId)
     {
-        if (m_vecObjs.size() > nId) {
+        if (m_vecObjs.size() > unId) {
             lock();
-            T *pObj = m_vecObjs[nId];
+            T *pObj = m_vecObjs[unId];
             pObj->exit();
             SAFE_DELETE(pObj);
-            m_vecObjs[nId] = NULL;
-            m_queFreeIds.push(nId);
+            m_vecObjs[unId] = NULL;
+            m_queFreeIds.push(unId);
             unlock();
         }
     }
@@ -126,7 +126,7 @@ public:
     }
 protected:
     std::vector<T*> m_vecObjs;
-    std::queue<oINT32> m_queFreeIds;
+    std::queue<oUINT32> m_queFreeIds;
     std::mutex m_Mutex;
 };
 

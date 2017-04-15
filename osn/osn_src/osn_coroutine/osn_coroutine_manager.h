@@ -24,9 +24,9 @@ class OsnCoroutineManager {
 public:
     ~OsnCoroutineManager();
     
-    oINT32 create(const OSN_COROUTINE_FUNC &func);
+    oUINT32 create(const OSN_COROUTINE_FUNC &func);
     const OSN_CO_ARG& yield(const OSN_CO_ARG &arg = OSN_CO_ARG());
-    const OSN_CO_ARG& resume(oINT32 nId, const OSN_CO_ARG &arg);
+    const OSN_CO_ARG& resume(oUINT32 nId, const OSN_CO_ARG &arg);
 private:
     stCoThreadInfo* getThreadInfo();
 private:

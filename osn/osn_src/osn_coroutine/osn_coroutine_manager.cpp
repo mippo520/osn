@@ -20,15 +20,15 @@ OsnCoroutineManager::~OsnCoroutineManager()
     
 }
 
-oINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func)
+oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func)
 {
-    oINT32 nId = m_arrCoroutine.makeObj<OsnCoroutine>();
-    OsnCoroutine *pCo = m_arrCoroutine.getObject(nId);
+    oUINT32 unId = m_arrCoroutine.makeObj<OsnCoroutine>();
+    OsnCoroutine *pCo = m_arrCoroutine.getObject(unId);
     if (NULL != pCo) {
         pCo->setFunc(func);
         pCo->setState(eCS_Ready);
     }
-    return nId;
+    return unId;
 }
 
 const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
@@ -52,7 +52,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     return pInfo->getArg();
 }
 
-const OSN_CO_ARG& OsnCoroutineManager::resume(oINT32 nId, const OSN_CO_ARG &arg)
+const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &arg)
 {
     stCoThreadInfo *pInfo = getThreadInfo();
 
@@ -60,7 +60,7 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oINT32 nId, const OSN_CO_ARG &arg)
         return pInfo->getArg();
     }
     
-    OsnCoroutine *pCo = m_arrCoroutine.getObject(nId);
+    OsnCoroutine *pCo = m_arrCoroutine.getObject(unId);
     if (NULL == pCo) {
         return pInfo->getArg();
     }
@@ -70,14 +70,14 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oINT32 nId, const OSN_CO_ARG &arg)
             getcontext(pCo->getCtxPtr());
             pCo->createContext(pInfo->getContextPtr());
             pCo->setState(eCS_Running);
-            pInfo->setRunning(nId);
+            pInfo->setRunning(unId);
             pInfo->setArg(arg);
             makecontext(pCo->getCtxPtr(), (void (*)())OsnCoroutineManager::mainFunc, 1, this);
             swapcontext(pInfo->getContextPtr(), pCo->getCtxPtr());
             break;
         case eCS_Suspend:
             pCo->setState(eCS_Running);
-            pInfo->setRunning(nId);
+            pInfo->setRunning(unId);
             pInfo->setArg(arg);
             pCo->setLastContext(pInfo->getContextPtr());
             swapcontext(pInfo->getContextPtr(), pCo->getCtxPtr());

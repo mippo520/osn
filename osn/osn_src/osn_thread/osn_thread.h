@@ -11,6 +11,7 @@
 #include "osn.h"
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 
 class OsnThread {
 public:
@@ -29,7 +30,7 @@ private:
 private:
     std::thread m_Thread;
     MEMBER_VALUE(oINT32, Weight)
-    MEMBER_VALUE(oINT32, Id)
+    MEMBER_VALUE(oUINT32, Id)
 };
 
 #endif /* osn_thread_hpp */

@@ -44,9 +44,9 @@ private:
         
     oINT32 pushMsg(oINT32 nTargetId, const OSN_SERVICE_MSG &msg);
     OsnService* popWorkingService();
-    void pushWarkingService(oINT32 nId);
+    void pushWarkingService(oUINT32 nId);
 private:
-    std::queue<oINT32> m_queHadMsgIds;
+    std::queue<oUINT32> m_queHadMsgIds;
 };
 
 #define g_ServiceManager OsnSingleton<OsnServiceManager>::instance()

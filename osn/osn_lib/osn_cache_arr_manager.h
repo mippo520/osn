@@ -15,7 +15,7 @@ template<class T, int ThreadType = eThread_Normal>
 class OsnCacheArrManager : public OsnArrManager<T, ThreadType> {
 public:
     OsnCacheArrManager()
-        : m_nCachePercent(100)
+        : m_unCachePercent(100)
     {
     }
     
@@ -31,18 +31,18 @@ public:
     void setCachePercent(oINT32 nPercent)
     {
         this->lock();
-        m_nCachePercent = nPercent;
-        if (m_nCachePercent <= 0 || m_nCachePercent > 100) {
-            m_nCachePercent = 100;
+        m_unCachePercent = nPercent;
+        if (m_unCachePercent <= 0 || m_unCachePercent > 100) {
+            m_unCachePercent = 100;
         }
         this->unlock();
     }
 
     template<class OBJ_T>
-    oINT32 makeObj()
+    oUINT32 makeObj()
     {
-        oINT32 nId = this->createId();
-        if (nId > 0) {
+        oUINT32 unId = this->createId();
+        if (unId > 0) {
             OBJ_T *pObj = NULL;
             this->lock();
             if (m_queObjCache.size() > 0) {
@@ -54,20 +54,20 @@ public:
             {
                 pObj = new OBJ_T();
             }
-            this->addObject(nId, pObj);
-            pObj->setId(nId);
+            this->addObject(unId, pObj);
+            pObj->setId(unId);
             pObj->init();
         }
-        return nId;
+        return unId;
     }
     
-    virtual void removeObj(oINT32 nId)
+    virtual void removeObj(oUINT32 nId)
     {
         this->lock();
         if (this->m_vecObjs.size() > nId) {
             T *pObj = this->m_vecObjs[nId];
             pObj->exit();
-            if (100 == m_nCachePercent || (this->m_vecObjs.size() > 0 && m_queObjCache.size() / this->m_vecObjs.size() < m_nCachePercent))
+            if (100 == m_unCachePercent || (this->m_vecObjs.size() > 0 && m_queObjCache.size() / this->m_vecObjs.size() < m_unCachePercent))
             {
                 m_queObjCache.push(pObj);
             }
@@ -78,7 +78,7 @@ public:
     }
 private:
     std::queue<T*> m_queObjCache;
-    oINT32 m_nCachePercent;
+    oUINT32 m_unCachePercent;
 };
 
 #endif /* osn_cache_arr_manager_h */

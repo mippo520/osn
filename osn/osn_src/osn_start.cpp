@@ -57,7 +57,7 @@ void OsnStart::start()
 {
     printf("OsnStart::start \n");
     
-    for (oINT32 i = 0; i < m_vecThread.size(); ++i) {
+    for (oUINT32 i = 0; i < m_vecThread.size(); ++i) {
         m_vecThread[i]->init();
     }
 }
@@ -83,7 +83,7 @@ oBOOL OsnStart::checkAbort()
 
 void OsnStart::clearThread()
 {
-    for (oINT32 i = 0; i < m_vecThread.size(); ++i) {
+    for (oUINT32 i = 0; i < m_vecThread.size(); ++i) {
         SAFE_DELETE(m_vecThread[i]);
     }
     m_vecThread.clear();

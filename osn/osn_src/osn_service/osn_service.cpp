@@ -40,17 +40,9 @@ oBOOL OsnService::dispatch()
 {
     if (m_queMsg.size() > 0) {
         OSN_SERVICE_MSG &msg = m_queMsg.front();
-        oINT32 nValue = msg.getInt32(0);
-        m_queMsg.pop();
+		oINT32 nValue = msg.getInt32(0);
+		m_queMsg.pop();
 
-        static std::set<oINT32> setInt;
-        static std::mutex m_Mutex;
-
-        if (nValue != getId())
-        {
-            printf("OsnService::dispatch error! id = %d,repeat value = %d\n", getId(), nValue);
-        }
-        printf("OsnService::dispatch id = %d, value = %d\n", getId(), nValue);
 
 
 
@@ -73,16 +65,16 @@ oUINT32 OsnService::getMsgSize()
     return m_queMsg.size();
 }
 
-oINT32 OsnService::createCO(OSN_COROUTINE_FUNC func)
+oUINT32 OsnService::createCO(OSN_COROUTINE_FUNC func)
 {
-    oINT32 co = -1;
+    oUINT32 co = 0;
     if (m_queCO.size() > 0)
     {
         co = m_queCO.front();
         m_queCO.pop();
     }
     
-    if (-1 == co)
+    if (0 == co)
     {
         co = g_CorotineManager.create([&](const OSN_CO_ARG &arg){
             func(arg);

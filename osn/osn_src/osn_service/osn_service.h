@@ -36,13 +36,13 @@ private:
     oINT32 pushMsg(const OSN_SERVICE_MSG &msg);
     oUINT32 getMsgSize();
 private:
-    oINT32 createCO(OSN_COROUTINE_FUNC func);
+    oUINT32 createCO(OSN_COROUTINE_FUNC func);
     void suspend(oINT32 co, const OSN_CO_ARG &arg);
 private:
     std::queue<OSN_SERVICE_MSG> m_queMsg;
     MEMBER_VALUE(oBOOL, IsInGlobal)
-    MEMBER_VALUE(oINT32, Id)
-    std::queue<oINT32> m_queCO;
+    MEMBER_VALUE(oUINT32, Id)
+    std::queue<oUINT32> m_queCO;
     oINT32 m_nSessionCount;
 };
 

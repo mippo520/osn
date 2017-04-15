@@ -31,20 +31,20 @@ enum eCoroutineState
 
 struct stCoThreadInfo {
 
-    MEMBER_VALUE(oINT32, Running);
+    MEMBER_VALUE(oUINT32, Running);
     MEMBER_VALUE(OSN_CO_ARG, Arg);
     MEMBER_VALUE(std::thread::id, ThreadId);
     ucontext_t m_MainCtx;
     
     stCoThreadInfo()
-    : m_Running(-1)
+    : m_Running(0)
     {
         
     }
     
     oBOOL isRunning()
     {
-        return -1 != m_Running;
+        return 0 != m_Running;
     }
     
     ucontext_t* getContextPtr()
