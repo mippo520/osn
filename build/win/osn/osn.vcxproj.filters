@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp">
+      <Filter>osn_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_main.cpp">
+      <Filter>osn_src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_start.cpp">
+      <Filter>osn_src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.cpp">
+      <Filter>osn_src\osn_coroutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_manager.cpp">
+      <Filter>osn_src\osn_coroutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp">
+      <Filter>osn_src\osn_service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.cpp">
+      <Filter>osn_src\osn_service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread.cpp">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_timer.cpp">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_worker.cpp">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="osn_lib">
+      <UniqueIdentifier>{08c8ef65-c2cb-4420-91fd-91fb86f7d9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src">
+      <UniqueIdentifier>{dae5b53c-55d6-4e9a-a37c-fca4264bf105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src\osn_coroutine">
+      <UniqueIdentifier>{cd35d40a-5fc6-4456-a728-771be9f6ba93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src\osn_service">
+      <UniqueIdentifier>{503023ca-3d01-4603-a8ee-497c2da7e888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src\osn_thread">
+      <UniqueIdentifier>{06822f56-40c7-40ff-801f-f4d60ff91692}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_cache_arr_manager.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_start.h">
+      <Filter>osn_src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.h">
+      <Filter>osn_src\osn_coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_head.h">
+      <Filter>osn_src\osn_coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_manager.h">
+      <Filter>osn_src\osn_coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread.h">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_timer.h">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_worker.h">
+      <Filter>osn_src\osn_thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
