@@ -24,28 +24,33 @@ void OsnServiceManager::init()
     OsnArrManager::init();
 }
 
-oINT32 OsnServiceManager::send(oINT32 nTargetId, const OSN_SERVICE_MSG &msg)
+oUINT32 OsnServiceManager::send(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg)
 {
-    return pushMsg(nTargetId, msg);
+	stServiceMessage serviceMsg;
+	serviceMsg.stmt = msg;
+	serviceMsg.unSession = unSession;
+	serviceMsg.unSource = unSource;
+	serviceMsg.nType = type;
+    return pushMsg(unTargetId, serviceMsg);
 }
 
-oINT32 OsnServiceManager::pushMsg(oINT32 nTargetId, const OSN_SERVICE_MSG &msg)
+oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage &msg)
 {
-    oINT32 nSession = 0;
-    lock();
-    OsnService *pService = getObject(nTargetId);
+    oUINT32 unSession = 0;
+    OsnService *pService = getObject(unTargetId);
     if (NULL != pService)
     {
-        nSession = pService->pushMsg(msg);
+        unSession = pService->pushMsg(msg);
         if (!pService->getIsInGlobal())
         {
             pService->setIsInGlobal(true);
-            m_queHadMsgIds.push(nTargetId);
-        }
+			lock();
+            m_queHadMsgIds.push(unTargetId);
+			unlock();
+		}
     }
 
-    unlock();
-    return nSession;
+    return unSession;
 }
 
 OsnService* OsnServiceManager::popWorkingService()
@@ -61,12 +66,12 @@ OsnService* OsnServiceManager::popWorkingService()
     return pService;
 }
 
-void OsnServiceManager::pushWarkingService(oUINT32 nId)
+void OsnServiceManager::pushWarkingService(oUINT32 unId)
 {
-    if (nId > 0)
+    if (unId > 0)
     {
         lock();
-        m_queHadMsgIds.push(nId);
+        m_queHadMsgIds.push(unId);
         unlock();
     }
 }
@@ -85,7 +90,7 @@ OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWei
     oUINT32 n = 1;
     for (oUINT32 i = 0; i < n; ++i)
     {
-        if (!pService->dispatch())
+        if (!pService->dispatchMessage())
         {
             return popWorkingService();
         }

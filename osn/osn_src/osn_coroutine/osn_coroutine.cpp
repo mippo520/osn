@@ -50,7 +50,7 @@ ucontext_t* OsnCoroutine::getCtxPtr()
 
 OSN_CO_ARG OsnCoroutine::run(const OSN_CO_ARG &arg)
 {
-    return m_Func(arg);
+    return m_Func(getId(), arg);
 }
 
 

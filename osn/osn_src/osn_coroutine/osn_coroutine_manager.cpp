@@ -45,7 +45,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     }
 
     pCo->setState(eCS_Suspend);
-    pInfo->setRunning(-1);
+    pInfo->setRunning(0);
     pInfo->setArg(arg);
     swapcontext(pCo->getCtxPtr(), pInfo->getContextPtr());
     pInfo = getThreadInfo();
@@ -106,7 +106,7 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
     pInfo = pManager->getThreadInfo();
     pInfo->setArg(arg);
     pManager->m_arrCoroutine.removeObj(pInfo->getRunning());
-    pInfo->setRunning(-1);
+    pInfo->setRunning(0);
 }
 
 stCoThreadInfo* OsnCoroutineManager::getThreadInfo()

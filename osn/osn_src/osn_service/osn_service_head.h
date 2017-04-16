@@ -8,9 +8,29 @@
 
 #ifndef osn_service_head
 #define osn_service_head
+#include "osn.h"
 #include "osn_prepared_statement.h"
 
-typedef OsnPreparedStatement OSN_SERVICE_MSG;
+enum eProtoType
+{
+	ePType_None = 0,
+	ePType_Response,
+	ePType_Lua,
+	ePType_Client,
+};
 
+struct stServiceMessage
+{
+	oUINT32 unSource;
+	oUINT32 unSession;
+	oINT32	nType;
+	OsnPreparedStatement stmt;
+
+	stServiceMessage()
+		: unSource(0)
+		, unSession(0)
+		, nType(ePType_None)
+	{}
+};
 
 #endif /* osn_service_head */

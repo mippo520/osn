@@ -19,6 +19,7 @@ union PreparedStatementDataUnion
     oINT64 i64;
     oFLOAT32 f;
     oFLOAT64 d;
+	const void *ptr;
 };
 
 //- This enum helps us differ data held in above union
@@ -37,6 +38,7 @@ enum PreparedStatementValueType
     TYPE_FLOAT64,
     TYPE_STRING,
     TYPE_FUNCTION,
+	TYPE_POINT,
     TYPE_NULL
 };
 
@@ -45,7 +47,6 @@ class OsnPreparedStatement
 public:
     typedef std::function<OsnPreparedStatement (const OsnPreparedStatement &)> STMT_FUNC;
 
-    
     struct PreparedStatementData
     {
         PreparedStatementDataUnion data;
@@ -68,11 +69,12 @@ public:
 	void setInt16(const oUINT8 index, const oINT16 value);
 	void setInt32(const oUINT8 index, const oINT32 value);
 	void setInt64(const oUINT8 index, const oINT64 value);
-	void setFloat(const oUINT8 index, const oFLOAT32 value);
-	void setDouble(const oUINT8 index, const oFLOAT64 value);
+	void setFloat32(const oUINT8 index, const oFLOAT32 value);
+	void setFloat64(const oUINT8 index, const oFLOAT64 value);
 	void setString(const oUINT8 index, const std::string& value);
 	void setNull(const oUINT8 index);
     void setFunction(const oUINT8 index, const STMT_FUNC &func);
+	void setPoint(const oUINT8 index, const void *ptr);
 
 	oBOOL getBool(const oUINT8 index) const;
 	oUINT8 getUInt8(const oUINT8 index) const;
@@ -83,20 +85,46 @@ public:
 	oINT16 getInt16(const oUINT8 index)const;
 	oINT32 getInt32(const oUINT8 index)const;
 	oINT64 getInt64(const oUINT8 index)const;
-	oFLOAT32 getFloat(const oUINT8 index)const;
-	oFLOAT64 getDouble(const oUINT8 index)const;
+	oFLOAT32 getFloat32(const oUINT8 index)const;
+	oFLOAT64 getFloat64(const oUINT8 index)const;
 	std::string getString(const oUINT8 index)const;
     STMT_FUNC getFunction(const oUINT8 index)const;
+	template<class T>
+	const T* getPoint(const oUINT8 index)const
+	{
+		const T* ptr = NULL;
+		if (index < 0 || index >= m_vecStatementData.size())
+		{
+			OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
+		}
+		else
+		{
+			if (TYPE_POINT == m_vecStatementData[index].type)
+			{
+				ptr = static_cast<const T*>(m_vecStatementData[index].data.ptr);
+			}
+			else
+			{
+				OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
+			}
+		}
+
+		return ptr;
+	}
+
+	oBOOL isEmpty() const;
+	void clear();
+	void printContext() const;
 
 	// 返回类型，调试用
 	PreparedStatementValueType getType( const oUINT8 index ) const;
-	oUINT32 getPreparedStatementDataCount() const;
+	oUINT8 getPreparedStatementDataCount() const;
 
 private:
 	static void errorInvalidIndex(const std::string &strFuncName, const oUINT8 index);
 	static void errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType);
 protected:
-	std::vector<PreparedStatementData> statement_data;    //- Buffer of parameters, not tied to MySQL in any way yet
+	std::vector<PreparedStatementData> m_vecStatementData;    //- Buffer of parameters, not tied to MySQL in any way yet
 };
 
 

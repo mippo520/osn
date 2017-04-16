@@ -16,7 +16,7 @@
 
 OsnWorkerThread::OsnWorkerThread()
 {
-    
+	m_pThread = new std::thread(&OsnWorkerThread::onWork, this);
 }
 
 OsnWorkerThread::~OsnWorkerThread()
@@ -25,11 +25,11 @@ OsnWorkerThread::~OsnWorkerThread()
 }
 
 
-void OsnWorkerThread::work()
+void OsnWorkerThread::onWork()
 {
     OsnService *pService = NULL;
 
-    while (!s_isQuit) {
+	while (!s_isQuit) {
         pService = g_ServiceManager.dispatchMessage(pService, getWeight());
         if (NULL == pService) {
             std::unique_lock<std::mutex> lock(s_Mutex);

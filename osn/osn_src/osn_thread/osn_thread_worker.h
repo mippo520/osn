@@ -20,7 +20,7 @@ public:
     OsnWorkerThread();
     ~OsnWorkerThread();
 private:
-    virtual void work();
+    virtual void onWork();
 };
 
 #endif /* osn_thread_worker_hpp */

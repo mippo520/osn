@@ -12,7 +12,7 @@
 
 OsnTimerThread::OsnTimerThread()
 {
-    
+	m_pThread = new std::thread(&OsnTimerThread::onWork, this);
 }
 
 OsnTimerThread::~OsnTimerThread()
@@ -20,14 +20,13 @@ OsnTimerThread::~OsnTimerThread()
     
 }
 
-void OsnTimerThread::work()
+void OsnTimerThread::onWork()
 {
-    for (;;) {
+	for (;;) {
         if (g_OsnStart.checkAbort()) {
             break;
         }
         usleep(2500);
-        
         g_OsnStart.wakeup(0);
     }
     

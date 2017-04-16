@@ -47,16 +47,16 @@ public:
 
     
     template<class OBJ_T>
-    oINT32 makeObj()
+    oUINT32 makeObj()
     {
-        oINT32 nId = createId();
-        if (nId > 0) {
+        oUINT32 unId = createId();
+        if (unId > 0) {
             OBJ_T *pObj = new OBJ_T();
-            addObject(nId, pObj);
-            pObj->setId(nId);
+            addObject(unId, pObj);
+            pObj->setId(unId);
             pObj->init();
         }
-        return nId;
+        return unId;
     }
 
     virtual oUINT32 createId()

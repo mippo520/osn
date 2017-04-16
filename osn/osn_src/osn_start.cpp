@@ -11,9 +11,10 @@
 #include "osn_thread/osn_thread_timer.h"
 #include "osn_thread/osn_thread_worker.h"
 #include "osn_service_manager.h"
-#include "osn_service.h"
 #include <ucontext.h>
 #include <sys/ucontext.h>
+#include "TestService.h"
+#include "TestService2.h"
 
 oINT32 OsnStart::s_WeightArr[] = {
     -1, -1, -1, -1, 0, 0, 0, 0,
@@ -36,21 +37,14 @@ OsnStart::~OsnStart()
 
 void OsnStart::init()
 {
-    printf("OsnStart::init \n");
-    
-//    for (oINT32 i = 0; i < 100; ++i) {
-//        g_ServiceManager.startService<OsnService>();
-//    }
-    
-//    g_ServiceManager.send(1, -1);
-    
-    clearThread();
-    
-    createThread<OsnTimerThread>();
-    
-    for (oINT32 i = 0; i < s_nWorkerCount; ++i) {
-        createThread<OsnWorkerThread>(s_WeightArr[i]);
-    }
+	g_ServiceManager.startService<TestService>();
+	g_ServiceManager.startService<TestService2>();
+
+	clearThread();
+	createThread<OsnTimerThread>();
+	for (oINT32 i = 0; i < s_nWorkerCount; ++i) {
+		createThread<OsnWorkerThread>(s_WeightArr[i]);
+	}
 }
 
 void OsnStart::start()

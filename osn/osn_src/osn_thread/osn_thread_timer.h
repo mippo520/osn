@@ -16,7 +16,7 @@ public:
     OsnTimerThread();
     ~OsnTimerThread();
 private:
-    virtual void work();
+    virtual void onWork();
 private:
 
 };

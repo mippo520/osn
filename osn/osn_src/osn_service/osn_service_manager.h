@@ -27,12 +27,12 @@ public:
     friend class OsnSingleton<OsnServiceManager>;
     ~OsnServiceManager();
 public:
-    oINT32 send(oINT32 nTargetId, const OSN_SERVICE_MSG &msg);
+    oUINT32 send(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg);
 public:
     virtual void init();
     
     template<class T>
-    oINT32 startService()
+    oUINT32 startService()
     {
         return makeObj<T>();
     }
@@ -42,7 +42,7 @@ private:
     friend class OsnService;
     friend class OsnStart;
         
-    oINT32 pushMsg(oINT32 nTargetId, const OSN_SERVICE_MSG &msg);
+    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage &msg);
     OsnService* popWorkingService();
     void pushWarkingService(oUINT32 nId);
 private:

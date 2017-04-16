@@ -16,27 +16,29 @@ std::condition_variable OsnThread::s_Cond;
 oINT32 OsnThread::s_SleepCount = 0;
 
 OsnThread::OsnThread()
-    : m_Thread(&OsnThread::work, this)
-    , m_Id(0)
+    : m_pThread(NULL)
+	, m_Id(0)
 {
     
 }
 
 OsnThread::~OsnThread()
 {
-    std::condition_variable condvar;
+	SAFE_DELETE(m_pThread);
 }
 
 void OsnThread::init(oBOOL isMainWait)
 {
-    if (isMainWait) {
-        m_Thread.join();
-    }
-    else
-    {
-        m_Thread.detach();
-    }
+	if (NULL != m_pThread)
+	{
+		if (isMainWait) {
+			m_pThread->join();
+		}
+		else
+		{
+			m_pThread->detach();
+		}
+	}
 }
-
 
 

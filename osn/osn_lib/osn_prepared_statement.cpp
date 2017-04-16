@@ -12,7 +12,7 @@ OsnPreparedStatement& OsnPreparedStatement::operator=( const OsnPreparedStatemen
 		return *this;
 	}
 
-	statement_data.assign( right.statement_data.begin(), right.statement_data.end() );
+	m_vecStatementData.assign( right.m_vecStatementData.begin(), right.m_vecStatementData.end() );
 	return *this;
 }
 
@@ -29,145 +29,154 @@ OsnPreparedStatement::~OsnPreparedStatement()
 //- Bind to buffer
 void OsnPreparedStatement::setBool(const oUINT8 index, const oBOOL value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.boolean = value;
-	statement_data[index].type = TYPE_BOOL;
+	m_vecStatementData[index].data.boolean = value;
+	m_vecStatementData[index].type = TYPE_BOOL;
 }
 
 void OsnPreparedStatement::setUInt8(const oUINT8 index, const oUINT8 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.ui8 = value;
-	statement_data[index].type = TYPE_UINT8;
+	m_vecStatementData[index].data.ui8 = value;
+	m_vecStatementData[index].type = TYPE_UINT8;
 }
 
 void OsnPreparedStatement::setUInt16(const oUINT8 index, const oUINT16 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.ui16 = value;
-	statement_data[index].type = TYPE_UINT16;
+	m_vecStatementData[index].data.ui16 = value;
+	m_vecStatementData[index].type = TYPE_UINT16;
 }
 
 void OsnPreparedStatement::setUInt32(const oUINT8 index, const oUINT32 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.ui32 = value;
-	statement_data[index].type = TYPE_UINT32;
+	m_vecStatementData[index].data.ui32 = value;
+	m_vecStatementData[index].type = TYPE_UINT32;
 }
 
 void OsnPreparedStatement::setUInt64(const oUINT8 index, const oUINT64 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.ui64 = value;
-	statement_data[index].type = TYPE_UINT64;
+	m_vecStatementData[index].data.ui64 = value;
+	m_vecStatementData[index].type = TYPE_UINT64;
 }
 
 void OsnPreparedStatement::setInt8(const oUINT8 index, const oINT8 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.i8 = value;
-	statement_data[index].type = TYPE_INT8;
+	m_vecStatementData[index].data.i8 = value;
+	m_vecStatementData[index].type = TYPE_INT8;
 }
 
 void OsnPreparedStatement::setInt16(const oUINT8 index, const oINT16 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.i16 = value;
-	statement_data[index].type = TYPE_INT16;
+	m_vecStatementData[index].data.i16 = value;
+	m_vecStatementData[index].type = TYPE_INT16;
 }
 
 void OsnPreparedStatement::setInt32(const oUINT8 index, const oINT32 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.i32 = value;
-	statement_data[index].type = TYPE_INT32;
+	m_vecStatementData[index].data.i32 = value;
+	m_vecStatementData[index].type = TYPE_INT32;
 }
 
 void OsnPreparedStatement::setInt64(const oUINT8 index, const oINT64 value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.i64 = value;
-	statement_data[index].type = TYPE_INT64;
+	m_vecStatementData[index].data.i64 = value;
+	m_vecStatementData[index].type = TYPE_INT64;
 }
 
-void OsnPreparedStatement::setFloat(const oUINT8 index, const float value)
+void OsnPreparedStatement::setFloat32(const oUINT8 index, const float value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.f = value;
-	statement_data[index].type = TYPE_FLOAT32;
+	m_vecStatementData[index].data.f = value;
+	m_vecStatementData[index].type = TYPE_FLOAT32;
 }
 
-void OsnPreparedStatement::setDouble(const oUINT8 index, const double value)
+void OsnPreparedStatement::setFloat64(const oUINT8 index, const double value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].data.d = value;
-	statement_data[index].type = TYPE_FLOAT64;
+	m_vecStatementData[index].data.d = value;
+	m_vecStatementData[index].type = TYPE_FLOAT64;
 }
 
 void OsnPreparedStatement::setString(const oUINT8 index, const std::string& value)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].str = value;
-	statement_data[index].type = TYPE_STRING;
+	m_vecStatementData[index].str = value;
+	m_vecStatementData[index].type = TYPE_STRING;
 }
 
 void OsnPreparedStatement::setNull(const oUINT8 index)
 {
-	if (index >= statement_data.size())
-		statement_data.resize(index+1);
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index+1);
 
-	statement_data[index].type = TYPE_NULL;
+	m_vecStatementData[index].type = TYPE_NULL;
 }
 
 void OsnPreparedStatement::setFunction(const oUINT8 index, const STMT_FUNC &func)
 {
-    if (index >= statement_data.size())
-        statement_data.resize(index+1);
+    if (index >= m_vecStatementData.size())
+        m_vecStatementData.resize(index+1);
     
-    statement_data[index].func = func;
-    statement_data[index].type = TYPE_FUNCTION;
+    m_vecStatementData[index].func = func;
+    m_vecStatementData[index].type = TYPE_FUNCTION;
+}
+
+void OsnPreparedStatement::setPoint(const oUINT8 index, const void *ptr)
+{
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index + 1);
+
+	m_vecStatementData[index].data.ptr = ptr;
+	m_vecStatementData[index].type = TYPE_POINT;
 }
 
 oBOOL OsnPreparedStatement::getBool( const oUINT8 index ) const
 {
 	oBOOL value = false;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_BOOL == statement_data[index].type)
+		if (TYPE_BOOL == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.boolean;
+			value = m_vecStatementData[index].data.boolean;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -177,19 +186,19 @@ oBOOL OsnPreparedStatement::getBool( const oUINT8 index ) const
 oUINT8 OsnPreparedStatement::getUInt8( const oUINT8 index ) const
 {
 	oUINT8 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_UINT8 == statement_data[index].type)
+		if (TYPE_UINT8 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.ui8;
+			value = m_vecStatementData[index].data.ui8;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -199,19 +208,19 @@ oUINT8 OsnPreparedStatement::getUInt8( const oUINT8 index ) const
 oUINT16 OsnPreparedStatement::getUInt16( const oUINT8 index ) const
 {
 	oUINT16 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_UINT16 == statement_data[index].type)
+		if (TYPE_UINT16 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.ui16;
+			value = m_vecStatementData[index].data.ui16;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -221,19 +230,19 @@ oUINT16 OsnPreparedStatement::getUInt16( const oUINT8 index ) const
 oUINT32 OsnPreparedStatement::getUInt32( const oUINT8 index ) const
 {
 	oUINT32 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_UINT32 == statement_data[index].type)
+		if (TYPE_UINT32 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.ui32;
+			value = m_vecStatementData[index].data.ui32;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -243,19 +252,19 @@ oUINT32 OsnPreparedStatement::getUInt32( const oUINT8 index ) const
 oUINT64 OsnPreparedStatement::getUInt64( const oUINT8 index ) const
 {
 	oUINT64 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_UINT64 == statement_data[index].type)
+		if (TYPE_UINT64 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.ui64;
+			value = m_vecStatementData[index].data.ui64;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -265,19 +274,19 @@ oUINT64 OsnPreparedStatement::getUInt64( const oUINT8 index ) const
 oINT8 OsnPreparedStatement::getInt8( const oUINT8 index ) const
 {
 	oINT8 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_INT8 == statement_data[index].type)
+		if (TYPE_INT8 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.i8;
+			value = m_vecStatementData[index].data.i8;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -287,19 +296,19 @@ oINT8 OsnPreparedStatement::getInt8( const oUINT8 index ) const
 oINT16 OsnPreparedStatement::getInt16( const oUINT8 index ) const
 {
 	oINT16 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_INT16 == statement_data[index].type)
+		if (TYPE_INT16 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.i16;
+			value = m_vecStatementData[index].data.i16;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -309,19 +318,19 @@ oINT16 OsnPreparedStatement::getInt16( const oUINT8 index ) const
 oINT32 OsnPreparedStatement::getInt32( const oUINT8 index ) const
 {
 	oINT32 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_INT32 == statement_data[index].type)
+		if (TYPE_INT32 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.i32;
+			value = m_vecStatementData[index].data.i32;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -331,63 +340,63 @@ oINT32 OsnPreparedStatement::getInt32( const oUINT8 index ) const
 oINT64 OsnPreparedStatement::getInt64( const oUINT8 index ) const
 {
 	oINT64 value = 0;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_INT64 == statement_data[index].type)
+		if (TYPE_INT64 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.i64;
+			value = m_vecStatementData[index].data.i64;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
 	return value;
 }
 
-float OsnPreparedStatement::getFloat( const oUINT8 index ) const
+float OsnPreparedStatement::getFloat32( const oUINT8 index ) const
 {
 	float value = 0.0f;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_FLOAT32 == statement_data[index].type)
+		if (TYPE_FLOAT32 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.f;
+			value = m_vecStatementData[index].data.f;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
 	return value;
 }
 
-double OsnPreparedStatement::getDouble( const oUINT8 index ) const
+double OsnPreparedStatement::getFloat64( const oUINT8 index ) const
 {
 	double value = 0.0f;
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_FLOAT64 == statement_data[index].type)
+		if (TYPE_FLOAT64 == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].data.d;
+			value = m_vecStatementData[index].data.d;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -397,19 +406,19 @@ double OsnPreparedStatement::getDouble( const oUINT8 index ) const
 std::string OsnPreparedStatement::getString( const oUINT8 index ) const
 {
 	std::string value = "";
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		if (TYPE_STRING == statement_data[index].type)
+		if (TYPE_STRING == m_vecStatementData[index].type)
 		{	
-			value = statement_data[index].str;
+			value = m_vecStatementData[index].str;
 		}
 		else
 		{
-			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
 		}
 	}
 
@@ -419,43 +428,131 @@ std::string OsnPreparedStatement::getString( const oUINT8 index ) const
 OsnPreparedStatement::STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
 {
     STMT_FUNC func;
-    if ( index < 0 || index >= statement_data.size() )
+    if ( index < 0 || index >= m_vecStatementData.size() )
     {
         OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
     }
     else
     {
-        if (TYPE_FUNCTION == statement_data[index].type)
+        if (TYPE_FUNCTION == m_vecStatementData[index].type)
         {
-            func = statement_data[index].func;
+            func = m_vecStatementData[index].func;
         }
         else
         {
-            OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, statement_data[index].type);
+            OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
         }
     }
     return func;
+}
+
+oBOOL OsnPreparedStatement::isEmpty() const
+{
+	return 0 == m_vecStatementData.size();
+}
+
+void OsnPreparedStatement::clear()
+{
+	m_vecStatementData.clear();
+}
+
+void OsnPreparedStatement::printContext() const
+{
+	std::string strPrintInfo = "";
+	oUINT8 unCount = getPreparedStatementDataCount();
+	for (oUINT8 i = 0; i < unCount; ++i)
+	{
+		char sz[256];
+		PreparedStatementValueType type = getType(i);
+		switch (type)
+		{
+		case TYPE_BOOL:
+			sprintf(sz, "BOOL = %s, ", getBool(i) ? "true" : "false");
+			strPrintInfo += sz;
+			break;
+		case TYPE_INT8:
+			sprintf(sz, "INT8 = %d, ", getInt8(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_UINT8:
+			sprintf(sz, "UINT8 = %d, ", getUInt8(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_INT16:
+			sprintf(sz, "INT16 = %d, ", getInt16(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_UINT16:
+			sprintf(sz, "UINT16 = %d, ", getUInt16(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_INT32:
+			sprintf(sz, "INT32 = %d, ", getInt32(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_UINT32:
+			sprintf(sz, "UINT32 = %u, ", getUInt32(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_INT64:
+			sprintf(sz, "INT64 = %ll, ", getInt64(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_UINT64:
+			sprintf(sz, "UINT64 = %llu, ", getUInt64(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_FLOAT32:
+			sprintf(sz, "FLOAT32 = %f, ", getFloat32(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_FLOAT64:
+			sprintf(sz, "FLOAT64 = %lf, ", getFloat64(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_STRING:
+			sprintf(sz, "STRING = %s, ", getString(i).c_str());
+			strPrintInfo += sz;
+			break;
+		case TYPE_POINT:
+			sprintf(sz, "POINT = %llx, ", getPoint<void>(i));
+			strPrintInfo += sz;
+			break;
+		case TYPE_FUNCTION:
+			sprintf(sz, "FUNCTION, ");
+			strPrintInfo += sz;
+			break;
+		case TYPE_NULL:
+			sprintf(sz, "NULL, ");
+			strPrintInfo += sz;
+			break;
+		default:
+			break;
+		}
+	}
+	strPrintInfo += "\n";
+	printf("OsnPreparedStatement = %s", strPrintInfo.c_str());
 }
 
 PreparedStatementValueType OsnPreparedStatement::getType( const oUINT8 index ) const
 {
 	PreparedStatementValueType eType = TYPE_NULL;
 
-	if ( index < 0 || index >= statement_data.size() )
+	if ( index < 0 || index >= m_vecStatementData.size() )
 	{
 		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
 	}
 	else
 	{
-		eType = statement_data[index].type;
+		eType = m_vecStatementData[index].type;
 	}
 
 	return eType;
 }
 
-size_t OsnPreparedStatement::getPreparedStatementDataCount() const
+oUINT8 OsnPreparedStatement::getPreparedStatementDataCount() const
 {
-	return statement_data.size();
+	return static_cast<oUINT8>(m_vecStatementData.size());
 }
 
 void OsnPreparedStatement::errorInvalidIndex(const std::string &strFuncName, const oUINT8 index)

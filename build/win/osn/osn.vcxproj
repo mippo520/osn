@@ -68,6 +68,8 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_main.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService2.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_start.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_timer.cpp" />
@@ -87,6 +89,8 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService2.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_start.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_timer.h" />

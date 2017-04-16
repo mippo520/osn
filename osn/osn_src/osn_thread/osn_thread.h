@@ -25,10 +25,8 @@ public:
     virtual ~OsnThread();
 public:
     void init(oBOOL isMainWait = true);
-private:
-    virtual void work() = 0;
-private:
-    std::thread m_Thread;
+protected:
+    std::thread *m_pThread;
     MEMBER_VALUE(oINT32, Weight)
     MEMBER_VALUE(oUINT32, Id)
 };

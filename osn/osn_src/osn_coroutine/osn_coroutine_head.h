@@ -18,7 +18,7 @@
 
 typedef OsnPreparedStatement OSN_CO_ARG;
 
-typedef OsnPreparedStatement::STMT_FUNC OSN_COROUTINE_FUNC;
+typedef std::function<OsnPreparedStatement(oUINT32 co, const OsnPreparedStatement &)> OSN_COROUTINE_FUNC;
 
 enum eCoroutineState
 {

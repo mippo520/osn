@@ -10,6 +10,8 @@
 #define osn_service_h
 
 #include <queue>
+#include <mutex>
+#include <map>
 #include "osn.h"
 #include "osn_arr_manager.h"
 #include "osn_coroutine_head.h"
@@ -24,26 +26,49 @@ class OsnService {
         eYT_Exit,
         eYT_Response,
     };
+	typedef std::function<void(const OsnPreparedStatement &)> DISPATCH_FUNC;
+	typedef OsnPreparedStatement::STMT_FUNC OSN_SERVICE_CO_FUNC;
 public:
     virtual ~OsnService();
+protected:
+	friend class OsnServiceManager;
+	friend class OsnArrManager<OsnService, eThread_Saved>;
+	typedef void (OsnService::*CO_MEMBER_FUNC)(const OsnPreparedStatement &);
+	OsnService();
+	oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
+	const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
+	const OsnPreparedStatement& ret(const OsnPreparedStatement &msg);
+	void registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr);
+	oBOOL getIsInGlobal();
+	void setIsInGlobal(oBOOL value);
 private:
-    friend class OsnServiceManager;
-    friend class OsnArrManager<OsnService, eThread_Saved>;
-    OsnService();
-    virtual void init();
-    virtual void exit();
-    virtual oBOOL dispatch();
-    oINT32 pushMsg(const OSN_SERVICE_MSG &msg);
+	virtual void init() = 0;
+	virtual void exit() = 0;
+	virtual OsnPreparedStatement dispatch(const OsnPreparedStatement &stmt);
+private:
+    virtual oBOOL dispatchMessage();
+    oUINT32 pushMsg(stServiceMessage &msg);
     oUINT32 getMsgSize();
+    oUINT32 createCO(OSN_SERVICE_CO_FUNC func);
+    void suspend(oUINT32 co, const OSN_CO_ARG &arg);
 private:
-    oUINT32 createCO(OSN_COROUTINE_FUNC func);
-    void suspend(oINT32 co, const OSN_CO_ARG &arg);
-private:
-    std::queue<OSN_SERVICE_MSG> m_queMsg;
-    MEMBER_VALUE(oBOOL, IsInGlobal)
+    std::queue<stServiceMessage> m_queMsg;
+	oBOOL m_IsInGlobal;
     MEMBER_VALUE(oUINT32, Id)
     std::queue<oUINT32> m_queCO;
-    oINT32 m_nSessionCount;
+    oUINT32 m_unSessionCount;
+	std::mutex m_Mutex;
+	std::map<oUINT32, oUINT32> m_mapCoroutineSession;
+	std::map<oUINT32, oUINT32> m_mapCoroutineSource;
+
+	typedef std::map<oUINT32, oUINT32> MAP_SESSION_CO;
+	typedef MAP_SESSION_CO::iterator MAP_SESSION_CO_ITR;
+	MAP_SESSION_CO m_mapSessionCoroutine;
+	OSN_COROUTINE_FUNC m_CoroutineFunction;
+
+	typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
+	typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
+	MAP_DISPATCH_FUNC m_mapDispatchFunc;
 };
 
 #endif /* osn_service_hpp */
