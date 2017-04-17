@@ -112,6 +112,11 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
 stCoThreadInfo* OsnCoroutineManager::getThreadInfo()
 {
     std::thread::id curThread = std::this_thread::get_id();
+    if (m_mapInfo.find(curThread) == m_mapInfo.end()) {
+        m_Mutex.lock();
+        m_mapInfo[curThread];
+        m_Mutex.unlock();
+    }
     return &m_mapInfo[curThread];
 }
 

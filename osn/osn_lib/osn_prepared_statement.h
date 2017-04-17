@@ -55,7 +55,7 @@ public:
         STMT_FUNC func;
     };
 public:
-    OsnPreparedStatement(...);
+    OsnPreparedStatement();
 	OsnPreparedStatement(const OsnPreparedStatement& right);
 	OsnPreparedStatement& operator=(const OsnPreparedStatement& right);
 	~OsnPreparedStatement();

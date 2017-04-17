@@ -32,6 +32,7 @@ private:
 private:
     OsnCacheArrManager<OsnCoroutine, eThread_Saved> m_arrCoroutine;
     MAP_CO_THREAD_INFO m_mapInfo;
+    std::mutex m_Mutex;
 };
 
 #define g_CorotineManager OsnSingleton<OsnCoroutineManager>::instance()

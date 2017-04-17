@@ -34,17 +34,17 @@ protected:
 	friend class OsnServiceManager;
 	friend class OsnArrManager<OsnService, eThread_Saved>;
 	typedef void (OsnService::*CO_MEMBER_FUNC)(const OsnPreparedStatement &);
+    void registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr);
 	OsnService();
-	oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-	const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-	const OsnPreparedStatement& ret(const OsnPreparedStatement &msg);
-	void registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr);
-	oBOOL getIsInGlobal();
-	void setIsInGlobal(oBOOL value);
+    oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
+    const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
+    const OsnPreparedStatement& ret(const OsnPreparedStatement &msg);
 private:
 	virtual void init() = 0;
 	virtual void exit() = 0;
 	virtual OsnPreparedStatement dispatch(const OsnPreparedStatement &stmt);
+    oBOOL getIsInGlobal();
+    void setIsInGlobal(oBOOL value);
 private:
     virtual oBOOL dispatchMessage();
     oUINT32 pushMsg(stServiceMessage &msg);

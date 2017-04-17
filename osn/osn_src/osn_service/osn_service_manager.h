@@ -27,8 +27,6 @@ public:
     friend class OsnSingleton<OsnServiceManager>;
     ~OsnServiceManager();
 public:
-    oUINT32 send(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg);
-public:
     virtual void init();
     
     template<class T>
@@ -44,7 +42,8 @@ private:
         
     oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage &msg);
     OsnService* popWorkingService();
-    void pushWarkingService(oUINT32 nId);
+    void pushWarkingService(oUINT32 unId);
+    oUINT32 send(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg);
 private:
     std::queue<oUINT32> m_queHadMsgIds;
 };

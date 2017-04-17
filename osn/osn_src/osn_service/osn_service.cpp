@@ -137,15 +137,16 @@ oBOOL OsnService::dispatchMessage()
 oUINT32 OsnService::pushMsg(stServiceMessage &msg)
 {
 	oUINT32 unSession = msg.unSession;
-	m_Mutex.lock();
 	if (0 == unSession)
 	{
-		unSession = ++m_unSessionCount;
+        unSession = ATOM_INC(&m_unSessionCount);
 		msg.unSession = unSession;
 	}
+    
+    m_Mutex.lock();
     m_queMsg.push(msg);
-
-	m_Mutex.unlock();
+    m_Mutex.unlock();
+    
 	return unSession;
 }
 

@@ -34,7 +34,7 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
 void TestService2::init()
 {
 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService2::dispatchLua));
-	send(1, ePType_Lua);
+	this->send(1, ePType_Lua);
 }
 
 void TestService2::exit()

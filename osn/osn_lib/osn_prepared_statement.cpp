@@ -16,7 +16,7 @@ OsnPreparedStatement& OsnPreparedStatement::operator=( const OsnPreparedStatemen
 	return *this;
 }
 
-OsnPreparedStatement::OsnPreparedStatement(...)
+OsnPreparedStatement::OsnPreparedStatement()
 {
     
 }

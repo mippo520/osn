@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92BC05EA1EA45843004C41B3 /* TestService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E61EA45843004C41B3 /* TestService.cpp */; };
+		92BC05EB1EA45843004C41B3 /* TestService2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E81EA45843004C41B3 /* TestService2.cpp */; };
 		92C918701E9491F3009BF419 /* osn_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C9186F1E9491F3009BF419 /* osn_main.cpp */; };
 		92C918731E949223009BF419 /* osn_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918711E949223009BF419 /* osn_start.cpp */; };
 		92C918781E949695009BF419 /* osn_thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918761E949695009BF419 /* osn_thread.cpp */; };
@@ -33,6 +35,10 @@
 
 /* Begin PBXFileReference section */
 		929736011E948F590067EE20 /* osn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osn; sourceTree = BUILT_PRODUCTS_DIR; };
+		92BC05E61EA45843004C41B3 /* TestService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestService.cpp; path = ../../osn/osn_src/osn_service/TestService.cpp; sourceTree = "<group>"; };
+		92BC05E71EA45843004C41B3 /* TestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestService.h; path = ../../osn/osn_src/osn_service/TestService.h; sourceTree = "<group>"; };
+		92BC05E81EA45843004C41B3 /* TestService2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestService2.cpp; path = ../../osn/osn_src/osn_service/TestService2.cpp; sourceTree = "<group>"; };
+		92BC05E91EA45843004C41B3 /* TestService2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestService2.h; path = ../../osn/osn_src/osn_service/TestService2.h; sourceTree = "<group>"; };
 		92C9186F1E9491F3009BF419 /* osn_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_main.cpp; path = ../../osn/osn_src/osn_main.cpp; sourceTree = "<group>"; };
 		92C918711E949223009BF419 /* osn_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_start.cpp; path = ../../osn/osn_src/osn_start.cpp; sourceTree = "<group>"; };
 		92C918721E949223009BF419 /* osn_start.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_start.h; path = ../../osn/osn_src/osn_start.h; sourceTree = "<group>"; };
@@ -142,6 +148,10 @@
 		92C918831E94E20B009BF419 /* osn_service */ = {
 			isa = PBXGroup;
 			children = (
+				92BC05E61EA45843004C41B3 /* TestService.cpp */,
+				92BC05E71EA45843004C41B3 /* TestService.h */,
+				92BC05E81EA45843004C41B3 /* TestService2.cpp */,
+				92BC05E91EA45843004C41B3 /* TestService2.h */,
 				92C918841E94E294009BF419 /* osn_service.cpp */,
 				92C918851E94E294009BF419 /* osn_service.h */,
 				92C918871E94E41B009BF419 /* osn_service_manager.cpp */,
@@ -228,6 +238,8 @@
 				92C918781E949695009BF419 /* osn_thread.cpp in Sources */,
 				92C918701E9491F3009BF419 /* osn_main.cpp in Sources */,
 				92C918861E94E294009BF419 /* osn_service.cpp in Sources */,
+				92BC05EB1EA45843004C41B3 /* TestService2.cpp in Sources */,
+				92BC05EA1EA45843004C41B3 /* TestService.cpp in Sources */,
 				92C918731E949223009BF419 /* osn_start.cpp in Sources */,
 				92F88F161E9B68A600E62286 /* osn_coroutine.cpp in Sources */,
 			);
