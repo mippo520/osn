@@ -62,9 +62,7 @@ oBOOL OsnService::getIsInGlobal()
 
 void OsnService::setIsInGlobal(oBOOL value)
 {
-	m_Mutex.lock();
-	m_IsInGlobal = value;
-	m_Mutex.unlock();
+    ATOM_SET(&m_IsInGlobal, value);
 }
 
 OsnService::~OsnService()

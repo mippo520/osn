@@ -100,15 +100,15 @@ public:
     
     virtual void removeObj(oUINT32 unId)
     {
+        lock();
         if (m_vecObjs.size() > unId) {
-            lock();
             T *pObj = m_vecObjs[unId];
             pObj->exit();
             SAFE_DELETE(pObj);
             m_vecObjs[unId] = NULL;
             m_queFreeIds.push(unId);
-            unlock();
         }
+        unlock();
     }
     
     void lock()

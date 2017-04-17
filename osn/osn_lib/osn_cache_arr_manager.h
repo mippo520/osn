@@ -30,12 +30,10 @@ public:
     
     void setCachePercent(oINT32 nPercent)
     {
-        this->lock();
-        m_unCachePercent = nPercent;
+        ATOM_SET(&m_unCachePercent, nPercent);
         if (m_unCachePercent <= 0 || m_unCachePercent > 100) {
-            m_unCachePercent = 100;
+            ATOM_SET(&m_unCachePercent, 100);
         }
-        this->unlock();
     }
 
     template<class OBJ_T>
