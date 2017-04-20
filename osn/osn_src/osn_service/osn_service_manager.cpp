@@ -37,19 +37,19 @@ const OsnPreparedStatement& OsnServiceManager::call(oUINT32 addr, oINT32 type, c
 }
 
 
-const OsnPreparedStatement& OsnServiceManager::ret(const OsnPreparedStatement &msg)
+void OsnServiceManager::ret(const OsnPreparedStatement &msg)
 {
     OSN_CO_ARG arg;
     arg.setInt32(0, OsnService::eYT_Return);
     arg.setPoint(1, &msg);
-    return g_CorotineManager.yield(arg);
+    g_CorotineManager.yield(arg);
 }
 
-const OsnPreparedStatement& OsnServiceManager::exit()
+void OsnServiceManager::exit()
 {
     OsnPreparedStatement stmt;
     stmt.setInt32(0, OsnService::eYT_Quit);
-    return g_CorotineManager.yield(stmt);
+    g_CorotineManager.yield(stmt);
 }
 
 void OsnServiceManager::init()

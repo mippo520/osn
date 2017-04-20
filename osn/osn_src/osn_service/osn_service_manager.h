@@ -41,8 +41,8 @@ public:
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
     oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
     const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-    const OsnPreparedStatement& ret(const OsnPreparedStatement &msg);
-    const OsnPreparedStatement& exit();
+    void ret(const OsnPreparedStatement &msg);
+    void exit();
     void addThread();
     void printThreadInfo();
     void pushWarkingService(oUINT32 unId);

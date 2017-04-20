@@ -31,7 +31,7 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
 		msg.setInt32(1, 201);
 		msg.setString(2, "ghi");
 		g_ServiceManager.ret(msg);
-        msg = g_ServiceManager.exit();
+        g_ServiceManager.exit();
     }
     
 }

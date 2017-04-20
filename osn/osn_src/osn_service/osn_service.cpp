@@ -177,8 +177,7 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
                 stmt.setInt32(0, eYT_Exit);
                 stmt = g_CorotineManager.yield(stmt);
                 OSN_SERVICE_CO_FUNC funcNew = stmt.getFunction(0);
-                stmt = g_CorotineManager.yield();
-                funcNew(stmt);
+                funcNew(g_CorotineManager.yield());
             }
             return arg;
         });
