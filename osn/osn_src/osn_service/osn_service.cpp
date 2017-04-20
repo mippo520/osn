@@ -12,7 +12,10 @@
 #include <set>
 #include <functional>
 #include "osn_prepared_statement.h"
+#include <signal.h>
 
+std::queue<oUINT32> OsnService::s_queCoroutine;
+OsnSpinLock OsnService::s_CoQueSpinLock;
 
 OsnService::OsnService()
     : m_IsInGlobal(false)
@@ -22,32 +25,6 @@ OsnService::OsnService()
     
 }
 
-
-oUINT32 OsnService::send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
-{
-	return g_ServiceManager.send(addr, getId(), type, 0, msg);
-}
-
-
-const OsnPreparedStatement& OsnService::call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
-{
-	oUINT32 unSession = g_ServiceManager.send(addr, getId(), type, 0, msg);
-	OSN_CO_ARG arg;
-	arg.setInt32(0, eYT_Call);
-	arg.setUInt32(1, unSession);
-	return g_CorotineManager.yield(arg);
-}
-
-
-const OsnPreparedStatement& OsnService::ret(const OsnPreparedStatement &msg)
-{
-	OSN_CO_ARG arg;
-	arg.setInt32(0, eYT_Return);
-	arg.setPoint(1, &msg);
-	return g_CorotineManager.yield(arg);
-}
-
-
 void OsnService::registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr)
 {
 	m_mapDispatchFunc[nPType] = std::bind(funcPtr, this, std::placeholders::_1);
@@ -56,23 +33,22 @@ void OsnService::registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr)
 
 oBOOL OsnService::getIsInGlobal()
 {
-	return m_IsInGlobal;
+    oBOOL bInGlobal = m_IsInGlobal;
+	return bInGlobal;
 }
 
 
 void OsnService::setIsInGlobal(oBOOL value)
 {
-    ATOM_SET(&m_IsInGlobal, value);
+    m_IsInGlobal = value;
 }
 
 OsnService::~OsnService()
 {
-    
 }
 
 void OsnService::exit()
 {
-    printf("OsnService::exit id = %d\n", getId());
 }
 
 
@@ -82,23 +58,43 @@ OsnPreparedStatement OsnService::dispatch(const OsnPreparedStatement &stmt)
 	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.getInt32(0));
 	if (itr != m_mapDispatchFunc.end())
 	{
-		itr->second(arg);
+        itr->second(arg);
 	}
 	return stmt;
 }
 
 void OsnService::init()
 {
-    printf("OsnService::init id = %d\n", getId());
+    registDispatchFunc(ePType_Start, &OsnService::start);
+    g_ServiceManager.send(getId(), ePType_Start);
 }
 
-oBOOL OsnService::dispatchMessage()
+oBOOL OsnService::popMessage(stServiceMessage &msg)
 {
+    oBOOL bRet = false;
+    m_QueMsgSpinLock.lock();
     if (m_queMsg.size() > 0) {
-		m_Mutex.lock();
-        stServiceMessage msg = m_queMsg.front();
-		m_queMsg.pop();
-		m_Mutex.unlock();
+        msg = m_queMsg.front();
+        m_queMsg.pop();
+
+        bRet = true;
+    }
+    
+    if (!bRet)
+    {
+        this->setIsInGlobal(false);
+    }
+    
+    m_QueMsgSpinLock.unlock();
+    return bRet;
+}
+
+oBOOL OsnService::dispatchMessage(oINT32 &nType)
+{
+    stServiceMessage msg;
+    if (popMessage(msg))
+    {
+
 		if (ePType_Response == msg.nType)
 		{
 			MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.find(msg.unSession);
@@ -110,7 +106,7 @@ oBOOL OsnService::dispatchMessage()
 			{
 				oUINT32 co = itr->second;
 				m_mapSessionCoroutine.erase(itr);
-				suspend(co, g_CorotineManager.resume(co, msg.stmt));
+				nType = suspend(co, g_CorotineManager.resume(co, msg.stmt));
 			}
 		}
 		else
@@ -121,62 +117,72 @@ oBOOL OsnService::dispatchMessage()
 			OSN_CO_ARG arg;
 			arg.setInt32(0, msg.nType);
 			arg.setPoint(1, &msg.stmt);
-			suspend(co, g_CorotineManager.resume(co, arg));
+			nType = suspend(co, g_CorotineManager.resume(co, arg));
 		}
 
         return true;
     }
     else{
-		this->setIsInGlobal(false);
         return false;
     }
 }
 
 oUINT32 OsnService::pushMsg(stServiceMessage &msg)
 {
-	oUINT32 unSession = msg.unSession;
+    oUINT32 unSession = msg.unSession;
 	if (0 == unSession)
 	{
         unSession = ATOM_INC(&m_unSessionCount);
 		msg.unSession = unSession;
 	}
     
-    m_Mutex.lock();
+    m_QueMsgSpinLock.lock();
     m_queMsg.push(msg);
-    m_Mutex.unlock();
+    
+    if (!getIsInGlobal())
+    {
+        setIsInGlobal(true);
+        g_ServiceManager.pushWarkingService(getId());
+    }
+    
+    m_QueMsgSpinLock.unlock();
     
 	return unSession;
 }
 
 oUINT32 OsnService::getMsgSize()
 {
-    return m_queMsg.size();
+    m_QueMsgSpinLock.lock();
+    oUINT32 unSize = m_queMsg.size();
+    m_QueMsgSpinLock.unlock();
+    return unSize;
 }
 
 oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
 {
 	oUINT32 curCo = 0;
-    if (m_queCO.size() > 0)
+    s_CoQueSpinLock.lock();
+    if (s_queCoroutine.size() > 0)
     {
-		curCo = m_queCO.front();
-        m_queCO.pop();
+		curCo = s_queCoroutine.front();
+        s_queCoroutine.pop();
     }
-    
+    s_CoQueSpinLock.unlock();
     if (0 == curCo)
     {
-		curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg) {
-			func(arg);
-			while (true) {
-				m_queCO.push(co);
-				OsnPreparedStatement stmt;
-				stmt.setInt32(0, eYT_Exit);
-				stmt = g_CorotineManager.yield(stmt);
-				OSN_SERVICE_CO_FUNC funcNew = stmt.getFunction(0);
-				stmt = g_CorotineManager.yield();
-				funcNew(stmt);
-			}
-			return arg;
-		});
+        curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg){
+            func(arg);
+            while (true) {
+                OsnPreparedStatement stmt;
+                stmt.setInt32(0, eYT_Exit);
+                stmt = g_CorotineManager.yield(stmt);
+                OSN_SERVICE_CO_FUNC funcNew = stmt.getFunction(0);
+                stmt = g_CorotineManager.yield();
+                funcNew(stmt);
+            }
+            return arg;
+        });
+
     }
     else
     {
@@ -188,7 +194,7 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
     return curCo;
 }
 
-void OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
+oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
 {
 	if (arg.isEmpty())
 	{
@@ -208,21 +214,30 @@ void OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
 			{
 				oUINT32 unSession = m_mapCoroutineSession[co];
 				oUINT32 unSource = m_mapCoroutineSource[co];
-				g_ServiceManager.send(unSource, getId(), ePType_Response, unSession, *pStmt);
-				suspend(co, g_CorotineManager.resume(co));
+				g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, *pStmt);
+				nType = suspend(co, g_CorotineManager.resume(co));
 			}
 		}
             break;
         case eYT_Exit:
-            
+            m_mapCoroutineSession[co] = 0;
+            m_mapCoroutineSource[co] = 0;
+            s_CoQueSpinLock.lock();
+            s_queCoroutine.push(co);
+            s_CoQueSpinLock.unlock();
             break;
         case eYT_Response:
             
             break;
+        case eYT_Quit:
+            suspend(co, g_CorotineManager.resume(co));
+            break;
         default:
             break;
     }
+    return nType;
 }
+
 
 
 

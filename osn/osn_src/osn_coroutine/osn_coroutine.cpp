@@ -10,6 +10,8 @@
 #include <stdlib.h>
 
 OsnCoroutine::OsnCoroutine()
+    : m_Id(0)
+    , m_State(eCS_Ready)
 {
 }
 
@@ -51,6 +53,11 @@ ucontext_t* OsnCoroutine::getCtxPtr()
 OSN_CO_ARG OsnCoroutine::run(const OSN_CO_ARG &arg)
 {
     return m_Func(getId(), arg);
+}
+
+void OsnCoroutine::printInfo()
+{
+    printf("coroutine info : id = %u, state = %d\n", getId(), getState());
 }
 
 

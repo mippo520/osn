@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		92BC05EA1EA45843004C41B3 /* TestService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E61EA45843004C41B3 /* TestService.cpp */; };
 		92BC05EB1EA45843004C41B3 /* TestService2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E81EA45843004C41B3 /* TestService2.cpp */; };
+		92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */; };
 		92C918701E9491F3009BF419 /* osn_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C9186F1E9491F3009BF419 /* osn_main.cpp */; };
 		92C918731E949223009BF419 /* osn_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918711E949223009BF419 /* osn_start.cpp */; };
 		92C918781E949695009BF419 /* osn_thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C918761E949695009BF419 /* osn_thread.cpp */; };
@@ -39,6 +40,8 @@
 		92BC05E71EA45843004C41B3 /* TestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestService.h; path = ../../osn/osn_src/osn_service/TestService.h; sourceTree = "<group>"; };
 		92BC05E81EA45843004C41B3 /* TestService2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestService2.cpp; path = ../../osn/osn_src/osn_service/TestService2.cpp; sourceTree = "<group>"; };
 		92BC05E91EA45843004C41B3 /* TestService2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestService2.h; path = ../../osn/osn_src/osn_service/TestService2.h; sourceTree = "<group>"; };
+		92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_spin_lock.cpp; path = ../../osn/osn_lib/osn_spin_lock.cpp; sourceTree = "<group>"; };
+		92BC05F01EA857C4004C41B3 /* osn_spin_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_spin_lock.h; path = ../../osn/osn_lib/osn_spin_lock.h; sourceTree = "<group>"; };
 		92C9186F1E9491F3009BF419 /* osn_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_main.cpp; path = ../../osn/osn_src/osn_main.cpp; sourceTree = "<group>"; };
 		92C918711E949223009BF419 /* osn_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_start.cpp; path = ../../osn/osn_src/osn_start.cpp; sourceTree = "<group>"; };
 		92C918721E949223009BF419 /* osn_start.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_start.h; path = ../../osn/osn_src/osn_start.h; sourceTree = "<group>"; };
@@ -128,6 +131,8 @@
 				92C9187C1E94C149009BF419 /* osn_macro.h */,
 				92F88F121E9B5C5100E62286 /* osn_arr_manager.h */,
 				92F88F1A1E9DCA5200E62286 /* osn_cache_arr_manager.h */,
+				92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */,
+				92BC05F01EA857C4004C41B3 /* osn_spin_lock.h */,
 			);
 			name = osn_lib;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92C918891E94E41B009BF419 /* osn_service_manager.cpp in Sources */,
+				92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */,
 				92C918811E94C373009BF419 /* osn_thread_timer.cpp in Sources */,
 				92C918821E94C373009BF419 /* osn_thread_worker.cpp in Sources */,
 				92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */,
@@ -342,6 +348,10 @@
 					"_XOPEN_SOURCE=1",
 					"Debug=1",
 				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fnon-call-exceptions",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -350,6 +360,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "_XOPEN_SOURCE=1";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fnon-call-exceptions",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

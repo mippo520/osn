@@ -12,6 +12,7 @@
 #include <queue>
 #include <mutex>
 #include "osn.h"
+#include "osn_spin_lock.h"
 
 enum eThreadType
 {
@@ -51,7 +52,7 @@ public:
     {
         oUINT32 unId = createId();
         if (unId > 0) {
-            OBJ_T *pObj = new OBJ_T();
+            T *pObj = new OBJ_T();
             addObject(unId, pObj);
             pObj->setId(unId);
             pObj->init();
@@ -92,25 +93,30 @@ public:
     virtual T* getObject(oUINT32 unId)
     {
         T *pObj = NULL;
+        lock();
         if (unId < m_vecObjs.size()) {
             pObj = m_vecObjs[unId];
         }
+        unlock();
         return pObj;
     }
     
     virtual void removeObj(oUINT32 unId)
     {
+        T *pObj = NULL;
         lock();
         if (m_vecObjs.size() > unId) {
-            T *pObj = m_vecObjs[unId];
-            pObj->exit();
-            SAFE_DELETE(pObj);
+            pObj = m_vecObjs[unId];
             m_vecObjs[unId] = NULL;
             m_queFreeIds.push(unId);
         }
         unlock();
+        if (NULL != pObj) {
+            pObj->exit();
+            SAFE_DELETE(pObj);
+        }
     }
-    
+protected:
     void lock()
     {
         if (eThread_Saved == ThreadType) {
@@ -127,7 +133,7 @@ public:
 protected:
     std::vector<T*> m_vecObjs;
     std::queue<oUINT32> m_queFreeIds;
-    std::mutex m_Mutex;
+    OsnSpinLock m_Mutex;
 };
 
 template<class T, int ThreadType>

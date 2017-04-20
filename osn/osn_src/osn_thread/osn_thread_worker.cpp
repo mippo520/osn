@@ -28,7 +28,8 @@ OsnWorkerThread::~OsnWorkerThread()
 void OsnWorkerThread::onWork()
 {
     OsnService *pService = NULL;
-
+    g_CorotineManager.addThread();
+    g_ServiceManager.addThread();
 	while (!s_isQuit) {
         pService = g_ServiceManager.dispatchMessage(pService, getWeight());
         if (NULL == pService) {

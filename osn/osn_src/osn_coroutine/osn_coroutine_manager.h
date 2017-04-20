@@ -27,12 +27,14 @@ public:
     oUINT32 create(const OSN_COROUTINE_FUNC &func);
     const OSN_CO_ARG& yield(const OSN_CO_ARG &arg = OSN_CO_ARG());
     const OSN_CO_ARG& resume(oUINT32 unId, const OSN_CO_ARG &arg = OSN_CO_ARG());
+    void addThread();
 private:
     stCoThreadInfo* getThreadInfo();
+    void printThreadInfo();
 private:
     OsnCacheArrManager<OsnCoroutine, eThread_Saved> m_arrCoroutine;
     MAP_CO_THREAD_INFO m_mapInfo;
-    std::mutex m_Mutex;
+    OsnSpinLock m_SpinLock;
 };
 
 #define g_CorotineManager OsnSingleton<OsnCoroutineManager>::instance()

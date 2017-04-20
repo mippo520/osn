@@ -25,39 +25,44 @@ class OsnService {
         eYT_Return,
         eYT_Exit,
         eYT_Response,
+        eYT_Quit,
     };
 	typedef std::function<void(const OsnPreparedStatement &)> DISPATCH_FUNC;
 	typedef OsnPreparedStatement::STMT_FUNC OSN_SERVICE_CO_FUNC;
+    static std::queue<oUINT32> s_queCoroutine;
+    static OsnSpinLock s_CoQueSpinLock;
 public:
     virtual ~OsnService();
 protected:
 	friend class OsnServiceManager;
 	friend class OsnArrManager<OsnService, eThread_Saved>;
 	typedef void (OsnService::*CO_MEMBER_FUNC)(const OsnPreparedStatement &);
+
+    OsnService();
     void registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr);
-	OsnService();
-    oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-    const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-    const OsnPreparedStatement& ret(const OsnPreparedStatement &msg);
 private:
-	virtual void init() = 0;
-	virtual void exit() = 0;
-	virtual OsnPreparedStatement dispatch(const OsnPreparedStatement &stmt);
+    virtual void start(const OsnPreparedStatement &stmt) = 0;
+    virtual OsnPreparedStatement dispatch(const OsnPreparedStatement &stmt);
+    void init();
+    virtual void exit();
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
 private:
-    virtual oBOOL dispatchMessage();
+    virtual oBOOL dispatchMessage(oINT32 &nType);
     oUINT32 pushMsg(stServiceMessage &msg);
     oUINT32 getMsgSize();
     oUINT32 createCO(OSN_SERVICE_CO_FUNC func);
-    void suspend(oUINT32 co, const OSN_CO_ARG &arg);
+    oINT32 suspend(oUINT32 co, const OSN_CO_ARG &arg);
+    
+    oBOOL popMessage(stServiceMessage &msg);
 private:
     std::queue<stServiceMessage> m_queMsg;
+    OsnSpinLock m_QueMsgSpinLock;
+
 	oBOOL m_IsInGlobal;
+    
     MEMBER_VALUE(oUINT32, Id)
-    std::queue<oUINT32> m_queCO;
     oUINT32 m_unSessionCount;
-	std::mutex m_Mutex;
 	std::map<oUINT32, oUINT32> m_mapCoroutineSession;
 	std::map<oUINT32, oUINT32> m_mapCoroutineSource;
 

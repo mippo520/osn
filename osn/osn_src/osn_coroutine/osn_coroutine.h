@@ -28,6 +28,8 @@ private:
     void setLastContext(ucontext_t *pLastCtx);
     ucontext_t* getCtxPtr();
     OSN_CO_ARG run(const OSN_CO_ARG &arg);
+    
+    void printInfo();
 private:
     MEMBER_VALUE(oUINT32, Id);
     MEMBER_VALUE(OSN_COROUTINE_FUNC, Func);

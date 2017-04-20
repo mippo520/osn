@@ -33,7 +33,6 @@ struct stCoThreadInfo {
 
     MEMBER_VALUE(oUINT32, Running);
     MEMBER_VALUE(OSN_CO_ARG, Arg);
-    MEMBER_VALUE(std::thread::id, ThreadId);
     ucontext_t m_MainCtx;
     
     stCoThreadInfo()
@@ -50,6 +49,12 @@ struct stCoThreadInfo {
     ucontext_t* getContextPtr()
     {
         return &m_MainCtx;
+    }
+    
+    void printInfo()
+    {
+        printf("stCoThreadInfo ==========> addr = %x, running = %u, \n", this, m_Running);
+        m_Arg.printContext();
     }
 };
 

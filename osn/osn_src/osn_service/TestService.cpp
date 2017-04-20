@@ -1,4 +1,5 @@
 #include "TestService.h"
+#include "osn_service_manager.h"
 
 
 
@@ -17,20 +18,23 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
 	msg.setUInt32(0, 100);
 	msg.setString(1, "abc");
 	msg.setInt8(2, 20);
-	msg = this->call(2, ePType_Lua, msg);
-	printf("TestService::dispatch ==> float32 = %f, int32 = %d, string = %s\n", msg.getFloat32(0), msg.getInt32(1), msg.getString(2).c_str());
-
+	msg = g_ServiceManager.call(2, ePType_Lua, msg);
+//    printf("call func=========>");
+//    msg.printContext();
+    
 	msg.clear();
 	msg.setUInt32(0, 101);
-	msg = this->call(2, ePType_Lua, msg);
-	msg.printContext();
+	msg = g_ServiceManager.call(2, ePType_Lua, msg);
+//    printf("call func=========>");
+//	msg.printContext();
+    
+//    OsnPreparedStatement *pMsg = NULL;
+//    oUINT8 nCount = pMsg->getPreparedStatementDataCount();
+//    printf("eeeeeeeeeeeeeeeeee! %d\n", nCount);
 }
 
-void TestService::init()
+void TestService::start(const OsnPreparedStatement &stmt)
 {
 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
 }
 
-void TestService::exit()
-{
-}

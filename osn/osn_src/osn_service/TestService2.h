@@ -7,7 +7,7 @@ public:
 	TestService2();
 	~TestService2();
 public:
-	virtual void init() override;
+	virtual void start(const OsnPreparedStatement &stmt) override;
 	virtual void exit() override;
 	void dispatchLua(const OsnPreparedStatement &stmt);
 };

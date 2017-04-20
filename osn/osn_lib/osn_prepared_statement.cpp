@@ -530,7 +530,7 @@ void OsnPreparedStatement::printContext() const
 			break;
 		}
 	}
-	strPrintInfo += "\n";
+	strPrintInfo += "]]]\n";
 	printf("OsnPreparedStatement = %s", strPrintInfo.c_str());
 }
 

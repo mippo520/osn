@@ -17,6 +17,7 @@ enum eProtoType
 	ePType_Response,
 	ePType_Lua,
 	ePType_Client,
+    ePType_Start,
 };
 
 struct stServiceMessage

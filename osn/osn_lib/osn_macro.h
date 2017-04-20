@@ -26,6 +26,5 @@
 #define ATOM_FDEC(ptr) __sync_fetch_and_sub(ptr, 1)
 #define ATOM_ADD(ptr,n) __sync_add_and_fetch(ptr, n)
 #define ATOM_SUB(ptr,n) __sync_sub_and_fetch(ptr, n)
-#define ATOM_SET(ptr,v) __sync_lock_test_and_set(ptr, v)
 
 #endif /* osn_macro_h */
