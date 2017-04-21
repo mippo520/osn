@@ -11,6 +11,8 @@
 #include "osn_coroutine_manager.h"
 #include <iostream>
 
+__thread oUINT32 OsnServiceManager::s_unThreadCurService = 0;
+
 OsnServiceManager::OsnServiceManager()
     : m_u64DistroyCount(0)
 {
@@ -123,12 +125,14 @@ OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWei
         oINT32 nMsgType = 0;
         oBOOL bRet = pService->dispatchMessage(nMsgType);
         if (OsnService::eYT_Quit == nMsgType) {
-            removeObj(pService->getId());
             setCurService(0);
             m_CountLock.lock();
             ++m_u64DistroyCount;
-            printf("destroy count is %llu\n", m_u64DistroyCount);
+            if (0 == m_u64DistroyCount % 100000) {
+                printf("destroy count is %llu\n", m_u64DistroyCount);
+            }
             m_CountLock.unlock();
+            removeObj(pService->getId());
             return popWorkingService();
         }
         else
@@ -154,37 +158,43 @@ OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWei
     }
     
     setCurService(0);
+    if (NULL == pService) {
+        pService = NULL;
+    }
     return pService;
 }
 
 void OsnServiceManager::addThread()
 {
-    std::thread::id curThread = std::this_thread::get_id();
-    m_CurServiceLock.lock();
-    m_mapThreadCurService[curThread] = 0;
-    m_CurServiceLock.unlock();
+//    std::thread::id curThread = std::this_thread::get_id();
+//    m_CurServiceLock.lock();
+//    m_mapThreadCurService[curThread] = 0;
+//    m_CurServiceLock.unlock();
+    s_unThreadCurService = 0;
 }
 
 void OsnServiceManager::setCurService(oUINT32 unId)
 {
-    std::thread::id curThread = std::this_thread::get_id();
-    m_mapThreadCurService[curThread] = unId;
+//    std::thread::id curThread = std::this_thread::get_id();
+//    m_mapThreadCurService[curThread] = unId;
+    s_unThreadCurService = unId;
 }
 
 oUINT32 OsnServiceManager::getCurService()
 {
-    std::thread::id curThread = std::this_thread::get_id();
-    return m_mapThreadCurService[curThread];
+//    std::thread::id curThread = std::this_thread::get_id();
+//    return m_mapThreadCurService[curThread];
+    return s_unThreadCurService;
 }
 
 void OsnServiceManager::printThreadInfo()
 {
-    std::map<std::thread::id, oUINT32>::iterator itr = m_mapThreadCurService.begin();
-    for (; itr != m_mapThreadCurService.end(); itr++)
-    {
-        printf("threadid = %lx, serviceId = %u | ", itr->first, itr->second);
-    }
-    printf("\n");
+//    std::map<std::thread::id, oUINT32>::iterator itr = m_mapThreadCurService.begin();
+//    for (; itr != m_mapThreadCurService.end(); itr++)
+//    {
+//        printf("threadid = %lx, serviceId = %u | ", itr->first, itr->second);
+//    }
+//    printf("\n");
 }
 
 

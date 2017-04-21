@@ -19,6 +19,7 @@ class OsnCoroutineManager {
     static void mainFunc(OsnCoroutineManager *pManager);
     friend class OsnSingleton<OsnCoroutineManager>;
     friend class OsnCoroutine;
+    static __thread stCoThreadInfo *s_pThreadInfo;
     
     OsnCoroutineManager();
 public:
@@ -33,8 +34,8 @@ private:
     void printThreadInfo();
 private:
     OsnCacheArrManager<OsnCoroutine, eThread_Saved> m_arrCoroutine;
-    MAP_CO_THREAD_INFO m_mapInfo;
-    OsnSpinLock m_SpinLock;
+//    MAP_CO_THREAD_INFO m_mapInfo;
+//    OsnSpinLock m_SpinLock;
 };
 
 #define g_CorotineManager OsnSingleton<OsnCoroutineManager>::instance()

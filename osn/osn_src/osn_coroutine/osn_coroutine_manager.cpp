@@ -10,8 +10,9 @@
 #include "osn_coroutine_manager.h"
 #include "osn_coroutine.h"
 #include <stdio.h>
-
 #include<execinfo.h>
+
+__thread stCoThreadInfo *OsnCoroutineManager::s_pThreadInfo = NULL;
 
 OsnCoroutineManager::OsnCoroutineManager()
 {
@@ -150,30 +151,32 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
 
 stCoThreadInfo* OsnCoroutineManager::getThreadInfo()
 {
-    std::thread::id curThread = std::this_thread::get_id();
-    return &m_mapInfo[curThread];
+//    std::thread::id curThread = std::this_thread::get_id();
+//    return &m_mapInfo[curThread];
+    return s_pThreadInfo;
 }
 
 void OsnCoroutineManager::addThread()
 {
-    std::thread::id curThread = std::this_thread::get_id();
-    if (m_mapInfo.find(curThread) == m_mapInfo.end())
-    {
-        m_SpinLock.lock();
-        m_mapInfo[curThread];
-        m_SpinLock.unlock();
-    }
+    s_pThreadInfo = new stCoThreadInfo();
+//    std::thread::id curThread = std::this_thread::get_id();
+//    if (m_mapInfo.find(curThread) == m_mapInfo.end())
+//    {
+//        m_SpinLock.lock();
+//        m_mapInfo[curThread];
+//        m_SpinLock.unlock();
+//    }
 }
 
 void OsnCoroutineManager::printThreadInfo()
 {
-    printf("thread count is %d\n", m_mapInfo.size());
-    MAP_CO_THREAD_INFO_ITR itr = m_mapInfo.begin();
-    for (; itr != m_mapInfo.end(); itr++)
-    {
-        printf("thread id = %lx, info arrd = %x, running = %u \n", itr->first, &itr->second, itr->second.getRunning());
-        itr->second.getArg().printContext();
-    }
+//    printf("thread count is %d\n", m_mapInfo.size());
+//    MAP_CO_THREAD_INFO_ITR itr = m_mapInfo.begin();
+//    for (; itr != m_mapInfo.end(); itr++)
+//    {
+//        printf("thread id = %lx, info arrd = %x, running = %u \n", itr->first, &itr->second, itr->second.getRunning());
+//        itr->second.getArg().printContext();
+//    }
 }
 
 

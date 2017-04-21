@@ -25,6 +25,7 @@
 class OsnService;
 
 class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved> {
+    static __thread oUINT32 s_unThreadCurService;
     OsnServiceManager();
 public:
     friend class OsnSingleton<OsnServiceManager>;
@@ -59,8 +60,8 @@ private:
     std::queue<oUINT32> m_queHadMsgIds;
     OsnSpinLock m_QueSpinLock;
     
-    std::map<std::thread::id, oUINT32> m_mapThreadCurService;
-    OsnSpinLock m_CurServiceLock;
+//    std::map<std::thread::id, oUINT32> m_mapThreadCurService;
+//    OsnSpinLock m_CurServiceLock;
     
     oUINT64 m_u64DistroyCount;
     OsnSpinLock m_CountLock;

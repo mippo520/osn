@@ -47,13 +47,13 @@ private:
     virtual void exit();
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
-private:
     virtual oBOOL dispatchMessage(oINT32 &nType);
     oUINT32 pushMsg(stServiceMessage &msg);
     oUINT32 getMsgSize();
     oUINT32 createCO(OSN_SERVICE_CO_FUNC func);
     oINT32 suspend(oUINT32 co, const OSN_CO_ARG &arg);
-    
+    void pushToCoroutinePool(oUINT32 co);
+    oUINT32 popFromCoroutinePool();
     oBOOL popMessage(stServiceMessage &msg);
 private:
     std::queue<stServiceMessage> m_queMsg;

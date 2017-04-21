@@ -1,7 +1,7 @@
 #include "TestService2.h"
 #include "osn_service_manager.h"
 #include <unistd.h>
-
+#include <stdlib.h>
 
 
 TestService2::TestService2()
@@ -41,7 +41,9 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService2::dispatchLua));
     OsnPreparedStatement msg;
     msg.setString(0, "send begin");
-    g_ServiceManager.send(1, ePType_Lua, msg);
+    msg.setUInt32(1, getId());
+
+    g_ServiceManager.send(getId() % 1000, ePType_Lua, msg);
 }
 
 void TestService2::exit()

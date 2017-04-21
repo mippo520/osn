@@ -22,7 +22,6 @@ OsnService::OsnService()
     , m_Id(0)
     , m_unSessionCount(0)
 {
-    
 }
 
 void OsnService::registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr)
@@ -160,14 +159,8 @@ oUINT32 OsnService::getMsgSize()
 
 oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
 {
-	oUINT32 curCo = 0;
-    s_CoQueSpinLock.lock();
-    if (s_queCoroutine.size() > 0)
-    {
-		curCo = s_queCoroutine.front();
-        s_queCoroutine.pop();
-    }
-    s_CoQueSpinLock.unlock();
+	oUINT32 curCo = popFromCoroutinePool();
+
     if (0 == curCo)
     {
         curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg){
@@ -177,7 +170,8 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
                 stmt.setInt32(0, eYT_Exit);
                 stmt = g_CorotineManager.yield(stmt);
                 OSN_SERVICE_CO_FUNC funcNew = stmt.getFunction(0);
-                funcNew(g_CorotineManager.yield());
+                stmt = g_CorotineManager.yield();
+                funcNew(stmt);
             }
             return arg;
         });
@@ -221,9 +215,7 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
         case eYT_Exit:
             m_mapCoroutineSession[co] = 0;
             m_mapCoroutineSource[co] = 0;
-            s_CoQueSpinLock.lock();
-            s_queCoroutine.push(co);
-            s_CoQueSpinLock.unlock();
+            pushToCoroutinePool(co);
             break;
         case eYT_Response:
             
@@ -237,6 +229,25 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
     return nType;
 }
 
+void OsnService::pushToCoroutinePool(oUINT32 co)
+{
+    s_CoQueSpinLock.lock();
+    s_queCoroutine.push(co);
+    s_CoQueSpinLock.unlock();
+}
+
+oUINT32 OsnService::popFromCoroutinePool()
+{
+    oUINT32 co = 0;
+    s_CoQueSpinLock.lock();
+    if (s_queCoroutine.size() > 0)
+    {
+        co = s_queCoroutine.front();
+        s_queCoroutine.pop();
+    }
+    s_CoQueSpinLock.unlock();
+    return co;
+}
 
 
 
