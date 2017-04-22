@@ -33,24 +33,25 @@ const OsnPreparedStatement& OsnServiceManager::call(oUINT32 addr, oINT32 type, c
 {
     oUINT32 unSession = sendMessage(addr, getCurService(), type, 0, msg);
     OSN_CO_ARG arg;
-    arg.setInt32(0, OsnService::eYT_Call);
-    arg.setUInt32(1, unSession);
+	arg.setUInt32(0, unSession);
+	arg.setUInt32(1, OsnService::eYT_Call);
     return g_CorotineManager.yield(arg);
 }
 
 
 void OsnServiceManager::ret(const OsnPreparedStatement &msg)
 {
-    OSN_CO_ARG arg;
-    arg.setInt32(0, OsnService::eYT_Return);
-    arg.setPoint(1, &msg);
-    g_CorotineManager.yield(arg);
+//     OSN_CO_ARG arg;
+//     arg.setInt32(0, OsnService::eYT_Return);
+//     arg.setPoint(1, &msg);
+	msg.pushBackUInt32(OsnService::eYT_Return);
+    g_CorotineManager.yield(msg);
 }
 
 void OsnServiceManager::exit()
 {
     OsnPreparedStatement stmt;
-    stmt.setInt32(0, OsnService::eYT_Quit);
+    stmt.setUInt32(0, OsnService::eYT_Quit);
     g_CorotineManager.yield(stmt);
 }
 

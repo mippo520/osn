@@ -152,15 +152,6 @@ void OsnPreparedStatement::setFunction(const oUINT8 index, const STMT_FUNC &func
     m_vecStatementData[index].type = TYPE_FUNCTION;
 }
 
-void OsnPreparedStatement::setPoint(const oUINT8 index, const void *ptr)
-{
-	if (index >= m_vecStatementData.size())
-		m_vecStatementData.resize(index + 1);
-
-	m_vecStatementData[index].data.ptr = ptr;
-	m_vecStatementData[index].type = TYPE_POINT;
-}
-
 oBOOL OsnPreparedStatement::getBool( const oUINT8 index ) const
 {
 	oBOOL value = false;
@@ -446,6 +437,28 @@ OsnPreparedStatement::STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 i
     return func;
 }
 
+oUINT32 OsnPreparedStatement::popBackUInt32() const
+{
+	oUINT32 unRet = 0;
+
+	oUINT32 unSize = m_vecStatementData.size();
+	if (unSize > 0)
+	{
+		unRet = m_vecStatementData[unSize - 1].data.ui32;
+		m_vecStatementData.pop_back();
+	}
+	return unRet;
+}
+
+void OsnPreparedStatement::pushBackUInt32(oUINT32 unValue) const
+{
+	oUINT32 unSize = m_vecStatementData.size();
+	m_vecStatementData.resize(unSize + 1);
+
+	m_vecStatementData[unSize].data.ui32 = unValue;
+	m_vecStatementData[unSize].type = TYPE_UINT32;
+}
+
 oBOOL OsnPreparedStatement::isEmpty() const
 {
 	return 0 == m_vecStatementData.size();
@@ -512,10 +525,6 @@ void OsnPreparedStatement::printContext() const
 			break;
 		case TYPE_STRING:
 			sprintf(sz, "STRING = %s, ", getString(i).c_str());
-			strPrintInfo += sz;
-			break;
-		case TYPE_POINT:
-			sprintf(sz, "POINT = %llx, ", getPoint<void>(i));
 			strPrintInfo += sz;
 			break;
 		case TYPE_FUNCTION:

@@ -63,6 +63,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_manager.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_main.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_head.h" />

@@ -53,11 +53,10 @@ void OsnService::exit()
 
 OsnPreparedStatement OsnService::dispatch(const OsnPreparedStatement &stmt)
 {
-	const OsnPreparedStatement &arg = *stmt.getPoint<OsnPreparedStatement>(1);
-	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.getInt32(0));
+	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.popBackUInt32());
 	if (itr != m_mapDispatchFunc.end())
 	{
-        itr->second(arg);
+        itr->second(stmt);
 	}
 	return stmt;
 }
@@ -113,10 +112,8 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			oUINT32 co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
 			m_mapCoroutineSession[co] = msg.unSession;
 			m_mapCoroutineSource[co] = msg.unSource;
-			OSN_CO_ARG arg;
-			arg.setInt32(0, msg.nType);
-			arg.setPoint(1, &msg.stmt);
-			nType = suspend(co, g_CorotineManager.resume(co, arg));
+			msg.stmt.pushBackUInt32(msg.nType);
+			nType = suspend(co, g_CorotineManager.resume(co, msg.stmt));
 		}
 
         return true;
@@ -192,24 +189,20 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
 	if (arg.isEmpty())
 	{
 	}
-    oINT32 nType = arg.getInt32(0);
+    oUINT32 nType = arg.popBackUInt32();
     switch (nType) {
         case eYT_Call:
 		{
-			oUINT32 unSession = arg.getUInt32(1);
+			oUINT32 unSession = arg.getUInt32(0);
 			m_mapSessionCoroutine[unSession] = co;
 		}
             break;
         case eYT_Return:
 		{
-			const OsnPreparedStatement *pStmt = arg.getPoint<OsnPreparedStatement>(1);
-			if (NULL != pStmt)
-			{
-				oUINT32 unSession = m_mapCoroutineSession[co];
-				oUINT32 unSource = m_mapCoroutineSource[co];
-				g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, *pStmt);
-				nType = suspend(co, g_CorotineManager.resume(co));
-			}
+			oUINT32 unSession = m_mapCoroutineSession[co];
+			oUINT32 unSource = m_mapCoroutineSource[co];
+			g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, arg);
+			nType = suspend(co, g_CorotineManager.resume(co));
 		}
             break;
         case eYT_Exit:

@@ -37,6 +37,9 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService2.cpp">
       <Filter>osn_src\osn_service</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp">
+      <Filter>osn_lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="osn_lib">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService2.h">
       <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h">
+      <Filter>osn_lib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
