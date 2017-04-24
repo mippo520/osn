@@ -18,7 +18,7 @@
 
 typedef OsnPreparedStatement OSN_CO_ARG;
 
-typedef std::function<OsnPreparedStatement(oUINT32 co, const OsnPreparedStatement &)> OSN_COROUTINE_FUNC;
+typedef std::function<OSN_CO_ARG(oUINT32 co, const OSN_CO_ARG&)> OSN_COROUTINE_FUNC;
 
 enum eCoroutineState
 {
@@ -32,13 +32,29 @@ enum eCoroutineState
 struct stCoThreadInfo {
 
     MEMBER_VALUE(oUINT32, Running);
-    MEMBER_VALUE(OSN_CO_ARG, Arg);
     ucontext_t m_MainCtx;
     
     stCoThreadInfo()
-    : m_Running(0)
+        : m_Running(0)
     {
-        
+        m_pArg = &m_ArgCache;
+    }
+    
+    void setArg(const OSN_CO_ARG *pArg)
+    {
+        if(NULL != pArg)
+        {
+            m_pArg = pArg;
+        }
+        else
+        {
+            m_pArg = &m_ArgCache;
+        }
+    }
+    
+    const OSN_CO_ARG& getArg()
+    {
+        return *m_pArg;
     }
     
     oBOOL isRunning()
@@ -53,9 +69,12 @@ struct stCoThreadInfo {
     
     void printInfo()
     {
-        printf("stCoThreadInfo ==========> addr = %x, running = %u, \n", this, m_Running);
-        m_Arg.printContext();
+        printf("stCoThreadInfo ==========> addr = %x, running = %lu, \n", this, m_Running);
+        m_pArg->printContext();
     }
+private:
+    const OSN_CO_ARG *m_pArg;
+    OSN_CO_ARG m_ArgCache;
 };
 
 typedef std::map<std::thread::id, stCoThreadInfo> MAP_CO_THREAD_INFO;

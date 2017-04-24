@@ -28,9 +28,11 @@ class OsnService {
         eYT_Quit,
     };
 	typedef std::function<void(const OsnPreparedStatement &)> DISPATCH_FUNC;
-	typedef OsnPreparedStatement::STMT_FUNC OSN_SERVICE_CO_FUNC;
+    typedef std::function<void (const OsnPreparedStatement &)> OSN_SERVICE_CO_FUNC;
     static std::queue<oUINT32> s_queCoroutine;
     static OsnSpinLock s_CoQueSpinLock;
+    static oUINT64 s_u64CoroutineCount;
+    static OsnSpinLock s_CoCountLock;
 public:
     virtual ~OsnService();
 protected:
@@ -42,7 +44,7 @@ protected:
     void registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr);
 private:
     virtual void start(const OsnPreparedStatement &stmt) = 0;
-    virtual OsnPreparedStatement dispatch(const OsnPreparedStatement &stmt);
+    virtual void dispatch(const OsnPreparedStatement &stmt);
     void init();
     virtual void exit();
     oBOOL getIsInGlobal();

@@ -44,7 +44,7 @@ void OsnServiceManager::ret(const OsnPreparedStatement &msg)
 //     OSN_CO_ARG arg;
 //     arg.setInt32(0, OsnService::eYT_Return);
 //     arg.setPoint(1, &msg);
-	msg.pushBackUInt32(OsnService::eYT_Return);
+	msg.pushBackInt32(OsnService::eYT_Return);
     g_CorotineManager.yield(msg);
 }
 
@@ -78,6 +78,10 @@ oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage &msg)
     if (NULL != pService)
     {
         unSession = pService->pushMsg(msg);
+    }
+    else
+    {
+        printf("OsnServiceManager::pushMsg Error! can not found service, id is %lu\n", unTargetId);
     }
 
     return unSession;

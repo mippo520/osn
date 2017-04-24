@@ -16,6 +16,8 @@
 
 std::queue<oUINT32> OsnService::s_queCoroutine;
 OsnSpinLock OsnService::s_CoQueSpinLock;
+oUINT64 OsnService::s_u64CoroutineCount = 0;
+OsnSpinLock OsnService::s_CoCountLock;
 
 OsnService::OsnService()
     : m_IsInGlobal(false)
@@ -51,14 +53,16 @@ void OsnService::exit()
 }
 
 
-OsnPreparedStatement OsnService::dispatch(const OsnPreparedStatement &stmt)
+void OsnService::dispatch(const OsnPreparedStatement &stmt)
 {
-	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.popBackUInt32());
+	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.popBackInt32());
 	if (itr != m_mapDispatchFunc.end())
 	{
         itr->second(stmt);
 	}
-	return stmt;
+    
+    OsnPreparedStatement arg = stmt;
+    printf("succeed!\n");
 }
 
 void OsnService::init()
@@ -98,7 +102,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.find(msg.unSession);
 			if (itr == m_mapSessionCoroutine.end())
 			{
-				printf("unknown session : %d from %x\n", msg.unSession, msg.unSource);
+				printf("Osn Return Error! unknown session : %lu from %lx\n", msg.unSession, msg.unSource);
 			}
 			else
 			{
@@ -112,7 +116,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			oUINT32 co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
 			m_mapCoroutineSession[co] = msg.unSession;
 			m_mapCoroutineSource[co] = msg.unSource;
-			msg.stmt.pushBackUInt32(msg.nType);
+			msg.stmt.pushBackInt32(msg.nType);
 			nType = suspend(co, g_CorotineManager.resume(co, msg.stmt));
 		}
 
@@ -160,6 +164,11 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
 
     if (0 == curCo)
     {
+        s_CoCountLock.lock();
+        ++s_u64CoroutineCount;
+        s_CoCountLock.unlock();
+        printf("coroutine count is %llu\n", s_u64CoroutineCount);
+        
         curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg){
             func(arg);
             while (true) {
@@ -189,7 +198,7 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
 	if (arg.isEmpty())
 	{
 	}
-    oUINT32 nType = arg.popBackUInt32();
+    oINT32 nType = arg.popBackInt32();
     switch (nType) {
         case eYT_Call:
 		{

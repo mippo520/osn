@@ -57,7 +57,7 @@ OSN_CO_ARG OsnCoroutine::run(const OSN_CO_ARG &arg)
 
 void OsnCoroutine::printInfo()
 {
-    printf("coroutine info : id = %u, state = %d\n", getId(), getState());
+    printf("coroutine info : id = %lu, state = %d\n", getId(), getState());
 }
 
 

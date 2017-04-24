@@ -43,7 +43,8 @@ void TestService2::start(const OsnPreparedStatement &stmt)
     msg.setString(0, "send begin");
     msg.setUInt32(1, getId());
 
-    g_ServiceManager.send(getId() % 1000, ePType_Lua, msg);
+    oUINT32 unId = (getId() - 1) % 1000 + 1;
+    g_ServiceManager.send(unId, ePType_Lua, msg);
 }
 
 void TestService2::exit()

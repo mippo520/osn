@@ -50,7 +50,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     OsnCoroutine *pCo = m_arrCoroutine.getObject(pInfo->getRunning());
     if (NULL == pCo)
     {
-        printf("OsnCoroutineManager::yield Error! Can not found running coroutine %u! thread id = %lx\n", pInfo->getRunning(), std::this_thread::get_id());
+        printf("OsnCoroutineManager::yield Error! Can not found running coroutine %lu! thread id = %lx\n", pInfo->getRunning(), std::this_thread::get_id());
         pInfo->printInfo();
         printThreadInfo();
         return pInfo->getArg();
@@ -58,7 +58,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
 
     pCo->setState(eCS_Suspend);
     pInfo->setRunning(0);
-    pInfo->setArg(arg);
+    pInfo->setArg(&arg);
     swapcontext(pCo->getCtxPtr(), pInfo->getContextPtr());
     pInfo = getThreadInfo();
     return pInfo->getArg();
@@ -79,7 +79,7 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
     OsnCoroutine *pCo = m_arrCoroutine.getObject(unId);
     if (NULL == pCo)
     {
-        printf("OsnCoroutineManager::resume Error! Can not found coroutine %u!\n", unId);
+        printf("OsnCoroutineManager::resume Error! Can not found coroutine %lu!\n", unId);
         pInfo->printInfo();
         printThreadInfo();
         return pInfo->getArg();
@@ -92,20 +92,20 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
             pCo->createContext(pInfo->getContextPtr());
             pCo->setState(eCS_Running);
             pInfo->setRunning(unId);
-            pInfo->setArg(arg);
+            pInfo->setArg(&arg);
             makecontext(pCo->getCtxPtr(), (void (*)())&OsnCoroutineManager::mainFunc, 1, this);
             swapcontext(pInfo->getContextPtr(), pCo->getCtxPtr());
             break;
         case eCS_Suspend:
             pCo->setState(eCS_Running);
             pInfo->setRunning(unId);
-            pInfo->setArg(arg);
+            pInfo->setArg(&arg);
             pCo->setLastContext(pInfo->getContextPtr());
             swapcontext(pInfo->getContextPtr(), pCo->getCtxPtr());
             break;
         default:
         {
-            printf("OsnCoroutineManager::resume Error! Coroutine %d state error! threadId = %lx\n", unId, std::this_thread::get_id());
+            printf("OsnCoroutineManager::resume Error! Coroutine %lu state error! threadId = %lx\n", unId, std::this_thread::get_id());
             pCo->printInfo();
             pInfo->printInfo();
             printThreadInfo();
@@ -137,7 +137,7 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
     OsnCoroutine *pCo = pManager->m_arrCoroutine.getObject(pInfo->getRunning());
     if (NULL == pCo)
     {
-        printf("OsnCoroutineManager::mainFunc Error! Can not found coroutine %u!\n", pInfo->getRunning());
+        printf("OsnCoroutineManager::mainFunc Error! Can not found coroutine %lu!\n", pInfo->getRunning());
         pInfo->printInfo();
         pManager->printThreadInfo();
         return;
@@ -145,7 +145,7 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
     OSN_CO_ARG arg = pCo->run(pInfo->getArg());
     pInfo = pManager->getThreadInfo();
     pInfo->setRunning(0);
-    pInfo->setArg(arg);
+    pInfo->setArg(&arg);
     pManager->m_arrCoroutine.removeObj(pInfo->getRunning());
 }
 

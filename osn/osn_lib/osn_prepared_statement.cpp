@@ -12,7 +12,9 @@ OsnPreparedStatement& OsnPreparedStatement::operator=( const OsnPreparedStatemen
 		return *this;
 	}
 
-	m_vecStatementData.assign( right.m_vecStatementData.begin(), right.m_vecStatementData.end() );
+    if (right.m_vecStatementData.size() > 0) {
+        m_vecStatementData.assign( right.m_vecStatementData.begin(), right.m_vecStatementData.end() );
+    }
 	return *this;
 }
 
@@ -143,7 +145,7 @@ void OsnPreparedStatement::setNull(const oUINT8 index)
 	m_vecStatementData[index].type = TYPE_NULL;
 }
 
-void OsnPreparedStatement::setFunction(const oUINT8 index, const STMT_FUNC &func)
+void OsnPreparedStatement::setFunction(const oUINT8 index, const VOID_STMT_FUNC &func)
 {
     if (index >= m_vecStatementData.size())
         m_vecStatementData.resize(index+1);
@@ -416,9 +418,9 @@ std::string OsnPreparedStatement::getString( const oUINT8 index ) const
 	return value;
 }
 
-OsnPreparedStatement::STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
+OsnPreparedStatement::VOID_STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
 {
-    STMT_FUNC func;
+    VOID_STMT_FUNC func;
     if ( index < 0 || index >= m_vecStatementData.size() )
     {
         OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
@@ -437,26 +439,26 @@ OsnPreparedStatement::STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 i
     return func;
 }
 
-oUINT32 OsnPreparedStatement::popBackUInt32() const
+oINT32 OsnPreparedStatement::popBackInt32() const
 {
-	oUINT32 unRet = 0;
+	oINT32 nRet = 0;
 
 	oUINT32 unSize = m_vecStatementData.size();
-	if (unSize > 0)
+	if (unSize > 0 && TYPE_INT32 == m_vecStatementData[unSize - 1].type)
 	{
-		unRet = m_vecStatementData[unSize - 1].data.ui32;
+		nRet = m_vecStatementData[unSize - 1].data.i32;
 		m_vecStatementData.pop_back();
 	}
-	return unRet;
+	return nRet;
 }
 
-void OsnPreparedStatement::pushBackUInt32(oUINT32 unValue) const
+void OsnPreparedStatement::pushBackInt32(oINT32 nValue) const
 {
 	oUINT32 unSize = m_vecStatementData.size();
 	m_vecStatementData.resize(unSize + 1);
 
-	m_vecStatementData[unSize].data.ui32 = unValue;
-	m_vecStatementData[unSize].type = TYPE_UINT32;
+	m_vecStatementData[unSize].data.i32 = nValue;
+	m_vecStatementData[unSize].type = TYPE_INT32;
 }
 
 oBOOL OsnPreparedStatement::isEmpty() const
@@ -504,11 +506,11 @@ void OsnPreparedStatement::printContext() const
 			strPrintInfo += sz;
 			break;
 		case TYPE_UINT32:
-			sprintf(sz, "UINT32 = %u, ", getUInt32(i));
+			sprintf(sz, "UINT32 = %lu, ", getUInt32(i));
 			strPrintInfo += sz;
 			break;
 		case TYPE_INT64:
-			sprintf(sz, "INT64 = %ll, ", getInt64(i));
+			sprintf(sz, "INT64 = %lld, ", getInt64(i));
 			strPrintInfo += sz;
 			break;
 		case TYPE_UINT64:
