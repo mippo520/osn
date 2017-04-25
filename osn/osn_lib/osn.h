@@ -2,13 +2,14 @@
 //  osn.h
 //  osn
 //
-//  Created by liqing on 17/4/5.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/5.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_h
 #define osn_h
 
+#include <assert.h>
 #include "osn_type.h"
 #include "osn_macro.h"
 

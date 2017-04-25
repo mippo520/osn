@@ -2,8 +2,8 @@
 //  osn_thread.cpp
 //  osn
 //
-//  Created by liqing on 17/4/5.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/5.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #include "osn_thread.h"

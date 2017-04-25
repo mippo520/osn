@@ -2,8 +2,8 @@
 //  osn_service_manager.hpp
 //  osn
 //
-//  Created by liqing on 17/4/5.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/5.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_service_manager_hpp

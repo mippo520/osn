@@ -2,8 +2,8 @@
 //  osn_spin_lock.hpp
 //  osn
 //
-//  Created by liqing on 17/4/20.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/20.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_spin_lock_hpp

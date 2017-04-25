@@ -2,8 +2,8 @@
 //  osn_service.cpp
 //  osn
 //
-//  Created by liqing on 17/4/5.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/5.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #include "osn_service.h"
@@ -163,7 +163,6 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
         s_CoCountLock.lock();
         ++s_u64CoroutineCount;
         s_CoCountLock.unlock();
-        printf("coroutine count is %llu\n", s_u64CoroutineCount);
         
         curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg){
             func(arg);

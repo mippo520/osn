@@ -2,8 +2,8 @@
 //  osn_message.hpp
 //  osn
 //
-//  Created by liqing on 17/4/7.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/7.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_service_head
@@ -33,6 +33,8 @@ struct stServiceMessage
 		, nType(ePType_None)
         , stmt(stmt)
 	{}
+    
+    ~stServiceMessage() {}
 };
 
 #endif /* osn_service_head */

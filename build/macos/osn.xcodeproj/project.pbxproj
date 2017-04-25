@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		922CDF851EAEF975003675CD /* osn_thread_socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922CDF831EAEF975003675CD /* osn_thread_socket.cpp */; };
 		92BC05EA1EA45843004C41B3 /* TestService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E61EA45843004C41B3 /* TestService.cpp */; };
 		92BC05EB1EA45843004C41B3 /* TestService2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05E81EA45843004C41B3 /* TestService2.cpp */; };
 		92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */; };
@@ -20,6 +21,9 @@
 		92F88F0F1E9B357500E62286 /* osn_coroutine_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F0D1E9B357500E62286 /* osn_coroutine_manager.cpp */; };
 		92F88F161E9B68A600E62286 /* osn_coroutine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F141E9B68A600E62286 /* osn_coroutine.cpp */; };
 		92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F88F1B1EA0781700E62286 /* osn_prepared_statement.cpp */; };
+		F4DDFED61EAF012200CA94BB /* osn_socket_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4DDFED41EAF012200CA94BB /* osn_socket_manager.cpp */; };
+		F4DDFEE01EAF387700CA94BB /* osn_socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4DDFEDE1EAF387700CA94BB /* osn_socket.cpp */; };
+		F4DDFEE51EAF3C5F00CA94BB /* osn_kqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4DDFEE21EAF3C5F00CA94BB /* osn_kqueue.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		922CDF831EAEF975003675CD /* osn_thread_socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_thread_socket.cpp; path = ../../osn/osn_src/osn_thread/osn_thread_socket.cpp; sourceTree = "<group>"; };
+		922CDF841EAEF975003675CD /* osn_thread_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_thread_socket.h; path = ../../osn/osn_src/osn_thread/osn_thread_socket.h; sourceTree = "<group>"; };
 		929736011E948F590067EE20 /* osn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osn; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BC05E61EA45843004C41B3 /* TestService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestService.cpp; path = ../../osn/osn_src/osn_service/TestService.cpp; sourceTree = "<group>"; };
 		92BC05E71EA45843004C41B3 /* TestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestService.h; path = ../../osn/osn_src/osn_service/TestService.h; sourceTree = "<group>"; };
@@ -69,6 +75,14 @@
 		92F88F1A1E9DCA5200E62286 /* osn_cache_arr_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osn_cache_arr_manager.h; path = ../../osn/osn_lib/osn_cache_arr_manager.h; sourceTree = "<group>"; };
 		92F88F1B1EA0781700E62286 /* osn_prepared_statement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_prepared_statement.cpp; path = ../../osn/osn_lib/osn_prepared_statement.cpp; sourceTree = "<group>"; };
 		92F88F1C1EA0781700E62286 /* osn_prepared_statement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_prepared_statement.h; path = ../../osn/osn_lib/osn_prepared_statement.h; sourceTree = "<group>"; };
+		F4DDFED41EAF012200CA94BB /* osn_socket_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_socket_manager.cpp; path = ../../osn/osn_src/osn_socket/osn_socket_manager.cpp; sourceTree = "<group>"; };
+		F4DDFED51EAF012200CA94BB /* osn_socket_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_socket_manager.h; path = ../../osn/osn_src/osn_socket/osn_socket_manager.h; sourceTree = "<group>"; };
+		F4DDFEDD1EAF2C0300CA94BB /* osn_socket_head.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osn_socket_head.h; path = ../../osn/osn_src/osn_socket/osn_socket_head.h; sourceTree = "<group>"; };
+		F4DDFEDE1EAF387700CA94BB /* osn_socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_socket.cpp; path = ../../osn/osn_src/osn_socket/osn_socket.cpp; sourceTree = "<group>"; };
+		F4DDFEDF1EAF387700CA94BB /* osn_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_socket.h; path = ../../osn/osn_src/osn_socket/osn_socket.h; sourceTree = "<group>"; };
+		F4DDFEE21EAF3C5F00CA94BB /* osn_kqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_kqueue.cpp; path = ../../osn/osn_src/osn_socket/poll/osn_kqueue.cpp; sourceTree = "<group>"; };
+		F4DDFEE31EAF3C5F00CA94BB /* osn_kqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_kqueue.h; path = ../../osn/osn_src/osn_socket/poll/osn_kqueue.h; sourceTree = "<group>"; };
+		F4DDFEE41EAF3C5F00CA94BB /* osn_poll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_poll.h; path = ../../osn/osn_src/osn_socket/poll/osn_poll.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +96,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		922CDF861EAEFAD4003675CD /* osn_socket */ = {
+			isa = PBXGroup;
+			children = (
+				F4DDFEE11EAF3BEC00CA94BB /* poll */,
+				F4DDFED41EAF012200CA94BB /* osn_socket_manager.cpp */,
+				F4DDFED51EAF012200CA94BB /* osn_socket_manager.h */,
+				F4DDFEDD1EAF2C0300CA94BB /* osn_socket_head.h */,
+				F4DDFEDE1EAF387700CA94BB /* osn_socket.cpp */,
+				F4DDFEDF1EAF387700CA94BB /* osn_socket.h */,
+			);
+			name = osn_socket;
+			sourceTree = "<group>";
+		};
 		929735F81E948F590067EE20 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +128,7 @@
 		92C9186C1E949154009BF419 /* osn_src */ = {
 			isa = PBXGroup;
 			children = (
+				922CDF861EAEFAD4003675CD /* osn_socket */,
 				92F88F0C1E9B344400E62286 /* osn_coroutine */,
 				92C918831E94E20B009BF419 /* osn_service */,
 				92C918751E9495E9009BF419 /* osn_thread */,
@@ -146,6 +174,8 @@
 				92C918801E94C373009BF419 /* osn_thread_worker.h */,
 				92C918761E949695009BF419 /* osn_thread.cpp */,
 				92C918771E949695009BF419 /* osn_thread.h */,
+				922CDF831EAEF975003675CD /* osn_thread_socket.cpp */,
+				922CDF841EAEF975003675CD /* osn_thread_socket.h */,
 			);
 			name = osn_thread;
 			sourceTree = "<group>";
@@ -176,6 +206,16 @@
 				92F88F151E9B68A600E62286 /* osn_coroutine.h */,
 			);
 			name = osn_coroutine;
+			sourceTree = "<group>";
+		};
+		F4DDFEE11EAF3BEC00CA94BB /* poll */ = {
+			isa = PBXGroup;
+			children = (
+				F4DDFEE21EAF3C5F00CA94BB /* osn_kqueue.cpp */,
+				F4DDFEE31EAF3C5F00CA94BB /* osn_kqueue.h */,
+				F4DDFEE41EAF3C5F00CA94BB /* osn_poll.h */,
+			);
+			name = poll;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,18 +276,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				92C918891E94E41B009BF419 /* osn_service_manager.cpp in Sources */,
+				F4DDFEE51EAF3C5F00CA94BB /* osn_kqueue.cpp in Sources */,
 				92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */,
 				92C918811E94C373009BF419 /* osn_thread_timer.cpp in Sources */,
 				92C918821E94C373009BF419 /* osn_thread_worker.cpp in Sources */,
 				92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */,
+				F4DDFEE01EAF387700CA94BB /* osn_socket.cpp in Sources */,
 				92F88F0F1E9B357500E62286 /* osn_coroutine_manager.cpp in Sources */,
 				92C918781E949695009BF419 /* osn_thread.cpp in Sources */,
 				92C918701E9491F3009BF419 /* osn_main.cpp in Sources */,
 				92C918861E94E294009BF419 /* osn_service.cpp in Sources */,
+				F4DDFED61EAF012200CA94BB /* osn_socket_manager.cpp in Sources */,
 				92BC05EB1EA45843004C41B3 /* TestService2.cpp in Sources */,
 				92BC05EA1EA45843004C41B3 /* TestService.cpp in Sources */,
 				92C918731E949223009BF419 /* osn_start.cpp in Sources */,
 				92F88F161E9B68A600E62286 /* osn_coroutine.cpp in Sources */,
+				922CDF851EAEF975003675CD /* osn_thread_socket.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

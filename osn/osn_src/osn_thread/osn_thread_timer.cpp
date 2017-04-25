@@ -2,13 +2,14 @@
 //  osn_thread.cpp
 //  osn
 //
-//  Created by liqing on 17/4/5.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/5.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #include "osn_thread_timer.h"
 #include <unistd.h>
 #include "osn_start.h"
+#include "osn_socket_manager.h"
 
 OsnTimerThread::OsnTimerThread()
 {
@@ -30,6 +31,7 @@ void OsnTimerThread::onWork()
         g_OsnStart.wakeup(0);
     }
     
+    g_SocketManager.exit();
     s_isQuit = true;
 }
 

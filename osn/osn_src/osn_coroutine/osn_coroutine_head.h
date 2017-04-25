@@ -2,8 +2,8 @@
 //  osn_coroutine_head.h
 //  osn
 //
-//  Created by liqing on 17/4/10.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/10.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_coroutine_head_h

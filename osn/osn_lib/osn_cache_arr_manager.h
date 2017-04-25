@@ -2,8 +2,8 @@
 //  osn_cache_arr_manager.h
 //  osn
 //
-//  Created by liqing on 17/4/12.
-//  Copyright © 2017年 liqing. All rights reserved.
+//  Created by zenghui on 17/4/12.
+//  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_cache_arr_manager_h
