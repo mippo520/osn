@@ -50,15 +50,15 @@ private:
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
     virtual oBOOL dispatchMessage(oINT32 &nType);
-    oUINT32 pushMsg(stServiceMessage &msg);
+    oUINT32 pushMsg(stServiceMessage *pMsg);
     oUINT32 getMsgSize();
     oUINT32 createCO(OSN_SERVICE_CO_FUNC func);
     oINT32 suspend(oUINT32 co, const OSN_CO_ARG &arg);
     void pushToCoroutinePool(oUINT32 co);
     oUINT32 popFromCoroutinePool();
-    oBOOL popMessage(stServiceMessage &msg);
+    stServiceMessage* popMessage();
 private:
-    std::queue<stServiceMessage> m_queMsg;
+    std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;
 
 	oBOOL m_IsInGlobal;

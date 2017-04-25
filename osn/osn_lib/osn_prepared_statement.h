@@ -56,7 +56,6 @@ public:
 public:
     OsnPreparedStatement();
 	OsnPreparedStatement(const OsnPreparedStatement& right);
-	OsnPreparedStatement& operator=(const OsnPreparedStatement& right);
 	~OsnPreparedStatement();
 
 	void setBool(const oUINT8 index, const oBOOL value);
@@ -100,7 +99,8 @@ public:
 	oUINT8 getPreparedStatementDataCount() const;
 
 private:
-	static void errorInvalidIndex(const std::string &strFuncName, const oUINT8 index);
+    OsnPreparedStatement& operator=(const OsnPreparedStatement& right);
+    static void errorInvalidIndex(const std::string &strFuncName, const oUINT8 index);
 	static void errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType);
 protected:
 	mutable std::vector<PreparedStatementData> m_vecStatementData;    //- Buffer of parameters, not tied to MySQL in any way yet

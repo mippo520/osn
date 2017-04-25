@@ -34,7 +34,7 @@ const OsnPreparedStatement& OsnServiceManager::call(oUINT32 addr, oINT32 type, c
     oUINT32 unSession = sendMessage(addr, getCurService(), type, 0, msg);
     OSN_CO_ARG arg;
 	arg.setUInt32(0, unSession);
-	arg.setUInt32(1, OsnService::eYT_Call);
+	arg.pushBackInt32(OsnService::eYT_Call);
     return g_CorotineManager.yield(arg);
 }
 
@@ -51,7 +51,7 @@ void OsnServiceManager::ret(const OsnPreparedStatement &msg)
 void OsnServiceManager::exit()
 {
     OsnPreparedStatement stmt;
-    stmt.setUInt32(0, OsnService::eYT_Quit);
+    stmt.pushBackInt32(OsnService::eYT_Quit);
     g_CorotineManager.yield(stmt);
 }
 
@@ -62,22 +62,21 @@ void OsnServiceManager::init()
 
 oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg)
 {
-	stServiceMessage serviceMsg;
-	serviceMsg.stmt = msg;
-	serviceMsg.unSession = unSession;
-	serviceMsg.unSource = unSource;
-	serviceMsg.nType = type;
+	stServiceMessage *pServiceMsg = new stServiceMessage(msg);
+	pServiceMsg->unSession = unSession;
+	pServiceMsg->unSource = unSource;
+	pServiceMsg->nType = type;
 
-    return pushMsg(unTargetId, serviceMsg);
+    return pushMsg(unTargetId, pServiceMsg);
 }
 
-oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage &msg)
+oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg)
 {
     oUINT32 unSession = 0;
     OsnService *pService = getObject(unTargetId);
     if (NULL != pService)
     {
-        unSession = pService->pushMsg(msg);
+        unSession = pService->pushMsg(pMsg);
     }
     else
     {

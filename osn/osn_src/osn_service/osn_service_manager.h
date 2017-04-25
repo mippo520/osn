@@ -51,7 +51,7 @@ private:
     friend class OsnService;
     friend class OsnStart;
         
-    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage &msg);
+    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg);
     OsnService* popWorkingService();
     oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg);
     void setCurService(oUINT32 unId);

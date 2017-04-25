@@ -27,10 +27,11 @@ struct stServiceMessage
 	oINT32	nType;
 	OsnPreparedStatement stmt;
 
-	stServiceMessage()
+	stServiceMessage(const OsnPreparedStatement &stmt)
 		: unSource(0)
 		, unSession(0)
 		, nType(ePType_None)
+        , stmt(stmt)
 	{}
 };
 

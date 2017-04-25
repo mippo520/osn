@@ -60,9 +60,6 @@ void OsnService::dispatch(const OsnPreparedStatement &stmt)
 	{
         itr->second(stmt);
 	}
-    
-    OsnPreparedStatement arg = stmt;
-    printf("succeed!\n");
 }
 
 void OsnService::init()
@@ -71,55 +68,54 @@ void OsnService::init()
     g_ServiceManager.send(getId(), ePType_Start);
 }
 
-oBOOL OsnService::popMessage(stServiceMessage &msg)
+stServiceMessage* OsnService::popMessage()
 {
-    oBOOL bRet = false;
+    stServiceMessage *pMsg = NULL;
     m_QueMsgSpinLock.lock();
     if (m_queMsg.size() > 0) {
-        msg = m_queMsg.front();
+        pMsg = m_queMsg.front();
         m_queMsg.pop();
-
-        bRet = true;
     }
     
-    if (!bRet)
+    if (NULL == pMsg)
     {
         this->setIsInGlobal(false);
     }
     
     m_QueMsgSpinLock.unlock();
-    return bRet;
+    return pMsg;
 }
 
 oBOOL OsnService::dispatchMessage(oINT32 &nType)
 {
-    stServiceMessage msg;
-    if (popMessage(msg))
+    stServiceMessage *pMsg = popMessage();
+    if (NULL != pMsg)
     {
 
-		if (ePType_Response == msg.nType)
+		if (ePType_Response == pMsg->nType)
 		{
-			MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.find(msg.unSession);
+			MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.find(pMsg->unSession);
 			if (itr == m_mapSessionCoroutine.end())
 			{
-				printf("Osn Return Error! unknown session : %lu from %lx\n", msg.unSession, msg.unSource);
+				printf("Osn Return Error! unknown session : %lu from %lx\n", pMsg->unSession, pMsg->unSource);
 			}
 			else
 			{
 				oUINT32 co = itr->second;
 				m_mapSessionCoroutine.erase(itr);
-				nType = suspend(co, g_CorotineManager.resume(co, msg.stmt));
+				nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
 			}
 		}
 		else
 		{
 			oUINT32 co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
-			m_mapCoroutineSession[co] = msg.unSession;
-			m_mapCoroutineSource[co] = msg.unSource;
-			msg.stmt.pushBackInt32(msg.nType);
-			nType = suspend(co, g_CorotineManager.resume(co, msg.stmt));
+			m_mapCoroutineSession[co] = pMsg->unSession;
+			m_mapCoroutineSource[co] = pMsg->unSource;
+			pMsg->stmt.pushBackInt32(pMsg->nType);
+			nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
 		}
 
+        SAFE_DELETE(pMsg);
         return true;
     }
     else{
@@ -127,17 +123,17 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
     }
 }
 
-oUINT32 OsnService::pushMsg(stServiceMessage &msg)
+oUINT32 OsnService::pushMsg(stServiceMessage *pMsg)
 {
-    oUINT32 unSession = msg.unSession;
+    oUINT32 unSession = pMsg->unSession;
 	if (0 == unSession)
 	{
         unSession = ATOM_INC(&m_unSessionCount);
-		msg.unSession = unSession;
+		pMsg->unSession = unSession;
 	}
     
     m_QueMsgSpinLock.lock();
-    m_queMsg.push(msg);
+    m_queMsg.push(pMsg);
     
     if (!getIsInGlobal())
     {
@@ -173,11 +169,11 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
             func(arg);
             while (true) {
                 OsnPreparedStatement stmt;
-                stmt.setInt32(0, eYT_Exit);
-                stmt = g_CorotineManager.yield(stmt);
-                OSN_SERVICE_CO_FUNC funcNew = stmt.getFunction(0);
-                stmt = g_CorotineManager.yield();
-                funcNew(stmt);
+                stmt.pushBackInt32(eYT_Exit);
+                const OsnPreparedStatement &stmtFunc = g_CorotineManager.yield(stmt);
+                OSN_SERVICE_CO_FUNC funcNew = stmtFunc.getFunction(0);
+                const OsnPreparedStatement &stmtArg = g_CorotineManager.yield();
+                funcNew(stmtArg);
             }
             return arg;
         });
