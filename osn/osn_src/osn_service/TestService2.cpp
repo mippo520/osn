@@ -1,7 +1,6 @@
 #include "TestService2.h"
 #include "osn_service_manager.h"
 #include <unistd.h>
-#include <stdlib.h>
 
 
 TestService2::TestService2()

@@ -20,7 +20,7 @@
 
 #ifdef __APPLE__
 #include "osn_kqueue.h"
-#elif defend __linux__
+#elif defined __linux__
 #include "osn_epoll.h"
 #endif
 
@@ -29,13 +29,14 @@ OsnSocketManager::OsnSocketManager()
     , m_nRecvFD(0)
     , m_nSendFD(0)
     , m_bCheckCtrl(true)
-    , m_nEventN(0)
-    , m_nEventIndex(0)
+	, m_nEventIndex(0)
+	, m_nEventN(0)
     , m_nAllocId(0)
 {
 #ifdef __APPLE__
     m_pPoll = new OsnKqueue();
-#elif defend __linux__
+#elif defined __linux__
+	m_pPoll = new OsnEpoll();
 #endif
 }
 
@@ -622,36 +623,37 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
 {
     stOsnSocketMsg *pSM;
     oINT32 sz = sizeof(*pSM);
+	oINT32 msg_sz = 0;
     if (bPadding)
     {
         if (result.data)
         {
-            oUINT32 msg_sz = strlen(result.data);
+            msg_sz = (oINT32)strlen(result.data);
             if (msg_sz > 128)
             {
                 msg_sz = 128;
             }
-            sz += msg_sz;
         }
         else
         {
             result.data[0] = '\0';
         }
     }
-    pSM = new stOsnSocketMsg();
-    pSM->type = nType;
-    pSM->id = result.id;
-    pSM->ud = result.ud;
+
     if (bPadding)
     {
-        pSM->pBuffer = NULL;
-        memcpy(pSM + 1, result.data, sz - sizeof(*pSM));
+		pSM = new stOsnSocketMsg(msg_sz);
+        memcpy(pSM->pBuffer, result.data, msg_sz);
     }
     else
     {
-        pSM->pBuffer = result.data;
+		pSM = new stOsnSocketMsg(0);
+		pSM->pBuffer = result.data;
     }
-    
+	pSM->type = nType;
+	pSM->id = result.id;
+	pSM->ud = result.ud;
+
     OsnPreparedStatement stmt;
     stmt.setUInt64(0, (oUINT64)pSM);
     oUINT32 unSession = g_ServiceManager.send(result.opaque, ePType_Socket, stmt);

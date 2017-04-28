@@ -36,7 +36,15 @@ OsnStart::~OsnStart()
 
 void OsnStart::init()
 {
-    g_ServiceManager.startService<TestService>();
+// 	for (oINT32 i = 0; i < 1000; ++i)
+// 	{
+		g_ServiceManager.startService<TestService>();
+// 	}
+// 
+// 	for (oINT32 i = 0; i < 1000; ++i)
+// 	{
+// 		g_ServiceManager.startService<TestService2>();
+// 	}
 
     g_SocketManager.init();
     

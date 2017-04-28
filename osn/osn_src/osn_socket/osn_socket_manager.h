@@ -9,6 +9,7 @@
 #ifndef osn_socket_manager_hpp
 #define osn_socket_manager_hpp
 #include <sys/types.h>
+#include <string>
 #include "osn.h"
 #include "osn_singleton.h"
 #include "osn_socket.h"

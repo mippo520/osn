@@ -9,6 +9,7 @@
 #ifndef osn_h
 #define osn_h
 
+#include <stdlib.h>
 #include <assert.h>
 #include "osn_type.h"
 #include "osn_macro.h"

@@ -149,17 +149,28 @@ struct stOsnSocketMsg
     oINT32 id;
     oINT32 ud;
     oINT8 *pBuffer;
+	oINT32 nSize;
     
-    stOsnSocketMsg()
+    stOsnSocketMsg(oINT32 sz)
         : type(0)
         , id(0)
         , ud(0)
         , pBuffer(NULL)
-    {}
+		, nSize(sz)
+    {
+		if (sz > 0)
+		{
+			pBuffer = (oINT8*)malloc(sz);
+		}
+		else
+		{
+			pBuffer = NULL;
+		}
+	}
     
     ~stOsnSocketMsg()
     {
-        SAFE_FREE(pBuffer);
+		SAFE_FREE(pBuffer);
     }
 };
 

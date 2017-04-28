@@ -42,10 +42,20 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
     }
 }
 
+void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
+{
+	stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
+	if (NULL != pSM)
+	{
+		int n = 0;
+	}
+}
+
 void TestService::start(const OsnPreparedStatement &stmt)
 {
-//	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
-    oINT32 sock = g_SocketManager.listen(getId(), "", 18765);
+// 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
+	registDispatchFunc(ePType_Socket, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchSocket));
+	oINT32 sock = g_SocketManager.listen(getId(), "", 18765);
     g_SocketManager.start(getId(), sock);
 }
 
