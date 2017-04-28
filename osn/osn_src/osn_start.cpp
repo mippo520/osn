@@ -36,28 +36,23 @@ OsnStart::~OsnStart()
 
 void OsnStart::init()
 {
-    for (oINT32 i = 0; i < 1000; ++i)
-    {
-        g_ServiceManager.startService<TestService>();
-    }
-    
-    for (oINT32 i = 0; i < 1000; ++i)
-    {
-        g_ServiceManager.startService<TestService2>();
-    }
+    g_ServiceManager.startService<TestService>();
+
     g_SocketManager.init();
     
 	clearThread();
 	createThread<OsnTimerThread>();
     createThread<OsnSocketThread>();
-	for (oINT32 i = 0; i < s_nWorkerCount; ++i) {
+	for (oINT32 i = 0; i < s_nWorkerCount; ++i)
+    {
 		createThread<OsnWorkerThread>(s_WeightArr[i]);
 	}
 }
 
 void OsnStart::start()
 {
-    for (oUINT32 i = 0; i < m_vecThread.size(); ++i) {
+    for (oUINT32 i = 0; i < m_vecThread.size(); ++i)
+    {
         m_vecThread[i]->init();
     }
 }
@@ -70,15 +65,7 @@ void OsnStart::exit()
 
 oBOOL OsnStart::checkAbort()
 {
-//    static oINT32 i = 0;
-//    ++i;
-//    if (i > 10) {
-//        return  true;
-//    }
-//    else
-//    {
-        return false;
-//    }
+    return false;
 }
 
 void OsnStart::clearThread()
@@ -95,7 +82,8 @@ void OsnStart::clearThread()
 
 void OsnStart::wakeup(oINT32 nSleepCount)
 {
-    if (OsnThread::s_SleepCount > nSleepCount) {
+    if (OsnThread::s_SleepCount > nSleepCount)
+    {
         OsnThread::s_Cond.notify_one();
     }
 }

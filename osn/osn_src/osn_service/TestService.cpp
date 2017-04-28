@@ -1,6 +1,6 @@
 #include "TestService.h"
 #include "osn_service_manager.h"
-
+#include "osn_socket_manager.h"
 
 
 TestService::TestService()
@@ -44,6 +44,7 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
 
 void TestService::start(const OsnPreparedStatement &stmt)
 {
-	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
+//	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
+    g_SocketManager.listen(getId(), "", 18765);
 }
 

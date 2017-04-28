@@ -18,6 +18,7 @@ enum eProtoType
 	ePType_Lua,
 	ePType_Client,
     ePType_Start,
+    ePType_Socket,
 };
 
 struct stServiceMessage

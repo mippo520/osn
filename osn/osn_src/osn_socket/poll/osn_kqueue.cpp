@@ -9,7 +9,8 @@
 #include "osn_kqueue.h"
 #include <sys/event.h>
 #include <unistd.h>
-
+#include "osn_socket_head.h"
+#include <fcntl.h>
 
 OsnKqueue::OsnKqueue()
 {
@@ -65,3 +66,40 @@ void OsnKqueue::del(oINT32 kfd, oINT32 sock)
     EV_SET(&ke, sock, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
     kevent(kfd, &ke, 1, NULL, 0, NULL);
 }
+
+oINT32 OsnKqueue::wait(oINT32 kfd, stSocketEvent *pEvent, oINT32 nMax)
+{
+    struct kevent ev[nMax];
+    oINT32 n = kevent(kfd, NULL, 0, ev, nMax, NULL);
+    
+    for (oINT32 i = 0; i < n; ++i)
+    {
+        pEvent[i].socket = static_cast<OsnSocket*>(ev[i].udata);
+        oUINT32 filter = ev[i].filter;
+        pEvent[i].bWrite = (filter == EVFILT_WRITE);
+        pEvent[i].bRead = (filter == EVFILT_READ);
+    }
+    
+    return n;
+}
+
+void OsnKqueue::write(oINT32 kfd, oINT32 sock, void *ud, oBOOL enable)
+{
+    struct kevent ke;
+    EV_SET(&ke, sock, EVFILT_WRITE, enable ? EV_ENABLE : EV_DISABLE, 0, 0, ud);
+    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1)
+    {
+        // todo: check error
+    }
+}
+
+void OsnKqueue::nonBlocking(oINT32 nSock)
+{
+    oINT32 flag = fcntl(nSock, F_GETFL, 0);
+    if ( -1 == flag ) {
+        return;
+    }
+    
+    fcntl(nSock, F_SETFL, flag | O_NONBLOCK);
+}
+

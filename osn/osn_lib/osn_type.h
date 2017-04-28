@@ -9,10 +9,10 @@
 #ifndef osn_type_h
 #define osn_type_h
 
-typedef signed char         oINT8;
-typedef signed short        oINT16;
-typedef signed int          oINT32;
-typedef signed long long    oINT64;
+typedef char                oINT8;
+typedef short               oINT16;
+typedef int                 oINT32;
+typedef long long           oINT64;
 typedef unsigned char       oUINT8;
 typedef unsigned short      oUINT16;
 typedef unsigned long       oUINT32;

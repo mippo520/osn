@@ -69,7 +69,7 @@ struct stCoThreadInfo {
     
     void printInfo()
     {
-        printf("stCoThreadInfo ==========> addr = %x, running = %lu, \n", this, m_Running);
+        printf("stCoThreadInfo ==========> addr = %llx, running = %lu, \n", (oUINT64)this, m_Running);
         m_pArg->printContext();
     }
 private:

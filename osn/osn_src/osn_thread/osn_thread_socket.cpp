@@ -7,6 +7,9 @@
 //
 
 #include "osn_thread_socket.h"
+#include "osn_socket_manager.h"
+#include "osn_start.h"
+#include <unistd.h>
 
 OsnSocketThread::OsnSocketThread()
 {
@@ -20,5 +23,21 @@ OsnSocketThread::~OsnSocketThread()
 
 void OsnSocketThread::onWork()
 {
-    
+    for (;;)
+    {
+        oINT32 nRet = g_SocketManager.poll();
+        if (0 == nRet)
+        {
+            break;
+        }
+        else if (nRet < 0)
+        {
+            if (g_OsnStart.checkAbort()) {
+                break;
+            }
+            continue;
+        }
+        
+        g_OsnStart.wakeup(0);
+    }
 }
