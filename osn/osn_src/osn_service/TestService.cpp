@@ -45,6 +45,7 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
 void TestService::start(const OsnPreparedStatement &stmt)
 {
 //	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
-    g_SocketManager.listen(getId(), "", 18765);
+    oINT32 sock = g_SocketManager.listen(getId(), "", 18765);
+    g_SocketManager.start(getId(), sock);
 }
 
