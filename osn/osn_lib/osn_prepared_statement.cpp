@@ -154,6 +154,15 @@ void OsnPreparedStatement::setFunction(const oUINT8 index, const VOID_STMT_FUNC 
     m_vecStatementData[index].type = TYPE_FUNCTION;
 }
 
+void OsnPreparedStatement::setBuffer(const oUINT8 index, const oINT8 *pBuffer, oUINT32 sz)
+{
+	if (index >= m_vecStatementData.size())
+		m_vecStatementData.resize(index + 1);
+
+	m_vecStatementData[index].str = std::string(pBuffer, sz);
+	m_vecStatementData[index].type = TYPE_STRING;
+}
+
 oBOOL OsnPreparedStatement::getBool( const oUINT8 index ) const
 {
 	oBOOL value = false;
@@ -437,6 +446,30 @@ OsnPreparedStatement::VOID_STMT_FUNC OsnPreparedStatement::getFunction(const oUI
         }
     }
     return func;
+}
+
+const oINT8* OsnPreparedStatement::getBuffer(const oUINT8 index, oUINT32 &sz) const
+{
+	const oINT8 *pBuffer = NULL;
+	sz = 0;
+	if (index < 0 || index >= m_vecStatementData.size())
+	{
+		OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
+	}
+	else
+	{
+		if (TYPE_STRING == m_vecStatementData[index].type)
+		{
+			pBuffer = m_vecStatementData[index].str.c_str();
+			sz = m_vecStatementData[index].str.size() - 1;
+		}
+		else
+		{
+			OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, m_vecStatementData[index].type);
+		}
+	}
+
+	return pBuffer;
 }
 
 oINT32 OsnPreparedStatement::popBackInt32() const

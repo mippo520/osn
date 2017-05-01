@@ -23,7 +23,7 @@ public:
     
     void freeWriteBuff();
     void checkWriteBuff();
-    oBOOL isSendBuffEmpty();
+    oBOOL isSendBufferEmpty();
     void raiseUncomplete();
     oBOOL isInvalidAndReserve();
     void setTcpSize(oINT32 nSize);

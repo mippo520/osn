@@ -4,6 +4,7 @@
 
 
 TestService::TestService()
+	: m_nListenId(-1)
 {
 }
 
@@ -44,10 +45,72 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
 
 void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
 {
-	stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
+	const stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
 	if (NULL != pSM)
 	{
-		int n = 0;
+		switch (pSM->type)
+		{
+		case eOST_Connect:
+			if (pSM->id == m_nListenId)
+			{
+				break;
+			}
+			if (m_setConnectedId.find(pSM->id) == m_setConnectedId.end())
+			{
+				printf("close unknown connection %d!\n", pSM->id);
+				g_SocketManager.close(getId(), pSM->id);
+			}
+
+			break;
+		case eOST_Accept:
+		{
+			assert(pSM->id == m_nListenId);
+			m_setConnectedId.insert(pSM->ud);
+			g_SocketManager.start(getId(), pSM->ud);
+// 			OsnPreparedStatement arg;
+// 			arg.setInt32(0, pSM->ud);
+// 			arg.setString(1, std::string(pSM->pBuffer, pSM->nSize));
+// 			g_ServiceManager.send(getId(), ePType_Text, arg);
+		}
+			break;
+		case eOST_Data:
+			printf("id = %d, ud = %d, msg size is %d!\n", pSM->id, pSM->ud, pSM->nSize);
+			break;
+		case eOST_Close:
+		case eOST_Error:
+		{
+			std::set<oINT32>::iterator itr = m_setConnectedId.find(pSM->id);
+			if (itr != m_setConnectedId.end())
+			{
+				oINT32 id = *itr;
+				m_setConnectedId.erase(itr);
+				g_SocketManager.close(getId(), id);
+			}
+		}
+			break;
+		default:
+			printf("socket message type error ====> %d\n", pSM->type);
+			break;
+		}
+	}
+	else
+	{
+		printf("OsnSocketMsg is NULL!\n");
+	}
+	SAFE_DELETE(pSM);
+}
+
+void TestService::dispatchText(const OsnPreparedStatement &stmt)
+{
+	std::string strCommand = stmt.getString(1);
+	if (strCommand.size() == 0)
+	{
+		return;
+	}
+
+	if ("start" == strCommand)
+	{
+		g_SocketManager.start(getId(), stmt.getInt32(0));
 	}
 }
 
@@ -55,7 +118,8 @@ void TestService::start(const OsnPreparedStatement &stmt)
 {
 // 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
 	registDispatchFunc(ePType_Socket, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchSocket));
-	oINT32 sock = g_SocketManager.listen(getId(), "", 18765);
-    g_SocketManager.start(getId(), sock);
+	registDispatchFunc(ePType_Text, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchText));
+	m_nListenId = g_SocketManager.listen(getId(), "", 18888);
+    g_SocketManager.start(getId(), m_nListenId);
 }
 

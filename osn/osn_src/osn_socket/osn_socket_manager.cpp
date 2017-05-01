@@ -70,21 +70,21 @@ oINT32 OsnSocketManager::poll()
     printf("OsnSocketManager::poll ===================> nType = %d\n", nType);
     switch (nType)
     {
-        case eSType_Exit:
+        case eSockStatus_Exit:
             return 0;
-        case eSType_Data:
+        case eSockStatus_Data:
             forwardMessage(eOST_Data, false, result);
             break;
-        case eSType_Close:
+        case eSockStatus_Close:
             forwardMessage(eOST_Close, false, result);
             break;
-        case eSType_Open:
+        case eSockStatus_Open:
             forwardMessage(eOST_Connect, true, result);
             break;
-        case eSType_Error:
+        case eSockStatus_Error:
             forwardMessage(eOST_Error, true, result);
             break;
-        case eSType_Accept:
+        case eSockStatus_Accept:
             forwardMessage(eOST_Accept, true, result);
             break;
         default:
@@ -122,8 +122,8 @@ oBOOL OsnSocketManager::create()
     if (!m_pPoll->add(m_nEventFD, nfd[0], NULL))
     {
         printf("OsnSocket::create Error! can not add server fd to event poll\n");
-        close(nfd[0]);
-        close(nfd[1]);
+        ::close(nfd[0]);
+        ::close(nfd[1]);
         return false;
     }
     
@@ -179,7 +179,7 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
             if (hasCmd())
             {
                 oINT32 nType = ctrlCmd(result);
-                if (eSType_None != nType)
+                if (eSockStatus_None != nType)
                 {
                     clearClosedEvent(result, nType);
                     return nType;
@@ -217,29 +217,29 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
         
         switch (pSocket->getType())
         {
-            case eSStatus_Connecting:
+            case eSockType_Connecting:
                 return reportConnect(*pSocket, result);
-            case eSStatus_Listen:
+            case eSockType_Listen:
             {
                 oINT32 ok = reportAccept(*pSocket, result);
                 if (ok > 0)
                 {
-                    return eSType_Accept;
+                    return eSockStatus_Accept;
                 }
                 else if (ok < 0)
                 {
-                    return eSType_Error;
+                    return eSockStatus_Error;
                 }
             }
                 break;
-            case eSStatus_Invalid:
+            case eSockType_Invalid:
                 printf("OsnSocketManager::pollResult Error! invalid socket!\n");
                 break;
             default:
                 if (event.bRead)
                 {
                     oINT32 nType;
-                    if (eSProtocol_TCP == pSocket->getType())
+                    if (eSProtocol_TCP == pSocket->getProtocol())
                     {
                         nType = forwardMessageTcp(*pSocket, result);
                     }
@@ -249,22 +249,23 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
                         assert(false);
                     } //udp
                     
-                    if (event.bWrite && eSType_Close != nType && eSType_Error != nType)
+                    if (event.bWrite && eSockStatus_Close != nType && eSockStatus_Error != nType)
                     {
                         event.bRead = false;
                         --m_nEventIndex;
                     }
                     
-                    if (eSType_None == nType)
+                    if (eSockStatus_None == nType)
                     {
                         break;
                     }
                     return nType;
                 }
-                else if (event.bWrite)
+                
+				if (event.bWrite)
                 {
                     oINT32 nType = sendBuff(*pSocket, result);
-                    if (eSType_None == nType)
+                    if (eSockStatus_None == nType)
                     {
                         break;
                     }
@@ -286,16 +287,18 @@ oINT32 OsnSocketManager::ctrlCmd(stSocketMessage &result)
     switch (type) {
         case 'X':
             result.clear();
-            return eSType_Exit;
+            return eSockStatus_Exit;
         case 'L':
             return listenSocket(*((stRequestListen*)buffer), result);
         case 'S':
             return startSocket(*((stRequestStart*)buffer), result);
+		case 'K':
+			return closeSocket(*((stRequestClose*)buffer), result);
         default:
             printf("OsnSocketManager::ctrlCmd : unknown ctrl %c!\n", type);
-            return eSType_None;
+            return eSockStatus_None;
     }
-    return eSType_None;
+    return eSockStatus_None;
 }
 
 void OsnSocketManager::blockReadPipe(void *pBuffer, oINT32 sz)
@@ -318,7 +321,7 @@ void OsnSocketManager::blockReadPipe(void *pBuffer, oINT32 sz)
 
 void OsnSocketManager::clearClosedEvent(stSocketMessage &result, oINT32 nType)
 {
-    if (eSType_Close == nType || eSType_Error == nType)
+    if (eSockStatus_Close == nType || eSockStatus_Error == nType)
     {
         oINT32 nId = result.id;
         for (oINT32 i = m_nEventIndex; i < m_nEventN; ++i)
@@ -327,7 +330,7 @@ void OsnSocketManager::clearClosedEvent(stSocketMessage &result, oINT32 nType)
             OsnSocket *pSocket = static_cast<OsnSocket*>(event.socket);
             if (NULL!= pSocket)
             {
-                if (eSStatus_Invalid == pSocket->getType() && pSocket->getId() == nId)
+                if (eSockType_Invalid == pSocket->getType() && pSocket->getId() == nId)
                 {
                     event.socket = NULL;
                     break;
@@ -353,15 +356,15 @@ oINT32 OsnSocketManager::reportConnect(OsnSocket &socket, stSocketMessage &resul
         {
             result.data = (oINT8*)strerror(errno);
         }
-        return eSType_Error;
+        return eSockStatus_Error;
     }
     else
     {
-        socket.setType(eSStatus_Connected);
+        socket.setType(eSockType_Connected);
         result.opaque = socket.getOpaque();
         result.id = socket.getId();
         result.ud = 0;
-        if (socket.isSendBuffEmpty())
+        if (socket.isSendBufferEmpty())
         {
             m_pPoll->write(m_nEventFD, socket.getFd(), &socket, false);
         }
@@ -374,11 +377,11 @@ oINT32 OsnSocketManager::reportConnect(OsnSocket &socket, stSocketMessage &resul
             if (inet_ntop(u.s.sa_family, sin_addr, m_Buff, sizeof(m_Buff)))
             {
                 result.data = m_Buff;
-                return eSType_Open;
+                return eSockStatus_Open;
             }
         }
         result.data = NULL;
-        return eSType_Open;
+        return eSockStatus_Open;
     }
 }
 
@@ -394,18 +397,18 @@ oINT32 OsnSocketManager::reportAccept(OsnSocket &socket, stSocketMessage &result
             result.id = socket.getId();
             result.ud = 0;
             result.data = strerror(errno);
-            return eSType_None;
+            return eSockStatus_None;
         }
         else
         {
-            return eSType_Data;
+            return eSockStatus_Data;
         }
     }
     
     oINT32 nId = reserveId();
     if (nId < 0)
     {
-        close(nClientFd);
+        ::close(nClientFd);
         return 0;
     }
     socketKeepAlive(nClientFd);
@@ -413,9 +416,9 @@ oINT32 OsnSocketManager::reportAccept(OsnSocket &socket, stSocketMessage &result
     OsnSocket *pSock = newFd(nId, nClientFd, eSProtocol_TCP, socket.getOpaque(), false);
     if (NULL == pSock)
     {
-        close(nClientFd);
+        ::close(nClientFd);
     }
-    pSock->setType(eSStatus_PAccept);
+    pSock->setType(eSockType_PAccept);
     result.opaque = socket.getOpaque();
     result.id = socket.getId();
     result.ud = nId;
@@ -430,7 +433,7 @@ oINT32 OsnSocketManager::reportAccept(OsnSocket &socket, stSocketMessage &result
         result.data = m_Buff;
     }
     
-    return eSType_Close;
+    return eSockStatus_Close;
 }
 
 oINT32 OsnSocketManager::reserveId()
@@ -444,7 +447,7 @@ oINT32 OsnSocketManager::reserveId()
         }
         
         OsnSocket &socket = m_Socket[hashId(nId)];
-        if (eSStatus_Invalid == socket.getType())
+        if (eSockType_Invalid == socket.getType())
         {
             if (socket.isInvalidAndReserve())
             {
@@ -465,13 +468,13 @@ OsnSocket* OsnSocketManager::newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUI
 {
     OsnSocket &socket = m_Socket[hashId(nId)];
     
-    assert(eSStatus_Reserve == socket.getType());
+    assert(eSockType_Reserve == socket.getType());
     
     if (bAdd)
     {
         if (!m_pPoll->add(m_nEventFD, nFd, &socket))
         {
-            socket.setType(eSStatus_Invalid);
+            socket.setType(eSockType_Invalid);
             return NULL;
         }
     }
@@ -504,40 +507,40 @@ void OsnSocketManager::forceClose(OsnSocket &socket, stSocketMessage &result)
     result.ud = 0;
     result.data = NULL;
     result.opaque = socket.getOpaque();
-    if (eSStatus_Invalid == socket.getType())
+    if (eSockType_Invalid == socket.getType())
     {
         return;
     }
-    assert(eSStatus_Reserve != socket.getType());
+    assert(eSockType_Reserve != socket.getType());
     socket.freeWriteBuff();
-    if (eSStatus_PAccept != socket.getType() && eSStatus_PListen != socket.getType())
+    if (eSockType_PAccept != socket.getType() && eSockType_PListen != socket.getType())
     {
         m_pPoll->del(m_nEventFD, socket.getFd());
     }
-    if (eSStatus_Bind != socket.getType())
+    if (eSockType_Bind != socket.getType())
     {
-        if (close(socket.getFd()) < 0)
+        if (::close(socket.getFd()) < 0)
         {
             perror("OsnSocketManager::forceClose Error! close socket : ");
         }
     }
-    socket.setType(eSStatus_Invalid);
+    socket.setType(eSockType_Invalid);
 }
 
 oINT32 OsnSocketManager::sendBuff(OsnSocket &socket, stSocketMessage &result)
 {
     assert(!listUncomplete(socket.m_queLow));
-    if (eSType_Close == sendList(socket, socket.m_queHigh, result))
+    if (eSockStatus_Close == sendList(socket, socket.m_queHigh, result))
     {
-        return eSType_Close;
+        return eSockStatus_Close;
     }
     if (socket.m_queHigh.empty())
     {
         if (!socket.m_queLow.empty())
         {
-            if (eSType_Close == sendList(socket, socket.m_queLow, result))
+            if (eSockStatus_Close == sendList(socket, socket.m_queLow, result))
             {
-                return eSType_Close;
+                return eSockStatus_Close;
             }
             
             if (listUncomplete(socket.m_queLow))
@@ -547,16 +550,16 @@ oINT32 OsnSocketManager::sendBuff(OsnSocket &socket, stSocketMessage &result)
             else
             {
                 m_pPoll->write(m_nEventFD, socket.getFd(), &socket, false);
-                if (eSStatus_Halfclose == socket.getType())
+                if (eSockType_Halfclose == socket.getType())
                 {
                     forceClose(socket, result);
-                    return eSType_Close;
+                    return eSockStatus_Close;
                 }
             }
         }
     }
     
-    return eSType_None;
+    return eSockStatus_None;
 }
 
 oBOOL OsnSocketManager::listUncomplete(QUE_WRITE_BUFF_PTR &queWBuff)
@@ -581,7 +584,7 @@ oINT32 OsnSocketManager::sendList(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuf
         return sendListTcp(socket, queWBuff, result);
     }
     
-    return eSType_None;
+    return eSockStatus_None;
 }
 
 oINT32 OsnSocketManager::sendListTcp(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result)
@@ -602,7 +605,7 @@ oINT32 OsnSocketManager::sendListTcp(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queW
                     case EINTR:
                         continue;
                     case AGAIN_WOULDBLOCK:
-                        return eSType_None;
+                        return eSockStatus_None;
                 }
             }
             socket.setWBSize(socket.getWBSize() - sz);
@@ -610,13 +613,13 @@ oINT32 OsnSocketManager::sendListTcp(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queW
             {
                 pWBuff->ptr += sz;
                 pWBuff->nSz -= sz;
-                return eSType_None;
+                return eSockStatus_None;
             }
         }
         
         SAFE_DELETE(pWBuff);
     }
-    return eSType_None;
+    return eSockStatus_None;
 }
 
 void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMessage &result)
@@ -626,7 +629,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
 	oINT32 msg_sz = 0;
     if (bPadding)
     {
-        if (result.data)
+        if (NULL != result.data)
         {
             msg_sz = (oINT32)strlen(result.data);
             if (msg_sz > 128)
@@ -649,6 +652,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
     {
 		pSM = new stOsnSocketMsg(0);
 		pSM->pBuffer = result.data;
+		pSM->nSize = result.ud;
     }
 	pSM->type = nType;
 	pSM->id = result.id;
@@ -681,22 +685,23 @@ oINT32 OsnSocketManager::forwardMessageTcp(OsnSocket &socket, stSocketMessage &r
                 // close when error
                 forceClose(socket, result);
                 result.data = strerror(errno);
-                return eSType_Error;
+                return eSockStatus_Error;
         }
-        return eSType_None;
+        return eSockStatus_None;
     }
-    else if (0 == nReadSize)
+    
+	if (0 == nReadSize)
     {
         SAFE_FREE(pBuff);
         forceClose(socket, result);
-        return eSType_Close;
+        return eSockStatus_Close;
     }
     else
     {
-        if (eSStatus_Halfclose == socket.getType())
+        if (eSockType_Halfclose == socket.getType())
         {
             SAFE_FREE(pBuff);
-            return eSType_None;
+            return eSockStatus_None;
         }
         
         if (nReadSize == sz)
@@ -712,7 +717,7 @@ oINT32 OsnSocketManager::forwardMessageTcp(OsnSocket &socket, stSocketMessage &r
         result.id = socket.getId();
         result.ud = nReadSize;
         result.data = pBuff;
-        return eSType_Data;
+        return eSockStatus_Data;
     }
 }
 
@@ -722,6 +727,15 @@ void OsnSocketManager::start(oUINT32 opaque, oINT32 sock)
     request.u.start.id = sock;
     request.u.start.opaque = opaque;
     sendRequest(request, 'S', sizeof(request.u.start));
+}
+
+void OsnSocketManager::close(oUINT32 opaque, oINT32 sock)
+{
+	stRequestPackage request;
+	request.u.close.id = sock;
+	request.u.close.shutdown = 0;
+	request.u.close.opaque = opaque;
+	sendRequest(request, 'K', sizeof(request.u.close));
 }
 
 oINT32 OsnSocketManager::listen(oUINT32 opaque, std::string &&strAddr, oINT32 port, oINT32 nBackLog)
@@ -736,7 +750,7 @@ oINT32 OsnSocketManager::listen(oUINT32 opaque, std::string &&strAddr, oINT32 po
     oINT32 id = reserveId();
     if (id < 0)
     {
-        close(id);
+        ::close(id);
         return id;
     }
     
@@ -757,7 +771,7 @@ oINT32 OsnSocketManager::doListen(std::string &strAddr, oINT32 nPort, oINT32 nBa
     }
     if (-1 == ::listen(listenFd, nBackLog))
     {
-        close(listenFd);
+        ::close(listenFd);
     }
     return listenFd;
 }
@@ -803,14 +817,14 @@ oINT32 OsnSocketManager::doBind(std::string &strAddr, oINT32 nPort, oINT32 proto
     }
     if (-1 == setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)))
     {
-        close(fd);
+        ::close(fd);
         freeaddrinfo( ai_list );
         return -1;
     }
     status = bind(fd, (sockaddr *)ai_list->ai_addr, ai_list->ai_addrlen);
     if (status != 0)
     {
-        close(fd);
+        ::close(fd);
         freeaddrinfo( ai_list );
         return -1;
     }
@@ -826,15 +840,15 @@ oINT32 OsnSocketManager::listenSocket(stRequestListen &request, stSocketMessage 
     OsnSocket *pSocket = newFd(id, listenId, eSProtocol_TCP, request.opaque, false);
     if (NULL == pSocket)
     {
-        close(listenId);
+        ::close(listenId);
         result.opaque = request.opaque;
         result.id = request.id;
         result.ud = 0;
         result.data = NULL;
-        m_Socket[hashId(id)].setType(eSStatus_Invalid);
-        return eSType_Error;
+        m_Socket[hashId(id)].setType(eSockType_Invalid);
+        return eSockStatus_Error;
     }
-    pSocket->setType(eSStatus_PListen);
+    pSocket->setType(eSockType_PListen);
     return -1;
 }
 
@@ -846,33 +860,65 @@ oINT32 OsnSocketManager::startSocket(stRequestStart &request, stSocketMessage &r
     result.ud = 0;
     result.data = NULL;
     OsnSocket &socket = m_Socket[hashId(id)];
-    if (eSStatus_Invalid == socket.getType() || socket.getId() != id)
+    if (eSockType_Invalid == socket.getType() || socket.getId() != id)
     {
         result.data = "invalid socket";
-        return eSType_Error;
+        return eSockStatus_Error;
     }
-    if (eSStatus_PAccept == socket.getType() || eSStatus_PListen == socket.getType())
+    if (eSockType_PAccept == socket.getType() || eSockType_PListen == socket.getType())
     {
         if (!m_pPoll->add(m_nEventFD, socket.getFd(), &socket))
         {
             forceClose(socket, result);
             result.data = strerror(errno);
-            return eSType_Error;
+            return eSockStatus_Error;
         }
-        socket.setType(eSStatus_PAccept == socket.getType() ? eSStatus_Connected : eSStatus_Listen);
+        socket.setType(eSockType_PAccept == socket.getType() ? eSockType_Connected : eSockType_Listen);
         socket.setOpaque(request.opaque);
         result.data = "start";
-        return eSType_Open;
+        return eSockStatus_Open;
     }
-    else if (eSStatus_Connected == socket.getType())
+    if (eSockType_Connected == socket.getType())
     {
         socket.setOpaque(request.opaque);
         result.data = "transfer";
-        return eSType_Open;
+        return eSockStatus_Open;
     }
     return -1;
 }
 
+oINT32 OsnSocketManager::closeSocket(stRequestClose &request, stSocketMessage &result)
+{
+	oINT32 id = request.id;
+	OsnSocket &sock = m_Socket[hashId(id)];
+	if (eSockType_Invalid == sock.getType() || sock.getId() != id)
+	{
+		result.id = id;
+		result.opaque = request.opaque;
+		result.ud = 0;
+		result.data = NULL;
+		return eSockStatus_Close;
+	}
+	if (!sock.isSendBufferEmpty())
+	{
+		oINT32 type = sendBuff(sock, result);
+		if (-1 != type)
+		{
+			return type;
+		}
+	}
+
+	if (request.shutdown || sock.isSendBufferEmpty())
+	{
+		forceClose(sock, result);
+		result.id = id;
+		result.opaque = request.opaque;
+		return eSockStatus_Close;
+	}
+	sock.setType(eSockType_Halfclose);
+
+	return -1;
+}
 
 
 

@@ -20,28 +20,28 @@
 #define AGAIN_WOULDBLOCK EAGAIN
 #endif
 
-enum eSocketStatus
-{
-    eSStatus_Invalid = 0,
-    eSStatus_Reserve,
-    eSStatus_PListen,
-    eSStatus_Listen,
-    eSStatus_Connecting,
-    eSStatus_Connected,
-    eSStatus_Halfclose,
-    eSStatus_PAccept,
-    eSStatus_Bind,
-};
-
 enum eSocketType
 {
-    eSType_None = -1,
-    eSType_Data = 0,
-    eSType_Close,
-    eSType_Open,
-    eSType_Accept,
-    eSType_Error,
-    eSType_Exit,
+    eSockType_Invalid = 0,
+    eSockType_Reserve,
+    eSockType_PListen,
+    eSockType_Listen,
+    eSockType_Connecting,
+    eSockType_Connected,
+    eSockType_Halfclose,
+    eSockType_PAccept,
+    eSockType_Bind,
+};
+
+enum eSocketStatus
+{
+    eSockStatus_None = -1,
+    eSockStatus_Data = 0,
+    eSockStatus_Close,
+    eSockStatus_Open,
+    eSockStatus_Accept,
+    eSockStatus_Error,
+    eSockStatus_Exit,
 };
 
 enum eOsnSocketType

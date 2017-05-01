@@ -34,6 +34,7 @@ public:
     oINT32 poll();
     oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog);
     void start(oUINT32 opaque, oINT32 sock);
+	void close(oUINT32 opaque, oINT32 sock);
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();
@@ -61,6 +62,7 @@ private:
     oINT32 doBind(std::string &strAddr, oINT32 nPort, oINT32 protocol, oINT32 &family);
     oINT32 listenSocket(stRequestListen &request, stSocketMessage &result);
     oINT32 startSocket(stRequestStart &request, stSocketMessage &result);
+	oINT32 closeSocket(stRequestClose &request, stSocketMessage &result);
 private:
     OsnPoll *m_pPoll;
     
