@@ -28,8 +28,11 @@ public:
     oBOOL isInvalidAndReserve();
     void setTcpSize(oINT32 nSize);
     oINT32 getTcpSize();
+    void appendSendBuffer(const stRequestSend &request, oINT32 n);
+    void appendSendBufferLow(const stRequestSend &request, oINT32 n);
 private:
     void freeWriteBuff(QUE_WRITE_BUFF_PTR &listBuff);
+    void appendSendBufferLogic(QUE_WRITE_BUFF_PTR &listBuff, const stRequestSend &request, oINT32 n);
 public:
     QUE_WRITE_BUFF_PTR m_queHigh;
     QUE_WRITE_BUFF_PTR m_queLow;

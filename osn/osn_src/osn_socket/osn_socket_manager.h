@@ -35,6 +35,7 @@ public:
     oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog);
     void start(oUINT32 opaque, oINT32 sock);
 	void close(oUINT32 opaque, oINT32 sock);
+    oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz);
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();
@@ -63,6 +64,7 @@ private:
     oINT32 listenSocket(stRequestListen &request, stSocketMessage &result);
     oINT32 startSocket(stRequestStart &request, stSocketMessage &result);
 	oINT32 closeSocket(stRequestClose &request, stSocketMessage &result);
+    oINT32 sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority);
 private:
     OsnPoll *m_pPoll;
     

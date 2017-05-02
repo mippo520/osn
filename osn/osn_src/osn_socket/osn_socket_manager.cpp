@@ -294,6 +294,10 @@ oINT32 OsnSocketManager::ctrlCmd(stSocketMessage &result)
             return startSocket(*((stRequestStart*)buffer), result);
 		case 'K':
 			return closeSocket(*((stRequestClose*)buffer), result);
+        case 'D':
+            return sendSocket(*((stRequestSend*)buffer), result, eSPriority_High);
+        case 'P':
+            return sendSocket(*((stRequestSend*)buffer), result, eSPriority_Low);
         default:
             printf("OsnSocketManager::ctrlCmd : unknown ctrl %c!\n", type);
             return eSockStatus_None;
@@ -918,6 +922,99 @@ oINT32 OsnSocketManager::closeSocket(stRequestClose &request, stSocketMessage &r
 	sock.setType(eSockType_Halfclose);
 
 	return -1;
+}
+
+oINT64 OsnSocketManager::send(oINT32 sock, const void *pBuff, oINT32 sz)
+{
+    OsnSocket &socket = m_Socket[hashId(sock)];
+    
+    if (socket.getId() != sock || eSockType_Invalid == socket.getType())
+    {
+        return -1;
+    }
+    
+    void *pSendBuff = malloc(sz);
+    memcpy(pSendBuff, pBuff, sz);
+    
+    stRequestPackage request;
+    request.u.send.id = sock;
+    request.u.send.buffer = (oINT8*)pSendBuff;
+    request.u.send.sz = sz;
+    sendRequest(request, 'D', sizeof(request.u.send));
+    return socket.getWBSize();
+}
+
+oINT32 OsnSocketManager::sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority)
+{
+    oINT32 id = request.id;
+    OsnSocket &socket = m_Socket[hashId(id)];
+    if (socket.getId() != id
+        || socket.getType() == eSockType_Invalid
+        || socket.getType() == eSockType_Halfclose
+        || socket.getType() == eSockType_PAccept)
+    {
+        SAFE_FREE(request.buffer);
+    }
+    
+    if (socket.getType() == eSockType_PListen || socket.getType() == eSockType_Listen)
+    {
+        printf("OsnSocketManager::sendSocket Error! write to listen fd %d\n", socket.getId());
+        SAFE_FREE(request.buffer);
+    }
+    
+    if (socket.isSendBufferEmpty() && socket.getType() == eSockType_Connected)
+    {
+        if (eSProtocol_TCP == socket.getProtocol())
+        {
+            oINT32 n = ::write(socket.getFd(), request.buffer, request.sz);
+            if (n < 0)
+            {
+                switch (errno)
+                {
+                    case EINTR:
+                    case AGAIN_WOULDBLOCK:
+                        n = 0;
+                        break;
+                    default:
+                        printf("OsnSocketManager::sendSocket Error! write to %d (fd = %d) error : %s!\n", id, socket.getFd(), strerror(errno));
+                        forceClose(socket, result);
+                        SAFE_FREE(request.buffer);
+                        return eSockStatus_Close;
+                }
+            }
+            if (n == request.sz)
+            {
+                SAFE_FREE(request.buffer);
+                return -1;
+            }
+            socket.appendSendBuffer(request, n);
+        }
+        else
+        {
+            printf("OsnSocketManager::sendSocket Error! no udp protocal!\n");
+            assert(false);
+        }
+    }
+    else
+    {
+        if (eSProtocol_TCP == socket.getProtocol())
+        {
+            if (eSPriority_Low == priority)
+            {
+                socket.appendSendBufferLow(request, 0);
+            }
+            else
+            {
+                socket.appendSendBuffer(request, 0);
+            }
+        }
+        else
+        {
+            printf("OsnSocketManager::sendSocket Error! no udp protocal!\n");
+            assert(false);
+        }
+    }
+    return -1;
 }
 
 

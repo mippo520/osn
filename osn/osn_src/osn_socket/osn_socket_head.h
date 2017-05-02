@@ -61,6 +61,12 @@ enum eSocketProtocol
     eSProtocol_TCP = 0,
 };
 
+enum eSocketPriority
+{
+    eSPriority_High = 0,
+    eSPriority_Low,
+};
+
 struct stRequestOpen {
     oINT32 id;
     oINT32 port;

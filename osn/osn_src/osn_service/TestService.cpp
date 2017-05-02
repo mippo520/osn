@@ -22,7 +22,8 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
         n = stmt.getUInt32(1);
     }
     
-    if (n > 0) {
+    if (n > 0)
+    {
         OsnPreparedStatement msg;
         msg.setUInt32(0, 100);
         msg.setString(1, "abc");
@@ -75,6 +76,7 @@ void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
 			break;
 		case eOST_Data:
 			printf("id = %d, ud = %d, msg size is %d!\n", pSM->id, pSM->ud, pSM->nSize);
+            g_SocketManager.send(pSM->id, pSM->pBuffer, pSM->nSize);
 			break;
 		case eOST_Close:
 		case eOST_Error:

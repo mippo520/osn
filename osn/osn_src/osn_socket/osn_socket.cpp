@@ -86,4 +86,22 @@ void OsnSocket::checkWriteBuff()
     assert(m_queHigh.empty());
 }
 
+void OsnSocket::appendSendBuffer(const stRequestSend &request, oINT32 n)
+{
+    appendSendBufferLogic(m_queHigh, request, n);
+}
+
+void OsnSocket::appendSendBufferLow(const stRequestSend &request, oINT32 n)
+{
+    appendSendBufferLogic(m_queLow, request, n);
+}
+
+void OsnSocket::appendSendBufferLogic(QUE_WRITE_BUFF_PTR &listBuff, const stRequestSend &request, oINT32 n)
+{
+    stWriteBuff *pWB = new stWriteBuff();
+    pWB->ptr = request.buffer + n;
+    pWB->nSz = request.sz - n;
+    pWB->pBuff = request.buffer;
+    listBuff.push(pWB);
+}
 
