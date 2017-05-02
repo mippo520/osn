@@ -10,7 +10,7 @@
 #include "osn_socket_head.h"
 
 OsnSocket::OsnSocket()
-    : m_Type(eSStatus_Invalid)
+    : m_Type(eSockType_Invalid)
     , m_Id(0)
     , m_Fd(0)
     , m_Opaque(0)
@@ -47,7 +47,7 @@ void OsnSocket::freeWriteBuff(QUE_WRITE_BUFF_PTR &queBuff)
     }
 }
 
-oBOOL OsnSocket::isSendBuffEmpty()
+oBOOL OsnSocket::isSendBufferEmpty()
 {
     return m_queLow.empty() && m_queHigh.empty();
 }
@@ -63,7 +63,7 @@ void OsnSocket::raiseUncomplete()
 
 oBOOL OsnSocket::isInvalidAndReserve()
 {
-    if (ATOM_CAS(&m_Type, eSStatus_Invalid, eSStatus_Reserve))
+    if (ATOM_CAS(&m_Type, eSockType_Invalid, eSockType_Reserve))
     {
         return true;
     }

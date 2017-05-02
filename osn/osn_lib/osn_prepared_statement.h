@@ -72,6 +72,7 @@ public:
 	void setString(const oUINT8 index, const std::string& value);
 	void setNull(const oUINT8 index);
     void setFunction(const oUINT8 index, const VOID_STMT_FUNC &func);
+	void setBuffer(const oUINT8 index, const oINT8 *pBuffer, oUINT32 sz);
 
 	oBOOL getBool(const oUINT8 index) const;
 	oUINT8 getUInt8(const oUINT8 index) const;
@@ -86,6 +87,7 @@ public:
 	oFLOAT64 getFloat64(const oUINT8 index)const;
 	std::string getString(const oUINT8 index)const;
     VOID_STMT_FUNC getFunction(const oUINT8 index)const;
+	const oINT8* getBuffer(const oUINT8 index, oUINT32 &sz)const;
 
 	oINT32 popBackInt32() const;
 	void pushBackInt32(oINT32 nValue) const;

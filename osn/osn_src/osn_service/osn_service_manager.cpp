@@ -146,7 +146,8 @@ OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWei
                 setCurService(0);
                 return popWorkingService();
             }
-            else if(0 == i && nWeight > 0)
+            
+			if(0 == i && nWeight > 0)
             {
                 n = pService->getMsgSize();
                 n >>= nWeight;

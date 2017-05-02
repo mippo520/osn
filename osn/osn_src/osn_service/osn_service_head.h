@@ -19,6 +19,7 @@ enum eProtoType
 	ePType_Client,
     ePType_Start,
     ePType_Socket,
+	ePType_Text,
 };
 
 struct stServiceMessage
