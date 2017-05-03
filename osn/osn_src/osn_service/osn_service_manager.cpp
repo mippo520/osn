@@ -26,12 +26,12 @@ OsnServiceManager::~OsnServiceManager()
 
 oUINT32 OsnServiceManager::send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
 {
-    return sendMessage(addr, 0, type, 0, msg);
+    return sendMessage(addr, 0, type, 0, &msg);
 }
 
 const OsnPreparedStatement& OsnServiceManager::call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
 {
-    oUINT32 unSession = sendMessage(addr, getCurService(), type, 0, msg);
+    oUINT32 unSession = sendMessage(addr, getCurService(), type, 0, &msg);
     OSN_CO_ARG arg;
 	arg.setUInt32(0, unSession);
 	arg.pushBackInt32(OsnService::eYT_Call);
@@ -55,14 +55,42 @@ void OsnServiceManager::exit()
     g_CorotineManager.yield(stmt);
 }
 
+void OsnServiceManager::wait(oUINT32 unId)
+{
+    oUINT32 unSession = genId();
+    OsnPreparedStatement stmt;
+    stmt.pushBackUInt32(unSession);
+    stmt.pushBackInt32(OsnService::eYT_Sleep);
+    g_CorotineManager.yield(stmt);
+    
+    stmt.clear();
+    stmt.pushBackUInt32(unSession);
+    stmt.pushBackInt32(OsnService::eYT_CleanSleep);
+    g_CorotineManager.yield(stmt);
+}
+
+oBOOL OsnServiceManager::wakeup(oUINT32 unId)
+{
+    OsnPreparedStatement stmt;
+    stmt.pushBackUInt32(unId);
+    stmt.pushBackInt32(OsnService::eYT_Wakeup);
+    const OsnPreparedStatement &ret = g_CorotineManager.yield(stmt);
+    return ret.getBool(0);
+}
+
+oUINT32 OsnServiceManager::genId()
+{
+    return sendMessage(getCurService(), 0, ePType_None, 0, NULL);
+}
+
 void OsnServiceManager::init()
 {
     OsnArrManager::init();
 }
 
-oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg)
+oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg)
 {
-	stServiceMessage *pServiceMsg = new stServiceMessage(msg);
+	stServiceMessage *pServiceMsg = new stServiceMessage(pMsg);
 	pServiceMsg->unSession = unSession;
 	pServiceMsg->unSource = unSource;
 	pServiceMsg->nType = type;

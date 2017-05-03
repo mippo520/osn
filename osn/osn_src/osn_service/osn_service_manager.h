@@ -44,6 +44,8 @@ public:
     const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
     void ret(const OsnPreparedStatement &msg);
     void exit();
+    void wait(oUINT32 unId = 0);
+    oBOOL wakeup(oUINT32 unId);
     void addThread();
     void printThreadInfo();
     void pushWarkingService(oUINT32 unId);
@@ -53,9 +55,10 @@ private:
         
     oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg);
     OsnService* popWorkingService();
-    oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement &msg);
+    oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg);
     void setCurService(oUINT32 unId);
     oUINT32 getCurService();
+    oUINT32 genId();
 private:
     std::queue<oUINT32> m_queHadMsgIds;
     OsnSpinLock m_QueSpinLock;

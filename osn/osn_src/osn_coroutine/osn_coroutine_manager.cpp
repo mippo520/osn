@@ -23,6 +23,19 @@ OsnCoroutineManager::~OsnCoroutineManager()
     
 }
 
+oUINT32 OsnCoroutineManager::running()
+{
+    stCoThreadInfo *pInfo = getThreadInfo();
+    if (NULL != pInfo)
+    {
+        return pInfo->getRunning();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func)
 {
     oUINT32 unId = m_arrCoroutine.makeObj<OsnCoroutine>();
@@ -122,7 +135,6 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
     }
     return pInfo->getArg();
 }
-
 
 void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
 {

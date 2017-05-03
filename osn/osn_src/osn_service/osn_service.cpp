@@ -102,8 +102,11 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			else
 			{
 				oUINT32 co = itr->second;
-				m_mapSessionCoroutine.erase(itr);
-				nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
+                m_mapSessionCoroutine.erase(itr);
+                if (0 != co)
+                {
+                    nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
+                }
 			}
 		}
 		else
@@ -201,11 +204,44 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
 			m_mapSessionCoroutine[unSession] = co;
 		}
             break;
+        case eYT_Sleep:
+        {
+            oUINT32 unSession = arg.popBackUInt32();
+            m_mapSessionCoroutine[unSession] = co;
+            m_mapSleepSession[co] = unSession;
+        }
+            break;
+        case eYT_CleanSleep:
+        {
+            std::map<oUINT32, oUINT32>::iterator itr = m_mapSleepSession.find(co);
+            if (itr != m_mapSleepSession.end())
+            {
+                m_mapSleepSession.erase(itr);
+            }
+            oUINT32 unSession = arg.popBackUInt32();
+            MAP_SESSION_CO_ITR coItr = m_mapSessionCoroutine.find(unSession);
+            if (coItr != m_mapSessionCoroutine.end())
+            {
+                m_mapSessionCoroutine.erase(coItr);
+            }
+            nType = suspend(co, g_CorotineManager.resume(co));
+        }
+            break;
+        case eYT_Wakeup:
+        {
+            oUINT32 unCo = arg.popBackUInt32();
+            if (m_mapSleepSession.find(unCo) != m_mapSleepSession.end())
+            {
+                m_queWakeup.push(unCo);
+            }
+            nType = suspend(co, g_CorotineManager.resume(co));
+        }
+            break;
         case eYT_Return:
 		{
 			oUINT32 unSession = m_mapCoroutineSession[co];
 			oUINT32 unSource = m_mapCoroutineSource[co];
-			g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, arg);
+			g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, &arg);
 			nType = suspend(co, g_CorotineManager.resume(co));
 		}
             break;
@@ -223,7 +259,35 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
         default:
             break;
     }
+    oINT32 wakeupType = dispatchWakeup();
+    if (eYT_Quit == wakeupType && wakeupType != nType)
+    {
+        nType = wakeupType;
+    }
     return nType;
+}
+
+oINT32 OsnService::dispatchWakeup()
+{
+    if (0 == m_queWakeup.size())
+    {
+        return eYT_None;
+    }
+    
+    oUINT32 co = m_queWakeup.front();
+    m_queWakeup.pop();
+    std::map<oUINT32, oUINT32>::iterator itr = m_mapSleepSession.find(co);
+    if (itr == m_mapSleepSession.end())
+    {
+        return eYT_None;
+    }
+    
+    oUINT32 unSession = itr->second;
+    m_mapSessionCoroutine[unSession] = 0;
+    OsnPreparedStatement stmt;
+    stmt.setBool(0, false);
+    stmt.setString(1, "BREAK");
+    return suspend(co, g_CorotineManager.resume(co, stmt));
 }
 
 void OsnService::pushToCoroutinePool(oUINT32 co)

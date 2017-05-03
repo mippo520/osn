@@ -55,8 +55,9 @@ public:
     };
 public:
     OsnPreparedStatement();
-	OsnPreparedStatement(const OsnPreparedStatement& right);
-	~OsnPreparedStatement();
+    OsnPreparedStatement(const OsnPreparedStatement& right);
+    OsnPreparedStatement(const OsnPreparedStatement* pRight);
+    ~OsnPreparedStatement();
 
 	void setBool(const oUINT8 index, const oBOOL value);
 	void setUInt8(const oUINT8 index, const oUINT8 value);
@@ -89,9 +90,11 @@ public:
     VOID_STMT_FUNC getFunction(const oUINT8 index)const;
 	const oINT8* getBuffer(const oUINT8 index, oUINT32 &sz)const;
 
-	oINT32 popBackInt32() const;
-	void pushBackInt32(oINT32 nValue) const;
-
+    oINT32 popBackInt32() const;
+    oUINT32 popBackUInt32() const;
+    void pushBackInt32(oINT32 nValue) const;
+    void pushBackUInt32(oUINT32 unValue) const;
+    
 	oBOOL isEmpty() const;
 	void clear();
 	void printContext() const;

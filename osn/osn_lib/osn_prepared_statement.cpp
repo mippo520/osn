@@ -5,6 +5,14 @@ OsnPreparedStatement::OsnPreparedStatement( const OsnPreparedStatement& right )
 	*this = right;
 }
 
+OsnPreparedStatement::OsnPreparedStatement(const OsnPreparedStatement* pRight)
+{
+    if (NULL != pRight)
+    {
+        *this = *pRight;
+    }
+}
+
 OsnPreparedStatement& OsnPreparedStatement::operator=( const OsnPreparedStatement& right )
 {
 	if ( this == &right )
@@ -485,6 +493,19 @@ oINT32 OsnPreparedStatement::popBackInt32() const
 	return nRet;
 }
 
+oUINT32 OsnPreparedStatement::popBackUInt32() const
+{
+    oUINT32 unRet = 0;
+    
+    oUINT32 unSize = m_vecStatementData.size();
+    if (unSize > 0 && TYPE_UINT32 == m_vecStatementData[unSize - 1].type)
+    {
+        unRet = m_vecStatementData[unSize - 1].data.ui32;
+        m_vecStatementData.pop_back();
+    }
+    return unRet;
+}
+
 void OsnPreparedStatement::pushBackInt32(oINT32 nValue) const
 {
 	oUINT32 unSize = m_vecStatementData.size();
@@ -492,6 +513,15 @@ void OsnPreparedStatement::pushBackInt32(oINT32 nValue) const
 
 	m_vecStatementData[unSize].data.i32 = nValue;
 	m_vecStatementData[unSize].type = TYPE_INT32;
+}
+
+void OsnPreparedStatement::pushBackUInt32(oUINT32 unValue) const
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.ui32 = unValue;
+    m_vecStatementData[unSize].type = TYPE_UINT32;
 }
 
 oBOOL OsnPreparedStatement::isEmpty() const

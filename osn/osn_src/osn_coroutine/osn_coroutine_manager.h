@@ -28,6 +28,7 @@ public:
     oUINT32 create(const OSN_COROUTINE_FUNC &func);
     const OSN_CO_ARG& yield(const OSN_CO_ARG &arg = OSN_CO_ARG());
     const OSN_CO_ARG& resume(oUINT32 unId, const OSN_CO_ARG &arg = OSN_CO_ARG());
+    oUINT32 running();
     void addThread();
 private:
     stCoThreadInfo* getThreadInfo();

@@ -587,6 +587,11 @@ oINT32 OsnSocketManager::sendList(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuf
     {
         return sendListTcp(socket, queWBuff, result);
     }
+    else
+    {
+        printf("OsnSocketManager::sendList Error! no udp protocal!\n");
+        assert(false);
+    }
     
     return eSockStatus_None;
 }

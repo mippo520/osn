@@ -26,6 +26,9 @@ class OsnService {
         eYT_Exit,
         eYT_Response,
         eYT_Quit,
+        eYT_Sleep,
+        eYT_Wakeup,
+        eYT_CleanSleep,
     };
 	typedef std::function<void(const OsnPreparedStatement &)> DISPATCH_FUNC;
     typedef std::function<void (const OsnPreparedStatement &)> OSN_SERVICE_CO_FUNC;
@@ -57,6 +60,7 @@ private:
     void pushToCoroutinePool(oUINT32 co);
     oUINT32 popFromCoroutinePool();
     stServiceMessage* popMessage();
+    oINT32 dispatchWakeup();
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;
@@ -72,6 +76,8 @@ private:
 	typedef MAP_SESSION_CO::iterator MAP_SESSION_CO_ITR;
 	MAP_SESSION_CO m_mapSessionCoroutine;
 	OSN_COROUTINE_FUNC m_CoroutineFunction;
+    std::map<oUINT32, oUINT32> m_mapSleepSession;
+    std::queue<oUINT32> m_queWakeup;
 
 	typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
 	typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
