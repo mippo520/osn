@@ -68,7 +68,7 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
 void TestService2::start(const OsnPreparedStatement &stmt)
 {
     printf("start %d\n", getId());
-	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService2::dispatchLua));
+	RegistDispatchFunc(ePType_Lua, &TestService2::dispatchLua, this);
 //    OsnPreparedStatement msg;
 //    msg.setString(0, "send begin");
 //    msg.setUInt32(1, getId());
@@ -82,7 +82,6 @@ void TestService2::start(const OsnPreparedStatement &stmt)
         OsnPreparedStatement msg;
         msg.setInt32(0, 100);
         g_ServiceManager.send(1, ePType_Lua, msg);
-        
     }
 }
 

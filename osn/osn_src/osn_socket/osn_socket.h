@@ -1,49 +1,39 @@
-//
-//  osn_socket.hpp
-//  osn
-//
-//  Created by zenghui on 17/4/25.
-//  Copyright © 2017年 zenghui. All rights reserved.
-//
-
-#ifndef osn_socket_hpp
-#define osn_socket_hpp
+#pragma once
+#include <map>
 #include "osn.h"
-#include <queue>
-#include "osn_socket_head.h"
+#include "osn_prepared_statement.h"
+
+struct stOsnSocketMsg;
+struct stSocketInfo;
 
 class OsnSocket
 {
-    typedef union{
-        oINT32 nSize;
-    } SIZE;
 public:
-    OsnSocket();
-    ~OsnSocket();
-    
-    void freeWriteBuff();
-    void checkWriteBuff();
-    oBOOL isSendBufferEmpty();
-    void raiseUncomplete();
-    oBOOL isInvalidAndReserve();
-    void setTcpSize(oINT32 nSize);
-    oINT32 getTcpSize();
-    void appendSendBuffer(const stRequestSend &request, oINT32 n);
-    void appendSendBufferLow(const stRequestSend &request, oINT32 n);
-private:
-    void freeWriteBuff(QUE_WRITE_BUFF_PTR &listBuff);
-    void appendSendBufferLogic(QUE_WRITE_BUFF_PTR &listBuff, const stRequestSend &request, oINT32 n);
+	OsnSocket();
+	~OsnSocket();
 public:
-    QUE_WRITE_BUFF_PTR m_queHigh;
-    QUE_WRITE_BUFF_PTR m_queLow;
+	void init();
+	oINT32 open(const oINT8 *addr, oINT32 port);
+	oINT64 write(oINT32 sock, const void *pBuff, oINT32 sz);
 private:
-    MEMBER_VALUE(oINT32, Type);
-    MEMBER_VALUE(oINT32, Id);
-    MEMBER_VALUE(oINT32, Fd);
-    MEMBER_VALUE(oUINT32, Opaque);
-    MEMBER_VALUE(oINT32, Protocol);
-    MEMBER_VALUE(oINT64, WBSize);
-    SIZE m_Size;
+	void suspend(stSocketInfo &info);
+	void wakeup(stSocketInfo &info);
+	oINT32 connect(oINT32 id);
+	void dispatchSocket(const OsnPreparedStatement &stmt);
+
+	void funcSocketData(const stOsnSocketMsg *msg);
+	void funcSocketConnect(const stOsnSocketMsg *msg);
+	void funcSocketClose(const stOsnSocketMsg *msg);
+	void funcSocketAccept(const stOsnSocketMsg *msg);
+	void funcSocketError(const stOsnSocketMsg *msg);
+	void funcSocketWarning(const stOsnSocketMsg *msg);
+private:
+	typedef std::function<void(const stOsnSocketMsg *)> SOCKET_MSG_FUNC;
+	typedef std::map<oINT32, SOCKET_MSG_FUNC> MAP_SOCKET_MSG_FUNC;
+	typedef MAP_SOCKET_MSG_FUNC::iterator MAP_SOCKET_MSG_FUNC_ITR;
+	MAP_SOCKET_MSG_FUNC m_mapDispatchFunc;
+	typedef std::map<oINT32, stSocketInfo> MAP_SOCKET_INFO;
+	typedef MAP_SOCKET_INFO::iterator MAP_SOCKET_INFO_ITR;
+	MAP_SOCKET_INFO m_mapSocketInfo;
 };
 
-#endif /* osn_socket_hpp */

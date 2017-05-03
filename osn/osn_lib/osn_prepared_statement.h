@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <map>
 #include "osn.h"
 
 //- Union for data buffer (upper-level bind -> queue -> lower-level bind)
@@ -111,5 +112,7 @@ protected:
 	mutable std::vector<PreparedStatementData> m_vecStatementData;    //- Buffer of parameters, not tied to MySQL in any way yet
 };
 
+typedef std::map<oINT32, OsnPreparedStatement::VOID_STMT_FUNC> MAP_DISPATCH_FUNC;
+typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
 
 #endif//_PreparedStatement_h__

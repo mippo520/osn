@@ -1,6 +1,7 @@
 #include "TestService.h"
 #include "osn_service_manager.h"
 #include "osn_socket_manager.h"
+#include "TestService3.h"
 
 
 TestService::TestService()
@@ -54,6 +55,7 @@ void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
 		case eOST_Connect:
 			if (pSM->id == m_nListenId)
 			{
+				g_ServiceManager.startService<TestService3>();
 				break;
 			}
 			if (m_setConnectedId.find(pSM->id) == m_setConnectedId.end())
@@ -61,7 +63,6 @@ void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
 				printf("close unknown connection %d!\n", pSM->id);
 				g_SocketManager.close(getId(), pSM->id);
 			}
-
 			break;
 		case eOST_Accept:
 		{
@@ -118,9 +119,9 @@ void TestService::dispatchText(const OsnPreparedStatement &stmt)
 
 void TestService::start(const OsnPreparedStatement &stmt)
 {
-// 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
-	registDispatchFunc(ePType_Socket, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchSocket));
-	registDispatchFunc(ePType_Text, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchText));
+	RegistDispatchFunc(ePType_Socket, &TestService::dispatchSocket, this);
+	RegistDispatchFunc(ePType_Text, &TestService::dispatchText, this);
+	// 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
 	m_nListenId = g_SocketManager.listen(getId(), "", 18888);
     g_SocketManager.start(getId(), m_nListenId);
 }

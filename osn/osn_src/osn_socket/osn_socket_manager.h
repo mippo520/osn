@@ -1,5 +1,5 @@
 //
-//  osn_socket.hpp
+//  osn_socket_manager.hpp
 //  osn
 //
 //  Created by zenghui on 17/4/25.
@@ -12,7 +12,7 @@
 #include <string>
 #include "osn.h"
 #include "osn_singleton.h"
-#include "osn_socket.h"
+#include "osn_socket_data.h"
 #include "osn_socket_head.h"
 
 class OsnPoll;
@@ -47,19 +47,19 @@ private:
     oINT32 pollResult(stSocketMessage &result, oBOOL &bMore);
     oINT32 ctrlCmd(stSocketMessage &result);
     void clearClosedEvent(stSocketMessage &result, oINT32 nType);
-    void forceClose(OsnSocket &socket, stSocketMessage &result);
-    oINT32 reportConnect(OsnSocket &socket, stSocketMessage &result);
-    oINT32 reportAccept(OsnSocket &socket, stSocketMessage &result);
-    oINT32 sendBuff(OsnSocket &socket, stSocketMessage &result);
+    void forceClose(OsnSocketData &socket, stSocketMessage &result);
+    oINT32 reportConnect(OsnSocketData &socket, stSocketMessage &result);
+    oINT32 reportAccept(OsnSocketData &socket, stSocketMessage &result);
+    oINT32 sendBuff(OsnSocketData &socket, stSocketMessage &result);
     oBOOL listUncomplete(QUE_WRITE_BUFF_PTR &queWBuff);
-    oINT32 sendList(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
-    oINT32 sendListTcp(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
+    oINT32 sendList(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
+    oINT32 sendListTcp(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
     oINT32 reserveId();
     static oINT32 hashId(oINT32 nId);
     void socketKeepAlive(oINT32 nFd);
-    OsnSocket* newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd);
+    OsnSocketData* newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd);
     void forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMessage &result);
-    oINT32 forwardMessageTcp(OsnSocket &socket, stSocketMessage &result);
+    oINT32 forwardMessageTcp(OsnSocketData &socket, stSocketMessage &result);
     oINT32 doListen(std::string &strAddr, oINT32 nPort, oINT32 nBackLog);
     oINT32 doBind(std::string &strAddr, oINT32 nPort, oINT32 protocol, oINT32 &family);
     oINT32 listenSocket(stRequestListen &request, stSocketMessage &result);
@@ -74,7 +74,7 @@ private:
     oINT32 m_nRecvFD;
     oINT32 m_nSendFD;
     oBOOL m_bCheckCtrl;
-    OsnSocket m_Socket[s_u64MaxSocket];
+    OsnSocketData m_Socket[s_u64MaxSocket];
     fd_set m_fdSet;
     oINT32 m_nEventIndex;
     oINT32 m_nEventN;

@@ -26,9 +26,9 @@ OsnService::OsnService()
 {
 }
 
-void OsnService::registDispatchFunc(oINT32 nPType, CO_MEMBER_FUNC funcPtr)
+void OsnService::registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC func)
 {
-	m_mapDispatchFunc[nPType] = std::bind(funcPtr, this, std::placeholders::_1);
+	m_mapDispatchFunc[nPType] = func;
 }
 
 
@@ -64,7 +64,7 @@ void OsnService::dispatch(const OsnPreparedStatement &stmt)
 
 void OsnService::init()
 {
-    registDispatchFunc(ePType_Start, &OsnService::start);
+	registDispatchFunc(ePType_Start, std::bind(&OsnService::start, this, std::placeholders::_1));
     g_ServiceManager.send(getId(), ePType_Start);
 }
 

@@ -40,9 +40,6 @@
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp">
       <Filter>osn_lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp">
-      <Filter>osn_src\osn_socket</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_manager.cpp">
       <Filter>osn_src\osn_socket</Filter>
     </ClCompile>
@@ -51,6 +48,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_socket.cpp">
       <Filter>osn_src\osn_thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService3.cpp">
+      <Filter>osn_src\osn_service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.cpp">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp">
+      <Filter>osn_src\osn_socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +143,6 @@
     <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h">
       <Filter>osn_lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h">
-      <Filter>osn_src\osn_socket</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h">
       <Filter>osn_src\osn_socket</Filter>
     </ClInclude>
@@ -154,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_socket.h">
       <Filter>osn_src\osn_thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService3.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h">
+      <Filter>osn_src\osn_socket</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

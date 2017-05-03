@@ -49,6 +49,8 @@ public:
     void addThread();
     void printThreadInfo();
     void pushWarkingService(oUINT32 unId);
+	void registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC funcPtr);
+	oUINT32 getCurService();
 private:
     friend class OsnService;
     friend class OsnStart;
@@ -57,7 +59,6 @@ private:
     OsnService* popWorkingService();
     oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg);
     void setCurService(oUINT32 unId);
-    oUINT32 getCurService();
     oUINT32 genId();
 private:
     std::queue<oUINT32> m_queHadMsgIds;

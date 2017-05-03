@@ -1,107 +1,115 @@
-//
-//  osn_socket.cpp
-//  osn
-//
-//  Created by zenghui on 17/4/25.
-//  Copyright © 2017年 zenghui. All rights reserved.
-//
-
 #include "osn_socket.h"
-#include "osn_socket_head.h"
+#include "osn_socket_manager.h"
+#include "osn_service_manager.h"
+#include "osn_coroutine_manager.h"
 
 OsnSocket::OsnSocket()
-    : m_Type(eSockType_Invalid)
-    , m_Id(0)
-    , m_Fd(0)
-    , m_Opaque(0)
-    , m_Protocol(eSProtocol_TCP)
-    , m_WBSize(0)
 {
-    
 }
+
 
 OsnSocket::~OsnSocket()
 {
-    
 }
 
-void OsnSocket::freeWriteBuff()
+void OsnSocket::init()
 {
-    freeWriteBuff(m_queHigh);
-    freeWriteBuff(m_queLow);
+	RegistDispatchFunc(ePType_Socket, &OsnSocket::dispatchSocket, this);
+	m_mapDispatchFunc[eOST_Data] = std::bind(&OsnSocket::funcSocketData, this, std::placeholders::_1);
+	m_mapDispatchFunc[eOST_Connect] = std::bind(&OsnSocket::funcSocketConnect, this, std::placeholders::_1);
+	m_mapDispatchFunc[eOST_Accept] = std::bind(&OsnSocket::funcSocketAccept, this, std::placeholders::_1);
+	m_mapDispatchFunc[eOST_Error] = std::bind(&OsnSocket::funcSocketError, this, std::placeholders::_1);
+	m_mapDispatchFunc[eOST_Close] = std::bind(&OsnSocket::funcSocketClose, this, std::placeholders::_1);
+	m_mapDispatchFunc[eOST_Warning] = std::bind(&OsnSocket::funcSocketWarning, this, std::placeholders::_1);
 }
 
-void OsnSocket::freeWriteBuff(QUE_WRITE_BUFF_PTR &queBuff)
+oINT32 OsnSocket::open(const oINT8 *addr, oINT32 port)
 {
-    while (!queBuff.empty())
-    {
-        stWriteBuff *pWB = queBuff.front();
-        
-        if (!pWB->bUserObject)
-        {
-            SAFE_FREE(pWB->pBuff);
-        }
-        SAFE_DELETE(pWB);
-        
-        queBuff.pop();
-    }
+	oUINT32 svrId = g_ServiceManager.getCurService();
+	oINT32 sock = g_SocketManager.connect(svrId, addr, port);
+	return connect(sock);
 }
 
-oBOOL OsnSocket::isSendBufferEmpty()
+oINT64 OsnSocket::write(oINT32 sock, const void *pBuff, oINT32 sz)
 {
-    return m_queLow.empty() && m_queHigh.empty();
+	return g_SocketManager.send(sock, pBuff, sz);
 }
 
-void OsnSocket::raiseUncomplete()
+void OsnSocket::suspend(stSocketInfo &info)
 {
-    assert(!m_queLow.empty());
-    assert(m_queHigh.empty());
-    stWriteBuff *pWBuff = m_queLow.front();
-    m_queLow.pop();
-    m_queHigh.push(pWBuff);
+	info.co = g_CorotineManager.running();
+	g_ServiceManager.wait(info.co);
+	if (info.closing > 0)
+	{
+		g_ServiceManager.wakeup(info.closing);
+	}
 }
 
-oBOOL OsnSocket::isInvalidAndReserve()
+void OsnSocket::wakeup(stSocketInfo &info)
 {
-    if (ATOM_CAS(&m_Type, eSockType_Invalid, eSockType_Reserve))
-    {
-        return true;
-    }
-    return  false;
+	oUINT32 co = info.co;
+	if (co > 0)
+	{
+		info.co = 0;
+		g_ServiceManager.wakeup(co);
+	}
 }
 
-void OsnSocket::setTcpSize(oINT32 nSize)
+oINT32 OsnSocket::connect(oINT32 id)
 {
-    m_Size.nSize = nSize;
+	stSocketInfo &info = m_mapSocketInfo[id];
+	info.strProtocal = "TCP";
+	info.bConnecting = true;
+	suspend(info);
+	return id;
 }
 
-oINT32 OsnSocket::getTcpSize()
+void OsnSocket::dispatchSocket(const OsnPreparedStatement &stmt)
 {
-    return m_Size.nSize;
+	const stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
+	if (NULL != pSM)
+	{
+		MAP_SOCKET_MSG_FUNC_ITR itr = m_mapDispatchFunc.find(pSM->type);
+		if (itr != m_mapDispatchFunc.end())
+		{
+			itr->second(pSM);
+		}
+	}
 }
 
-void OsnSocket::checkWriteBuff()
+void OsnSocket::funcSocketData(const stOsnSocketMsg *msg)
 {
-    assert(m_queLow.empty());
-    assert(m_queHigh.empty());
+
 }
 
-void OsnSocket::appendSendBuffer(const stRequestSend &request, oINT32 n)
+void OsnSocket::funcSocketConnect(const stOsnSocketMsg *msg)
 {
-    appendSendBufferLogic(m_queHigh, request, n);
+	oINT32 id = msg->id;
+	MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.find(id);
+	if (itr != m_mapSocketInfo.end())
+	{
+		stSocketInfo &info = itr->second;
+		info.bConnected = true;
+		wakeup(info);
+	}
 }
 
-void OsnSocket::appendSendBufferLow(const stRequestSend &request, oINT32 n)
+void OsnSocket::funcSocketClose(const stOsnSocketMsg *msg)
 {
-    appendSendBufferLogic(m_queLow, request, n);
+
 }
 
-void OsnSocket::appendSendBufferLogic(QUE_WRITE_BUFF_PTR &listBuff, const stRequestSend &request, oINT32 n)
+void OsnSocket::funcSocketAccept(const stOsnSocketMsg *msg)
 {
-    stWriteBuff *pWB = new stWriteBuff();
-    pWB->ptr = request.buffer + n;
-    pWB->nSz = request.sz - n;
-    pWB->pBuff = request.buffer;
-    listBuff.push(pWB);
+
 }
 
+void OsnSocket::funcSocketError(const stOsnSocketMsg *msg)
+{
+
+}
+
+void OsnSocket::funcSocketWarning(const stOsnSocketMsg *msg)
+{
+
+}

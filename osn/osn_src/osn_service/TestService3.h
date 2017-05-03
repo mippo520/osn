@@ -10,6 +10,7 @@
 #define TestService3_hpp
 
 #include "osn_service.h"
+#include "osn_socket.h"
 
 class TestService3 : public OsnService
 {
@@ -20,6 +21,8 @@ public:
     virtual void start(const OsnPreparedStatement &stmt) override;
     virtual void exit() override;
     void dispatchLua(const OsnPreparedStatement &stmt);
+private:
+	OsnSocket m_Socket;
 };
 
 #endif /* TestService3_hpp */

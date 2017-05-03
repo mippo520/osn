@@ -12,6 +12,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <queue>
+#include <string>
 
 // EAGAIN and EWOULDBLOCK may be not the same value.
 #if (EAGAIN != EWOULDBLOCK)
@@ -197,11 +198,11 @@ struct stWriteBuff
 
 typedef std::queue<stWriteBuff*> QUE_WRITE_BUFF_PTR;
 
-class OsnSocket;
+class OsnSocketData;
 
 struct stSocketEvent
 {
-    OsnSocket *socket;
+    OsnSocketData *socket;
     oBOOL bRead;
     oBOOL bWrite;
     
@@ -217,6 +218,47 @@ union sockaddr_all
     sockaddr s;
     sockaddr_in v4;
     sockaddr_in6 v6;
+};
+
+struct stBufferNode 
+{
+	oINT8 *msg;
+	oINT32 sz;
+	stBufferNode()
+		: msg(NULL)
+		, sz(0)
+	{}
+};
+
+struct stSocketBuffer
+{
+	oINT32 size;
+	oINT32 offset;
+	std::queue<stBufferNode> queNode;
+
+	stSocketBuffer()
+		: size(0)
+		, offset(0)
+	{}
+};
+
+struct stSocketInfo 
+{
+	oUINT32 co;
+	oINT32 id;
+	oBOOL bConnected;
+	oBOOL bConnecting;
+	std::string strProtocal;
+	stSocketBuffer buffer;
+	oINT32 closing;
+
+	stSocketInfo()
+		: co(0)
+		, id(0)
+		, bConnected(false)
+		, bConnecting(false)
+		, closing(0)
+	{}
 };
 
 #endif /* osn_socket_head_h */

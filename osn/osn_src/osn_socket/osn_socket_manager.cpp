@@ -1,5 +1,5 @@
 //
-//  osn_socket.cpp
+//  osn_socket_manager.cpp
 //  osn
 //
 //  Created by zenghui on 17/4/25.
@@ -209,7 +209,7 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
         }
         
         stSocketEvent &event = m_Events[m_nEventIndex++];
-        OsnSocket *pSocket = event.socket;
+        OsnSocketData *pSocket = event.socket;
         if (NULL == pSocket)
         {
             continue;
@@ -333,7 +333,7 @@ void OsnSocketManager::clearClosedEvent(stSocketMessage &result, oINT32 nType)
         for (oINT32 i = m_nEventIndex; i < m_nEventN; ++i)
         {
             stSocketEvent &event = m_Events[i];
-            OsnSocket *pSocket = static_cast<OsnSocket*>(event.socket);
+            OsnSocketData *pSocket = static_cast<OsnSocketData*>(event.socket);
             if (NULL!= pSocket)
             {
                 if (eSockType_Invalid == pSocket->getType() && pSocket->getId() == nId)
@@ -346,7 +346,7 @@ void OsnSocketManager::clearClosedEvent(stSocketMessage &result, oINT32 nType)
     }
 }
 
-oINT32 OsnSocketManager::reportConnect(OsnSocket &socket, stSocketMessage &result)
+oINT32 OsnSocketManager::reportConnect(OsnSocketData &socket, stSocketMessage &result)
 {
     oINT32 nError;
     socklen_t nErrlen = sizeof(nError);
@@ -391,7 +391,7 @@ oINT32 OsnSocketManager::reportConnect(OsnSocket &socket, stSocketMessage &resul
     }
 }
 
-oINT32 OsnSocketManager::reportAccept(OsnSocket &socket, stSocketMessage &result)
+oINT32 OsnSocketManager::reportAccept(OsnSocketData &socket, stSocketMessage &result)
 {
     sockaddr_all u;
     socklen_t len = sizeof(u);
@@ -419,7 +419,7 @@ oINT32 OsnSocketManager::reportAccept(OsnSocket &socket, stSocketMessage &result
     }
     socketKeepAlive(nClientFd);
     m_pPoll->nonBlocking(nClientFd);
-    OsnSocket *pSock = newFd(nId, nClientFd, eSProtocol_TCP, socket.getOpaque(), false);
+    OsnSocketData *pSock = newFd(nId, nClientFd, eSProtocol_TCP, socket.getOpaque(), false);
     if (NULL == pSock)
     {
         ::close(nClientFd);
@@ -452,7 +452,7 @@ oINT32 OsnSocketManager::reserveId()
             nId = ATOM_AND(&m_nAllocId, 0x7fffffff);
         }
         
-        OsnSocket &socket = m_Socket[hashId(nId)];
+        OsnSocketData &socket = m_Socket[hashId(nId)];
         if (eSockType_Invalid == socket.getType())
         {
             if (socket.isInvalidAndReserve())
@@ -470,9 +470,9 @@ oINT32 OsnSocketManager::reserveId()
     return -1;
 }
 
-OsnSocket* OsnSocketManager::newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd)
+OsnSocketData* OsnSocketManager::newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd)
 {
-    OsnSocket &socket = m_Socket[hashId(nId)];
+    OsnSocketData &socket = m_Socket[hashId(nId)];
     
     assert(eSockType_Reserve == socket.getType());
     
@@ -507,7 +507,7 @@ oINT32 OsnSocketManager::hashId(oINT32 nId)
     return (((oUINT32)nId) % s_u64MaxSocket);
 }
 
-void OsnSocketManager::forceClose(OsnSocket &socket, stSocketMessage &result)
+void OsnSocketManager::forceClose(OsnSocketData &socket, stSocketMessage &result)
 {
     result.id = socket.getId();
     result.ud = 0;
@@ -533,7 +533,7 @@ void OsnSocketManager::forceClose(OsnSocket &socket, stSocketMessage &result)
     socket.setType(eSockType_Invalid);
 }
 
-oINT32 OsnSocketManager::sendBuff(OsnSocket &socket, stSocketMessage &result)
+oINT32 OsnSocketManager::sendBuff(OsnSocketData &socket, stSocketMessage &result)
 {
     assert(!listUncomplete(socket.m_queLow));
     if (eSockStatus_Close == sendList(socket, socket.m_queHigh, result))
@@ -583,7 +583,7 @@ oBOOL OsnSocketManager::listUncomplete(QUE_WRITE_BUFF_PTR &queWBuff)
     return pBuff->ptr != pBuff->pBuff;
 }
 
-oINT32 OsnSocketManager::sendList(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result)
+oINT32 OsnSocketManager::sendList(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result)
 {
     if (eSProtocol_TCP == socket.getProtocol())
     {
@@ -598,7 +598,7 @@ oINT32 OsnSocketManager::sendList(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuf
     return eSockStatus_None;
 }
 
-oINT32 OsnSocketManager::sendListTcp(OsnSocket &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result)
+oINT32 OsnSocketManager::sendListTcp(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result)
 {
 
     while (!queWBuff.empty())
@@ -650,7 +650,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
         }
         else
         {
-            result.data[0] = '\0';
+            result.data = "";
         }
     }
 
@@ -678,7 +678,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
     }
 }
 
-oINT32 OsnSocketManager::forwardMessageTcp(OsnSocket &socket, stSocketMessage &result)
+oINT32 OsnSocketManager::forwardMessageTcp(OsnSocketData &socket, stSocketMessage &result)
 {
     oINT32 sz = socket.getTcpSize();
     oINT8 *pBuff = (oINT8*)malloc(sz);
@@ -848,7 +848,7 @@ oINT32 OsnSocketManager::listenSocket(stRequestListen &request, stSocketMessage 
 {
     oINT32 id = request.id;
     oINT32 listenId = request.fd;
-    OsnSocket *pSocket = newFd(id, listenId, eSProtocol_TCP, request.opaque, false);
+    OsnSocketData *pSocket = newFd(id, listenId, eSProtocol_TCP, request.opaque, false);
     if (NULL == pSocket)
     {
         ::close(listenId);
@@ -870,7 +870,7 @@ oINT32 OsnSocketManager::startSocket(stRequestStart &request, stSocketMessage &r
     result.opaque = request.opaque;
     result.ud = 0;
     result.data = NULL;
-    OsnSocket &socket = m_Socket[hashId(id)];
+    OsnSocketData &socket = m_Socket[hashId(id)];
     if (eSockType_Invalid == socket.getType() || socket.getId() != id)
     {
         result.data = "invalid socket";
@@ -901,7 +901,7 @@ oINT32 OsnSocketManager::startSocket(stRequestStart &request, stSocketMessage &r
 oINT32 OsnSocketManager::closeSocket(stRequestClose &request, stSocketMessage &result)
 {
 	oINT32 id = request.id;
-	OsnSocket &sock = m_Socket[hashId(id)];
+	OsnSocketData &sock = m_Socket[hashId(id)];
 	if (eSockType_Invalid == sock.getType() || sock.getId() != id)
 	{
 		result.id = id;
@@ -933,7 +933,7 @@ oINT32 OsnSocketManager::closeSocket(stRequestClose &request, stSocketMessage &r
 
 oINT64 OsnSocketManager::send(oINT32 sock, const void *pBuff, oINT32 sz)
 {
-    OsnSocket &socket = m_Socket[hashId(sock)];
+    OsnSocketData &socket = m_Socket[hashId(sock)];
     
     if (socket.getId() != sock || eSockType_Invalid == socket.getType())
     {
@@ -985,7 +985,7 @@ oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &res
     result.id = id;
     result.ud = 0;
     result.data = NULL;
-    OsnSocket *pSock = NULL;
+    OsnSocketData *pSock = NULL;
     addrinfo ai_hints;
     addrinfo *ai_list = NULL;
     addrinfo *ai_ptr = NULL;
@@ -1067,7 +1067,7 @@ oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &res
 oINT32 OsnSocketManager::sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority)
 {
     oINT32 id = request.id;
-    OsnSocket &socket = m_Socket[hashId(id)];
+    OsnSocketData &socket = m_Socket[hashId(id)];
     if (socket.getId() != id
         || socket.getType() == eSockType_Invalid
         || socket.getType() == eSockType_Halfclose
