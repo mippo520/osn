@@ -298,6 +298,8 @@ oINT32 OsnSocketManager::ctrlCmd(stSocketMessage &result)
             return sendSocket(*((stRequestSend*)buffer), result, eSPriority_High);
         case 'P':
             return sendSocket(*((stRequestSend*)buffer), result, eSPriority_Low);
+        case 'O':
+            return openSocket(*((stRequestOpen*)buffer), result);
         default:
             printf("OsnSocketManager::ctrlCmd : unknown ctrl %c!\n", type);
             return eSockStatus_None;
@@ -947,6 +949,119 @@ oINT64 OsnSocketManager::send(oINT32 sock, const void *pBuff, oINT32 sz)
     request.u.send.sz = sz;
     sendRequest(request, 'D', sizeof(request.u.send));
     return socket.getWBSize();
+}
+
+oINT32 OsnSocketManager::connect(oUINT32 opaque, const char *szAddr, oINT32 port)
+{
+    stRequestPackage request;
+    oINT32 len = (oINT32)strlen(szAddr);
+    if (len + sizeof(request.u.open) >= 256)
+    {
+        printf("OsnSocketManager::connect Error! socket-server : Invalid addr %s.\n", szAddr);
+        return -1;
+    }
+    oINT32 id = reserveId();
+    if (id < 0)
+    {
+        return -1;
+    }
+    request.u.open.opaque = opaque;
+    request.u.open.id = id;
+    request.u.open.port = port;
+    memcpy(request.u.open.host, szAddr, len);
+    request.u.open.host[len] = '\0';
+    if (len < 0)
+    {
+        return -1;
+    }
+    sendRequest(request, 'O', sizeof(request.u.open) + len);
+    return request.u.open.id;
+}
+
+oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &result)
+{
+    oINT32 id = request.id;
+    result.opaque = request.opaque;
+    result.id = id;
+    result.ud = 0;
+    result.data = NULL;
+    OsnSocket *pSock = NULL;
+    addrinfo ai_hints;
+    addrinfo *ai_list = NULL;
+    addrinfo *ai_ptr = NULL;
+    oINT8 port[16];
+    sprintf(port, "%d", request.port);
+    memset(&ai_hints, 0, sizeof( ai_hints ) );
+    ai_hints.ai_family = AF_UNSPEC;
+    ai_hints.ai_socktype = SOCK_STREAM;
+    ai_hints.ai_protocol = IPPROTO_TCP;
+    
+    oINT32 status = getaddrinfo(request.host, port, &ai_hints, &ai_list);
+    if (0 != status)
+    {
+        result.data = (oINT8*)gai_strerror(status);
+        freeaddrinfo( ai_list );
+        m_Socket[hashId(id)].setType(eSockType_Invalid);
+        return eSockStatus_Error;
+    }
+    oINT32 nSock = -1;
+    for (ai_ptr = ai_list; ai_ptr != NULL; ai_ptr = ai_ptr->ai_next)
+    {
+        nSock = ::socket(ai_ptr->ai_family, ai_ptr->ai_socktype, ai_ptr->ai_protocol);
+        if (nSock < 0)
+        {
+            continue;
+        }
+        socketKeepAlive(nSock);
+        m_pPoll->nonBlocking(nSock);
+        status = ::connect(nSock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
+        if (0 != status && errno != EINPROGRESS)
+        {
+            ::close(nSock);
+            nSock = -1;
+            continue;
+        }
+        break;
+    }
+    
+    if (nSock < 0)
+    {
+        result.data = strerror(errno);
+        freeaddrinfo( ai_list );
+        m_Socket[hashId(id)].setType(eSockType_Invalid);
+        return eSockStatus_Error;
+    }
+    
+    pSock = newFd(id, nSock, eSProtocol_TCP, request.opaque, true);
+    if (NULL == pSock)
+    {
+        ::close(nSock);
+        result.data = "reach skynet socket number limit";
+        freeaddrinfo( ai_list );
+        m_Socket[hashId(id)].setType(eSockType_Invalid);
+        return eSockStatus_Error;
+    }
+    
+    if (0 == status)
+    {
+        pSock->setType(eSockType_Connected);
+        sockaddr *addr = ai_ptr->ai_addr;
+        void *sin_addr = (AF_INET == ai_ptr->ai_family) ? (void*)&((sockaddr_in *)addr)->sin_addr : (void*)&((sockaddr_in6 *)addr)->sin6_addr;
+        if (inet_ntop(ai_ptr->ai_family, sin_addr, m_Buff, sizeof(m_Buff)))
+        {
+            result.data = m_Buff;
+        }
+        freeaddrinfo( ai_list );
+        return eSockStatus_Open;
+    }
+    else
+    {
+        pSock->setType(eSockType_Connecting);
+        m_pPoll->write(m_nEventFD, pSock->getFd(), pSock, true);
+    }
+    
+    freeaddrinfo(ai_list);
+    return -1;
 }
 
 oINT32 OsnSocketManager::sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority)

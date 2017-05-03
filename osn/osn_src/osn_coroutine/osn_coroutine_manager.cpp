@@ -127,7 +127,8 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
             char **str;
             nptrs = backtrace(buffer, 100);
             str = backtrace_symbols(buffer, nptrs);
-            for (int i = 0; i < nptrs; ++i) {
+            for (int i = 0; i < nptrs; ++i)
+            {
                 printf("%s\n", str[i]);
             }
         }

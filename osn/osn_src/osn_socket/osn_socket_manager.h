@@ -36,6 +36,7 @@ public:
     void start(oUINT32 opaque, oINT32 sock);
 	void close(oUINT32 opaque, oINT32 sock);
     oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz);
+    oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port);
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();
@@ -65,6 +66,7 @@ private:
     oINT32 startSocket(stRequestStart &request, stSocketMessage &result);
 	oINT32 closeSocket(stRequestClose &request, stSocketMessage &result);
     oINT32 sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority);
+    oINT32 openSocket(stRequestOpen &request, stSocketMessage &result);
 private:
     OsnPoll *m_pPoll;
     

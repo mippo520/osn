@@ -39,4 +39,7 @@ struct stServiceMessage
     ~stServiceMessage() {}
 };
 
+#define RegistDispatchFunc(type, func) registDispatchFunc(type, static_cast<CO_MEMBER_FUNC>(&func));
+
+
 #endif /* osn_service_head */
