@@ -35,6 +35,11 @@ oINT64 OsnSocket::write(oINT32 sock, const void *pBuff, oINT32 sz)
 	return g_SocketManager.send(sock, pBuff, sz);
 }
 
+oINT32 OsnSocket::listen(oUINT32 opaque, const oINT8 *addr, oINT32 nPort, oINT32 nBackLog)
+{
+    return g_SocketManager.listen(opaque, addr, nPort);
+}
+
 void OsnSocket::suspend(stSocketInfo &info)
 {
 	info.co = g_CorotineManager.running();

@@ -24,7 +24,6 @@ class OsnSocketManager
     const static oINT32 s_nMaxEvents = 64;
     const static oINT32 s_nMaxInfo = 128;
     const static oINT32 s_nMinReadBuffer = 64;
-    const static oINT32 s_nBacklog = 32;
 public:
     ~OsnSocketManager();
     

@@ -261,4 +261,6 @@ struct stSocketInfo
 	{}
 };
 
+const static oINT32 s_nBacklog = 32;
+
 #endif /* osn_socket_head_h */

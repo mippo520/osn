@@ -74,7 +74,7 @@ oINT32 OsnKqueue::wait(oINT32 kfd, stSocketEvent *pEvent, oINT32 nMax)
     
     for (oINT32 i = 0; i < n; ++i)
     {
-        pEvent[i].socket = static_cast<OsnSocket*>(ev[i].udata);
+        pEvent[i].socket = static_cast<OsnSocketData*>(ev[i].udata);
         oUINT32 filter = ev[i].filter;
         pEvent[i].bWrite = (filter == EVFILT_WRITE);
         pEvent[i].bRead = (filter == EVFILT_READ);

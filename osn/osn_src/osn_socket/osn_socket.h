@@ -2,6 +2,7 @@
 #include <map>
 #include "osn.h"
 #include "osn_prepared_statement.h"
+#include "osn_socket_head.h"
 
 struct stOsnSocketMsg;
 struct stSocketInfo;
@@ -15,6 +16,7 @@ public:
 	void init();
 	oINT32 open(const oINT8 *addr, oINT32 port);
 	oINT64 write(oINT32 sock, const void *pBuff, oINT32 sz);
+    oINT32 listen(oUINT32 opaque, const oINT8 *addr, oINT32 nPort = 0, oINT32 nBackLog = s_nBacklog);
 private:
 	void suspend(stSocketInfo &info);
 	void wakeup(stSocketInfo &info);
