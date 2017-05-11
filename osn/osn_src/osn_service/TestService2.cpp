@@ -67,7 +67,7 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
 
 void TestService2::start(const OsnPreparedStatement &stmt)
 {
-    printf("start %d\n", getId());
+    printf("start %lu\n", getId());
 	RegistDispatchFunc(ePType_Lua, &TestService2::dispatchLua, this);
 //    OsnPreparedStatement msg;
 //    msg.setString(0, "send begin");

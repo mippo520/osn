@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <queue>
 #include <string>
+#include "osn_prepared_statement.h"
 
 // EAGAIN and EWOULDBLOCK may be not the same value.
 #if (EAGAIN != EWOULDBLOCK)
@@ -155,8 +156,8 @@ struct stOsnSocketMsg
     oINT32 type;
     oINT32 id;
     oINT32 ud;
-    oINT8 *pBuffer;
-	oINT32 nSize;
+    mutable oINT8 *pBuffer;
+	mutable oINT32 nSize;
     
     stOsnSocketMsg(oINT32 sz)
         : type(0)
@@ -175,9 +176,10 @@ struct stOsnSocketMsg
 		}
 	}
     
-    ~stOsnSocketMsg()
+    void clear() const
     {
-		SAFE_FREE(pBuffer);
+        SAFE_FREE(pBuffer);
+        nSize = 0;
     }
 };
 
@@ -220,47 +222,9 @@ union sockaddr_all
     sockaddr_in6 v6;
 };
 
-struct stBufferNode 
-{
-	oINT8 *msg;
-	oINT32 sz;
-	stBufferNode()
-		: msg(NULL)
-		, sz(0)
-	{}
-};
-
-struct stSocketBuffer
-{
-	oINT32 size;
-	oINT32 offset;
-	std::queue<stBufferNode> queNode;
-
-	stSocketBuffer()
-		: size(0)
-		, offset(0)
-	{}
-};
-
-struct stSocketInfo 
-{
-	oUINT32 co;
-	oINT32 id;
-	oBOOL bConnected;
-	oBOOL bConnecting;
-	std::string strProtocal;
-	stSocketBuffer buffer;
-	oINT32 closing;
-
-	stSocketInfo()
-		: co(0)
-		, id(0)
-		, bConnected(false)
-		, bConnecting(false)
-		, closing(0)
-	{}
-};
 
 const static oINT32 s_nBacklog = 32;
+
+#define SOCKET_START_FUNC_BIND() std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 
 #endif /* osn_socket_head_h */

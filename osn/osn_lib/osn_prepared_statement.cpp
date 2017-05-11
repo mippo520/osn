@@ -1,5 +1,83 @@
 #include "osn_prepared_statement.h"
 
+PreparedStatementData::PreparedStatementData()
+    : type(TYPE_NULL)
+{
+    
+}
+void PreparedStatementData::setBool(const oBOOL value)
+{
+    data.boolean = value;
+    type = TYPE_BOOL;
+}
+
+void PreparedStatementData::setInt32(const oINT32 value)
+{
+    data.i32 = value;
+    type = TYPE_INT32;
+}
+
+void PreparedStatementData::setString(const char *sz)
+{
+    if (NULL != sz)
+    {
+        str = sz;
+    }
+    else
+    {
+        str = "";
+    }
+    type = TYPE_STRING;
+}
+
+void PreparedStatementData::setNull()
+{
+    type = TYPE_NULL;
+}
+
+oBOOL PreparedStatementData::getBool() const
+{
+    if (TYPE_BOOL == type)
+    {
+        return data.boolean;
+    }
+    return false;
+}
+
+oINT32 PreparedStatementData::getInt32() const
+{
+    if (TYPE_INT32 == type)
+    {
+        return data.i32;
+    }
+    return 0;
+}
+
+std::string PreparedStatementData::getString() const
+{
+    if (TYPE_STRING != type)
+    {
+        str = "";
+    }
+    return str;
+}
+
+const char* PreparedStatementData::getCharPtr() const
+{
+    if (TYPE_STRING != type)
+    {
+        str = "";
+    }
+    return str.c_str();
+}
+
+
+PreparedStatementValueType PreparedStatementData::getType() const
+{
+    return type;
+}
+
+
 OsnPreparedStatement::OsnPreparedStatement( const OsnPreparedStatement& right )
 {
 	*this = right;
@@ -435,7 +513,7 @@ std::string OsnPreparedStatement::getString( const oUINT8 index ) const
 	return value;
 }
 
-OsnPreparedStatement::VOID_STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
+VOID_STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
 {
     VOID_STMT_FUNC func;
     if ( index < 0 || index >= m_vecStatementData.size() )

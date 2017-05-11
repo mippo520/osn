@@ -40,6 +40,6 @@ struct stServiceMessage
 };
 
 #define RegistDispatchFunc(type, func, ptr) g_ServiceManager.registDispatchFunc(type, std::bind(func, ptr, std::placeholders::_1));
-
+#define UnregistDispatchFunc(type) g_ServiceManager.unregistDispatchFunc(type)
 
 #endif /* osn_service_head */

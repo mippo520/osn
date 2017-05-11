@@ -33,7 +33,8 @@ public:
     oINT32 poll();
     oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog);
     void start(oUINT32 opaque, oINT32 sock);
-	void close(oUINT32 opaque, oINT32 sock);
+    void close(oUINT32 opaque, oINT32 sock);
+    void shutdown(oUINT32 opaque, oINT32 sock);
     oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz);
     oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port);
 private:

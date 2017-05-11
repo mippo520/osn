@@ -55,7 +55,7 @@ void TestService::dispatchSocket(const OsnPreparedStatement &stmt)
 		case eOST_Connect:
 			if (pSM->id == m_nListenId)
 			{
-				g_ServiceManager.startService<TestService3>();
+//				g_ServiceManager.startService<TestService3>();
 				break;
 			}
 			if (m_setConnectedId.find(pSM->id) == m_setConnectedId.end())
@@ -122,7 +122,7 @@ void TestService::start(const OsnPreparedStatement &stmt)
 	RegistDispatchFunc(ePType_Socket, &TestService::dispatchSocket, this);
 	RegistDispatchFunc(ePType_Text, &TestService::dispatchText, this);
 	// 	registDispatchFunc(ePType_Lua, static_cast<CO_MEMBER_FUNC>(&TestService::dispatchLua));
-	m_nListenId = g_SocketManager.listen(getId(), "", 18888);
+	m_nListenId = g_SocketManager.listen(getId(), "", 18523);
     g_SocketManager.start(getId(), m_nListenId);
 }
 

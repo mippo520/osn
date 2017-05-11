@@ -26,11 +26,19 @@ OsnService::OsnService()
 {
 }
 
-void OsnService::registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC func)
+void OsnService::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC func)
 {
 	m_mapDispatchFunc[nPType] = func;
 }
 
+void OsnService::unregistDispatchFunc(oINT32 nPType)
+{
+    MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(nPType);
+    if (itr != m_mapDispatchFunc.end())
+    {
+        m_mapDispatchFunc.erase(itr);
+    }
+}
 
 oBOOL OsnService::getIsInGlobal()
 {

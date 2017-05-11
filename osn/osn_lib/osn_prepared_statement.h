@@ -41,19 +41,37 @@ enum PreparedStatementValueType
     TYPE_NULL
 };
 
-class OsnPreparedStatement
+class OsnPreparedStatement;
+typedef std::function<OsnPreparedStatement (const OsnPreparedStatement &)> STMT_FUNC;
+typedef std::function<void (const OsnPreparedStatement &)> VOID_STMT_FUNC;
+
+class PreparedStatementData
 {
 public:
-    typedef std::function<OsnPreparedStatement (const OsnPreparedStatement &)> STMT_FUNC;
-    typedef std::function<void (const OsnPreparedStatement &)> VOID_STMT_FUNC;
+    PreparedStatementData();
     
-    struct PreparedStatementData
-    {
-        PreparedStatementDataUnion data;
-        PreparedStatementValueType type;
-        std::string str;
-        VOID_STMT_FUNC func;
-    };
+    void setBool(const oBOOL value);
+    void setInt32(const oINT32 value);
+    void setString(const char *sz);
+    void setNull();
+    
+    oBOOL getBool() const;
+    oINT32 getInt32() const;
+    std::string getString() const;
+    const char* getCharPtr() const;
+    
+    PreparedStatementValueType getType() const;
+    
+private:
+    friend class OsnPreparedStatement;
+    PreparedStatementDataUnion data;
+    PreparedStatementValueType type;
+    mutable std::string str;
+    VOID_STMT_FUNC func;
+};
+
+class OsnPreparedStatement
+{
 public:
     OsnPreparedStatement();
     OsnPreparedStatement(const OsnPreparedStatement& right);
@@ -112,7 +130,7 @@ protected:
 	mutable std::vector<PreparedStatementData> m_vecStatementData;    //- Buffer of parameters, not tied to MySQL in any way yet
 };
 
-typedef std::map<oINT32, OsnPreparedStatement::VOID_STMT_FUNC> MAP_DISPATCH_FUNC;
+typedef std::map<oINT32, VOID_STMT_FUNC> MAP_DISPATCH_FUNC;
 typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
 
 #endif//_PreparedStatement_h__

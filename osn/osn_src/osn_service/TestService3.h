@@ -22,7 +22,12 @@ public:
     virtual void exit() override;
     void dispatchLua(const OsnPreparedStatement &stmt);
 private:
+    void acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz);
+private:
 	OsnSocket m_Socket;
+    oINT32 m_SockId;
+    oINT32 m_fd;
+    oUINT32 m_curCO;
 };
 
 #endif /* TestService3_hpp */

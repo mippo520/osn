@@ -59,7 +59,8 @@ private:
     oUINT32 popFromCoroutinePool();
     stServiceMessage* popMessage();
     oINT32 dispatchWakeup();
-	void registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC func);
+	void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC func);
+    void unregistDispatchFunc(oINT32 nPType);
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;

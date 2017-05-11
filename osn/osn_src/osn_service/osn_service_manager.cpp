@@ -139,7 +139,7 @@ void OsnServiceManager::pushWarkingService(oUINT32 unId)
     }
 }
 
-void OsnServiceManager::registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC funcPtr)
+void OsnServiceManager::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr)
 {
 	oUINT32 unId = getCurService();
 	OsnService *pService = getObject(unId);
@@ -147,6 +147,16 @@ void OsnServiceManager::registDispatchFunc(oINT32 nPType, OsnPreparedStatement::
 	{
 		pService->registDispatchFunc(nPType, funcPtr);
 	}
+}
+
+void OsnServiceManager::unregistDispatchFunc(oINT32 nPType)
+{
+    oUINT32 unId = getCurService();
+    OsnService *pService = getObject(unId);
+    if (NULL != pService)
+    {
+        pService->unregistDispatchFunc(nPType);
+    }
 }
 
 OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWeight)

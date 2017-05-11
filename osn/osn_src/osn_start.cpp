@@ -13,6 +13,7 @@
 #include "osn_service_manager.h"
 #include "TestService.h"
 #include "TestService2.h"
+#include "TestService3.h"
 #include "osn_socket_manager.h"
 
 oINT32 OsnStart::s_WeightArr[] = {
@@ -38,7 +39,7 @@ void OsnStart::init()
 {
 // 	for (oINT32 i = 0; i < 1000; ++i)
 // 	{
-		g_ServiceManager.startService<TestService>();
+		g_ServiceManager.startService<TestService3>();
 // 	}
 // 
 // 	for (oINT32 i = 0; i < 1000; ++i)

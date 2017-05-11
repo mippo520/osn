@@ -749,6 +749,15 @@ void OsnSocketManager::close(oUINT32 opaque, oINT32 sock)
 	sendRequest(request, 'K', sizeof(request.u.close));
 }
 
+void OsnSocketManager::shutdown(oUINT32 opaque, oINT32 sock)
+{
+    stRequestPackage request;
+    request.u.close.id = sock;
+    request.u.close.shutdown = 1;
+    request.u.close.opaque = opaque;
+    sendRequest(request, 'K', sizeof(request.u.close));
+}
+
 oINT32 OsnSocketManager::listen(oUINT32 opaque, std::string &&strAddr, oINT32 port, oINT32 nBackLog)
 {
     oINT32 fd = doListen(strAddr, port, nBackLog);
@@ -855,7 +864,7 @@ oINT32 OsnSocketManager::listenSocket(stRequestListen &request, stSocketMessage 
         result.opaque = request.opaque;
         result.id = request.id;
         result.ud = 0;
-        result.data = NULL;
+        result.data = "reach skynet socket number limit";
         m_Socket[hashId(id)].setType(eSockType_Invalid);
         return eSockStatus_Error;
     }

@@ -49,7 +49,8 @@ public:
     void addThread();
     void printThreadInfo();
     void pushWarkingService(oUINT32 unId);
-	void registDispatchFunc(oINT32 nPType, OsnPreparedStatement::VOID_STMT_FUNC funcPtr);
+	void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
+    void unregistDispatchFunc(oINT32 nPType);
 	oUINT32 getCurService();
 private:
     friend class OsnService;
