@@ -19,6 +19,6 @@ int main(int argc, const char * argv[]) {
     g_OsnStart.init();
     g_OsnStart.start();
     g_OsnStart.exit();
-    
+
     return 0;
 }

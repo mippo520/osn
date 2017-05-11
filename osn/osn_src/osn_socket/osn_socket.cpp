@@ -2,6 +2,7 @@
 #include "osn_socket_manager.h"
 #include "osn_service_manager.h"
 #include "osn_coroutine_manager.h"
+#include <string.h>
 
 OsnSocket::OsnSocket()
 {
