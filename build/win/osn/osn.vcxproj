@@ -61,6 +61,10 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>
+    </LibraryPath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
@@ -119,7 +123,7 @@
       <AdditionalDependencies>-lpthread;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>../../../osn/osn_src;../../../osn/osn_src/osn_thread;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_coroutine;../../../osn/osn_lib;../../../osn/osn_src/osn_socket;../../../osn/osn_src/osn_socket/poll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\share\osn\socket;../../../osn/osn_src;../../../osn/osn_src/osn_thread;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_coroutine;../../../osn/osn_lib;../../../osn/osn_src/osn_socket;../../../osn/osn_src/osn_socket/poll;../../../socket;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
