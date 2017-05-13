@@ -74,24 +74,20 @@
     <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_cache_arr_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h" />
-    <ClInclude Include="..\..\..\osn\osn_lib\osn_dylib.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h" />
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_factory.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
-    <ClInclude Include="..\..\..\services\TestService2\service.h" />
+    <ClInclude Include="..\..\..\services\TestService2\test_service2.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\osn\osn_lib\osn_dylib.cpp" />
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp" />
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_factory.cpp" />
-    <ClCompile Include="..\..\..\services\TestService2\service.cpp" />
+    <ClCompile Include="..\..\..\services\TestService2\test_service2.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

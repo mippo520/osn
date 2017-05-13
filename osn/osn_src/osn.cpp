@@ -49,7 +49,9 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
             break;
         }
         
-        DYLIB_INIT init = (DYLIB_INIT)dlsym(handle, "init");
+		std::string strInitFunc = "init";
+		strInitFunc += strServiceName;
+        DYLIB_INIT init = (DYLIB_INIT)dlsym(handle, strInitFunc.c_str());
         if (NULL == init)
         {
             printf("Osn::loadService Error! loal function init error! %s\n", dlerror());
@@ -57,7 +59,10 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
         }
         (*init)(this, g_Service, g_Coroutine, g_Socket);
         
-        DYLIB_GET_FACTORY getFactory = (DYLIB_GET_FACTORY)dlsym(handle, "getFactory");
+		std::string strGetFactoryFunc = "get";
+		strGetFactoryFunc += strServiceName;
+		strGetFactoryFunc += "Factory";
+        DYLIB_GET_FACTORY getFactory = (DYLIB_GET_FACTORY)dlsym(handle, strGetFactoryFunc.c_str());
         if (NULL == getFactory)
         {
             printf("Osn::loadService Error! loal function getFactory error! %s\n", dlerror());

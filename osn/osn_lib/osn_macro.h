@@ -31,4 +31,62 @@
 #define ATOM_CAS(ptr, oval, nval) __sync_bool_compare_and_swap(ptr, oval, nval)
 #define ATOM_SET(ptr,n) __sync_lock_test_and_set(ptr, n)
 
+#define AddService_Declare(SERVICE_NAME)	\
+class SERVICE_NAME##Factory : public IServiceFactory	\
+{	\
+public:	\
+	virtual OsnService* create();	\
+};	\
+class IOsn;	\
+class IOsnService;	\
+class IOsnCoroutine;	\
+class IOsnSocket;	\
+class IServiceFactory;	\
+class OsnServiceFactory;	\
+extern "C"	\
+{	\
+	oBOOL init##SERVICE_NAME(const IOsn *pOsn, const IOsnService *pService, const IOsnCoroutine *pCoroutine, const IOsnSocket *pSocket);	\
+	IServiceFactory* get##SERVICE_NAME##Factory();	\
+}
+
+#define AddService_Instance(SERVICE_NAME)	\
+OsnService* SERVICE_NAME##Factory::create()	\
+{	\
+	return new SERVICE_NAME();	\
+}	\
+const IOsn *g_Osn = NULL;	\
+const IOsnService *g_Service = NULL;	\
+const IOsnCoroutine *g_Coroutine = NULL;	\
+const IOsnSocket *g_Socket = NULL;	\
+extern "C"	\
+{	\
+	oBOOL init##SERVICE_NAME(const IOsn *pOsn	\
+		, const IOsnService *pService	\
+		, const IOsnCoroutine *pCoroutine	\
+		, const IOsnSocket *pSocket)	\
+	{	\
+		oBOOL bRet = false;	\
+		printf("%s init!\n", #SERVICE_NAME);	\
+		if (NULL != pOsn && NULL != pService && NULL != pCoroutine && NULL != pSocket)	\
+		{	\
+			g_Osn = pOsn;	\
+			g_Service = pService;	\
+			g_Coroutine = pCoroutine;	\
+			g_Socket = pSocket;	\
+			bRet = true;	\
+		}	\
+		else	\
+		{	\
+			printf("dylib init error! Global value is NULL!\n");	\
+		}	\
+		return bRet;	\
+	}	\
+	IServiceFactory* get##SERVICE_NAME##Factory()	\
+	{	\
+		printf("%s getfactory!\n", #SERVICE_NAME);	\
+		return new SERVICE_NAME##Factory();	\
+	}	\
+}
+
+
 #endif /* osn_macro_h */

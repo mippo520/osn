@@ -45,9 +45,6 @@
     <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h">
       <Filter>osn_lib</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_lib\osn_dylib.h">
-      <Filter>osn_lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h">
       <Filter>osn_lib</Filter>
     </ClInclude>
@@ -75,17 +72,11 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h">
       <Filter>osn_src\osn_socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\services\TestService\service.h">
+    <ClInclude Include="..\..\..\services\TestService\test_service.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_factory.h">
-      <Filter>osn_src\osn_service</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\osn\osn_lib\osn_dylib.cpp">
-      <Filter>osn_lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp">
       <Filter>osn_lib</Filter>
     </ClCompile>
@@ -98,11 +89,8 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp">
       <Filter>osn_src\osn_socket</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\services\TestService\service.cpp">
+    <ClCompile Include="..\..\..\services\TestService\test_service.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_factory.cpp">
-      <Filter>osn_src\osn_service</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
