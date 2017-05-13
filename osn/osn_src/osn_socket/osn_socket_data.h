@@ -8,7 +8,7 @@
 
 #ifndef osn_socket_data_hpp
 #define osn_socket_data_hpp
-#include "osn.h"
+#include "osn_common.h"
 #include <queue>
 #include "osn_socket_head.h"
 
@@ -21,13 +21,13 @@ public:
     OsnSocketData();
     ~OsnSocketData();
     
+    oINT32 getTcpSize();
+    oBOOL isSendBufferEmpty();
+    oBOOL isInvalidAndReserve();
     void freeWriteBuff();
     void checkWriteBuff();
-    oBOOL isSendBufferEmpty();
     void raiseUncomplete();
-    oBOOL isInvalidAndReserve();
     void setTcpSize(oINT32 nSize);
-    oINT32 getTcpSize();
     void appendSendBuffer(const stRequestSend &request, oINT32 n);
     void appendSendBufferLow(const stRequestSend &request, oINT32 n);
 private:
@@ -37,13 +37,13 @@ public:
     QUE_WRITE_BUFF_PTR m_queHigh;
     QUE_WRITE_BUFF_PTR m_queLow;
 private:
+    SIZE m_Size;
     MEMBER_VALUE(oINT32, Type);
     MEMBER_VALUE(oINT32, Id);
     MEMBER_VALUE(oINT32, Fd);
     MEMBER_VALUE(oUINT32, Opaque);
     MEMBER_VALUE(oINT32, Protocol);
     MEMBER_VALUE(oINT64, WBSize);
-    SIZE m_Size;
 };
 
 #endif /* osn_socket_data_hpp */

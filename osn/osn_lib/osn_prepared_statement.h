@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 #include <map>
-#include "osn.h"
+#include "osn_type.h"
 
 //- Union for data buffer (upper-level bind -> queue -> lower-level bind)
 union PreparedStatementDataUnion

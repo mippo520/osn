@@ -8,7 +8,7 @@
 
 #ifndef osn_service_head
 #define osn_service_head
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_prepared_statement.h"
 
 enum eProtoType
@@ -39,7 +39,7 @@ struct stServiceMessage
     ~stServiceMessage() {}
 };
 
-#define RegistDispatchFunc(type, func, ptr) g_ServiceManager.registDispatchFunc(type, std::bind(func, ptr, std::placeholders::_1));
-#define UnregistDispatchFunc(type) g_ServiceManager.unregistDispatchFunc(type)
+#define RegistDispatchFunc(type, func, ptr) g_Osn->registDispatchFunc(type, std::bind(func, ptr, std::placeholders::_1));
+#define UnregistDispatchFunc(type) g_Osn->unregistDispatchFunc(type)
 
 #endif /* osn_service_head */

@@ -8,7 +8,7 @@
 
 #ifndef osn_thread_timer_hpp
 #define osn_thread_timer_hpp
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_thread.h"
 
 class OsnTimerThread : public OsnThread {

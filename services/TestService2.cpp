@@ -40,9 +40,9 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
         OsnPreparedStatement msg2;
         msg2.setInt32(0, 101);
         msg2.setUInt32(1, g_CorotineManager.running());
-        g_ServiceManager.send(2, ePType_Lua, msg2);
+        g_Osn->send(2, ePType_Lua, msg2);
         printf("%lu ==========> sleep!\n", getId());
-        g_ServiceManager.wait();
+        g_Osn->wait();
         printf("%lu ==========> wake up!\n", getId());
     }
     else if(101 == tag)
@@ -52,16 +52,16 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
         msg3.setInt32(0, 102);
         msg3.setUInt32(1, stmt.getUInt32(1));
         printf("%lu ==========> timeup to send wakeup command!\n", getId());
-        g_ServiceManager.send(1, ePType_Lua, msg3);
-        g_ServiceManager.exit();
+        g_Osn->send(1, ePType_Lua, msg3);
+        g_Osn->exit();
     }
     else if(102 == tag)
     {
         sleep(1);
         printf("%lu ==========> receive wakeup command!\n", getId());
-        g_ServiceManager.wakeup(stmt.getUInt32(1));
+        g_Osn->wakeup(stmt.getUInt32(1));
         printf("%lu ==========> call wakeup func!\n", getId());
-        g_ServiceManager.exit();
+        g_Osn->exit();
     }
 }
 
@@ -81,11 +81,11 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //        sleep(1);
         OsnPreparedStatement msg;
         msg.setInt32(0, 100);
-        g_ServiceManager.send(1, ePType_Lua, msg);
+        g_Osn->send(1, ePType_Lua, msg);
     }
 }
 
 void TestService2::exit()
 {
-    g_ServiceManager.startService<TestService2>();
+    g_Osn->startService("TestService2");
 }

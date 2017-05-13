@@ -7,12 +7,12 @@
 //
 
 #include "osn_service.h"
-#include "osn_service_manager.h"
-#include "osn_coroutine_manager.h"
 #include <set>
 #include <functional>
-#include "osn_prepared_statement.h"
 #include <signal.h>
+#include "osn_prepared_statement.h"
+#include "I_osn_coroutine.h"
+#include "I_osn_service.h"
 
 std::queue<oUINT32> OsnService::s_queCoroutine;
 OsnSpinLock OsnService::s_CoQueSpinLock;
@@ -73,7 +73,7 @@ void OsnService::dispatch(const OsnPreparedStatement &stmt)
 void OsnService::init()
 {
 	registDispatchFunc(ePType_Start, std::bind(&OsnService::start, this, std::placeholders::_1));
-    g_ServiceManager.send(getId(), ePType_Start);
+    g_Osn->send(getId(), ePType_Start);
 }
 
 stServiceMessage* OsnService::popMessage()
@@ -113,7 +113,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
                 m_mapSessionCoroutine.erase(itr);
                 if (0 != co)
                 {
-                    nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
+                    nType = suspend(co, g_Coroutine->resume(co, pMsg->stmt));
                 }
 			}
 		}
@@ -123,7 +123,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			m_mapCoroutineSession[co] = pMsg->unSession;
 			m_mapCoroutineSource[co] = pMsg->unSource;
 			pMsg->stmt.pushBackInt32(pMsg->nType);
-			nType = suspend(co, g_CorotineManager.resume(co, pMsg->stmt));
+			nType = suspend(co, g_Coroutine->resume(co, pMsg->stmt));
 		}
 
         SAFE_DELETE(pMsg);
@@ -149,7 +149,7 @@ oUINT32 OsnService::pushMsg(stServiceMessage *pMsg)
     if (!getIsInGlobal())
     {
         setIsInGlobal(true);
-        g_ServiceManager.pushWarkingService(getId());
+        g_Service->pushWarkingService(getId());
     }
     
     m_QueMsgSpinLock.unlock();
@@ -175,14 +175,14 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
         ++s_u64CoroutineCount;
         s_CoCountLock.unlock();
         
-        curCo = g_CorotineManager.create([=](oUINT32 co, const OsnPreparedStatement &arg){
+        curCo = g_Coroutine->create([=](oUINT32 co, const OsnPreparedStatement &arg){
             func(arg);
             while (true) {
                 OsnPreparedStatement stmt;
                 stmt.pushBackInt32(eYT_Exit);
-                const OsnPreparedStatement &stmtFunc = g_CorotineManager.yield(stmt);
+                const OsnPreparedStatement &stmtFunc = g_Coroutine->yield(stmt);
                 OSN_SERVICE_CO_FUNC funcNew = stmtFunc.getFunction(0);
-                const OsnPreparedStatement &stmtArg = g_CorotineManager.yield();
+                const OsnPreparedStatement &stmtArg = g_Coroutine->yield();
                 funcNew(stmtArg);
             }
             return arg;
@@ -193,7 +193,7 @@ oUINT32 OsnService::createCO(OSN_SERVICE_CO_FUNC func)
     {
         OsnPreparedStatement stmt;
         stmt.setFunction(0, func);
-		g_CorotineManager.resume(curCo, stmt);
+		g_Coroutine->resume(curCo, stmt);
     }
     
     return curCo;
@@ -232,7 +232,7 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
             {
                 m_mapSessionCoroutine.erase(coItr);
             }
-            nType = suspend(co, g_CorotineManager.resume(co));
+            nType = suspend(co, g_Coroutine->resume(co));
         }
             break;
         case eYT_Wakeup:
@@ -242,15 +242,15 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
             {
                 m_queWakeup.push(unCo);
             }
-            nType = suspend(co, g_CorotineManager.resume(co));
+            nType = suspend(co, g_Coroutine->resume(co));
         }
             break;
         case eYT_Return:
 		{
 			oUINT32 unSession = m_mapCoroutineSession[co];
 			oUINT32 unSource = m_mapCoroutineSource[co];
-			g_ServiceManager.sendMessage(unSource, 0, ePType_Response, unSession, &arg);
-			nType = suspend(co, g_CorotineManager.resume(co));
+			g_Service->sendMessage(unSource, 0, ePType_Response, unSession, &arg);
+			nType = suspend(co, g_Coroutine->resume(co));
 		}
             break;
         case eYT_Exit:
@@ -262,7 +262,7 @@ oINT32 OsnService::suspend(oUINT32 co, const OSN_CO_ARG &arg)
             
             break;
         case eYT_Quit:
-            suspend(co, g_CorotineManager.resume(co));
+            suspend(co, g_Coroutine->resume(co));
             break;
         default:
             break;
@@ -295,7 +295,7 @@ oINT32 OsnService::dispatchWakeup()
     OsnPreparedStatement stmt;
     stmt.setBool(0, false);
     stmt.setString(1, "BREAK");
-    return suspend(co, g_CorotineManager.resume(co, stmt));
+    return suspend(co, g_Coroutine->resume(co, stmt));
 }
 
 void OsnService::pushToCoroutinePool(oUINT32 co)

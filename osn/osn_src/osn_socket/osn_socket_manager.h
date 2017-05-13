@@ -10,14 +10,15 @@
 #define osn_socket_manager_hpp
 #include <sys/types.h>
 #include <string>
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_singleton.h"
 #include "osn_socket_data.h"
 #include "osn_socket_head.h"
+#include "I_osn_socket.h"
 
 class OsnPoll;
 
-class OsnSocketManager
+class OsnSocketManager : public IOsnSocket
 {
     const static oINT32 s_nMaxSocketShift = 16;
     const static oUINT64 s_u64MaxSocket = 1 << s_nMaxSocketShift;
@@ -31,17 +32,17 @@ public:
     void exit();
     void release();
     oINT32 poll();
-    oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog);
-    void start(oUINT32 opaque, oINT32 sock);
-    void close(oUINT32 opaque, oINT32 sock);
-    void shutdown(oUINT32 opaque, oINT32 sock);
-    oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz);
-    oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port);
+    virtual oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const;
+    virtual void start(oUINT32 opaque, oINT32 sock) const;
+    virtual void close(oUINT32 opaque, oINT32 sock) const;
+    virtual void shutdown(oUINT32 opaque, oINT32 sock) const;
+    virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const;
+    virtual oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port) const;
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();
     oBOOL create();
-    void sendRequest(stRequestPackage &request, oINT8 type, oUINT8 len);
+    void sendRequest(stRequestPackage &request, oINT8 type, oUINT8 len) const;
     void blockReadPipe(void *pBuffer, oINT32 sz);
     oBOOL hasCmd();
     oINT32 pollResult(stSocketMessage &result, oBOOL &bMore);
@@ -54,14 +55,14 @@ private:
     oBOOL listUncomplete(QUE_WRITE_BUFF_PTR &queWBuff);
     oINT32 sendList(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
     oINT32 sendListTcp(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &queWBuff, stSocketMessage &result);
-    oINT32 reserveId();
+    oINT32 reserveId() const;
     static oINT32 hashId(oINT32 nId);
     void socketKeepAlive(oINT32 nFd);
     OsnSocketData* newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd);
     void forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMessage &result);
     oINT32 forwardMessageTcp(OsnSocketData &socket, stSocketMessage &result);
-    oINT32 doListen(std::string &strAddr, oINT32 nPort, oINT32 nBackLog);
-    oINT32 doBind(std::string &strAddr, oINT32 nPort, oINT32 protocol, oINT32 &family);
+    oINT32 doListen(std::string &strAddr, oINT32 nPort, oINT32 nBackLog) const;
+    oINT32 doBind(std::string &strAddr, oINT32 nPort, oINT32 protocol, oINT32 &family) const;
     oINT32 listenSocket(stRequestListen &request, stSocketMessage &result);
     oINT32 startSocket(stRequestStart &request, stSocketMessage &result);
 	oINT32 closeSocket(stRequestClose &request, stSocketMessage &result);
@@ -74,7 +75,7 @@ private:
     oINT32 m_nRecvFD;
     oINT32 m_nSendFD;
     oBOOL m_bCheckCtrl;
-    OsnSocketData m_Socket[s_u64MaxSocket];
+    mutable OsnSocketData m_Socket[s_u64MaxSocket];
     fd_set m_fdSet;
     oINT32 m_nEventIndex;
     oINT32 m_nEventN;

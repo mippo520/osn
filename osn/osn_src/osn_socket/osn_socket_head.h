@@ -8,7 +8,7 @@
 
 #ifndef osn_socket_head_h
 #define osn_socket_head_h
-#include "osn.h"
+#include "osn_common.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <queue>

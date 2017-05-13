@@ -9,13 +9,20 @@
 #include <iostream>
 #include "osn_start.h"
 #include <unistd.h>
-#include <queue>
-#include "osn_coroutine_manager.h"
 #include <stdio.h>
-
 
 int main(int argc, const char * argv[]) {
 
+    const oINT8 * config_file = NULL ;
+    if (argc > 1) {
+        config_file = argv[1];
+        printf("config_file = %s\n", config_file);
+        g_Osn->loadService(config_file);
+    } else {
+        printf("Need a config file. \n");
+        return 1;
+    }
+        
     g_OsnStart.init();
     g_OsnStart.start();
     g_OsnStart.exit();

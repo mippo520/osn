@@ -8,7 +8,7 @@
 
 #ifndef osn_poll_hpp
 #define osn_poll_hpp
-#include "osn.h"
+#include "osn_common.h"
 
 struct stSocketEvent;
 

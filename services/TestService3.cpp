@@ -7,9 +7,8 @@
 //
 
 #include "TestService3.h"
-#include "osn_service_manager.h"
 #include "osn_socket.h"
-#include "osn_coroutine_manager.h"
+#include "I_osn_coroutine.h"
 
 TestService3::TestService3()
     : m_fd(-1)
@@ -28,7 +27,7 @@ void TestService3::start(const OsnPreparedStatement &stmt)
 	m_Socket.init();
     m_SockId = m_Socket.listen("127.0.0.1", 18523);
     
-    g_ServiceManager.send(getId(), ePType_Lua);
+    g_Osn->send(getId(), ePType_Lua);
     std::string strError = "";
     m_Socket.start(m_SockId, strError, std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);
@@ -61,8 +60,8 @@ void TestService3::dispatchLua(const OsnPreparedStatement &stmt)
         }
         else
         {
-            m_curCO = g_CorotineManager.running();
-            g_ServiceManager.wait(m_curCO);
+            m_curCO = g_Coroutine->running();
+            g_Osn->wait(m_curCO);
         }
     }
 }
@@ -73,7 +72,7 @@ void TestService3::acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz)
     m_fd = m_Socket.start(fd, strErr);
     if (m_fd > 0)
     {
-        g_ServiceManager.wakeup(m_curCO);
+        g_Osn->wakeup(m_curCO);
     }
 //    static oINT32 i = 0;
 //    ++i;

@@ -8,7 +8,7 @@
 
 #ifndef osn_thread_socket_hpp
 #define osn_thread_socket_hpp
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_thread.h"
 
 class OsnSocketThread : public OsnThread {

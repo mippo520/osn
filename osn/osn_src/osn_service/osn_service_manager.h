@@ -15,61 +15,55 @@
 #include <mutex>
 #include <map>
 #include <thread>
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_singleton.h"
 #include "osn_arr_manager.h"
 #include "osn_service_head.h"
 #include "osn_spin_lock.h"
-
+#include "I_osn_service.h"
 
 class OsnService;
+class OsnServiceFactory;
 
-class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved> {
+class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved>, public IOsnService {
     static __thread oUINT32 s_unThreadCurService;
+    friend class OsnSingleton<OsnServiceManager>;
+    friend class OsnService;
+    friend class OsnStart;
+    friend class Osn;
     OsnServiceManager();
 public:
-    friend class OsnSingleton<OsnServiceManager>;
     ~OsnServiceManager();
 public:
     virtual void init();
     
-    template<class T>
-    oUINT32 startService()
-    {
-        return makeObj<T>();
-    }
-    
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
-    oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-    const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement());
-    void ret(const OsnPreparedStatement &msg);
-    void exit();
-    void wait(oUINT32 unId = 0);
-    oBOOL wakeup(oUINT32 unId);
     void addThread();
-    void printThreadInfo();
-    void pushWarkingService(oUINT32 unId);
-	void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
-    void unregistDispatchFunc(oINT32 nPType);
-	oUINT32 getCurService();
 private:
-    friend class OsnService;
-    friend class OsnStart;
-        
-    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg);
+    virtual oUINT32 getCurService() const;
+    virtual void pushWarkingService(oUINT32 unId) const;
+    virtual oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg) const;
+    oUINT32 startService(const std::string &strServiceName);
+    void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
+    void unregistDispatchFunc(oINT32 nPType);
+    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg) const;
     OsnService* popWorkingService();
-    oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg);
     void setCurService(oUINT32 unId);
     oUINT32 genId();
+    void addServiceFactory(const std::string &strName, OsnServiceFactory *pFactory);
 private:
-    std::queue<oUINT32> m_queHadMsgIds;
-    OsnSpinLock m_QueSpinLock;
+    mutable std::queue<oUINT32> m_queHadMsgIds;
+    mutable OsnSpinLock m_QueSpinLock;
     
 //    std::map<std::thread::id, oUINT32> m_mapThreadCurService;
 //    OsnSpinLock m_CurServiceLock;
     
     oUINT64 m_u64DistroyCount;
     OsnSpinLock m_CountLock;
+    
+    typedef std::map<std::string, OsnServiceFactory*> MAP_SERVICE_FACTORY;
+    typedef MAP_SERVICE_FACTORY::iterator MAP_SERVICE_FACTORY_ITR;
+    MAP_SERVICE_FACTORY m_mapServiceFactory;
 };
 
 #define g_ServiceManager OsnSingleton<OsnServiceManager>::instance()

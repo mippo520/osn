@@ -10,15 +10,10 @@
 #define osn_coroutine_head_h
 
 #include <functional>
-#include <ucontext.h>
-#include "osn.h"
+#include "osn_common.h"
 #include <map>
 #include <thread>
 #include "osn_prepared_statement.h"
-
-typedef OsnPreparedStatement OSN_CO_ARG;
-
-typedef std::function<OSN_CO_ARG(oUINT32 co, const OSN_CO_ARG&)> OSN_COROUTINE_FUNC;
 
 enum eCoroutineState
 {

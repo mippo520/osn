@@ -12,10 +12,10 @@
 #include <queue>
 #include <mutex>
 #include <map>
-#include "osn.h"
-#include "osn_arr_manager.h"
-#include "osn_coroutine_head.h"
+#include "osn_common.h"
 #include "osn_service_head.h"
+#include "osn_spin_lock.h"
+#include "osn_arr_manager.h"
 
 class OsnService {
     enum eYieldType
@@ -40,6 +40,7 @@ public:
 protected:
 	friend class OsnServiceManager;
 	friend class OsnArrManager<OsnService, eThread_Saved>;
+    friend class Osn;
 	typedef void (OsnService::*CO_MEMBER_FUNC)(const OsnPreparedStatement &);
 
     OsnService();

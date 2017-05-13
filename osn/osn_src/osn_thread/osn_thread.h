@@ -8,7 +8,7 @@
 
 #ifndef osn_thread_hpp
 #define osn_thread_hpp
-#include "osn.h"
+#include "osn_common.h"
 #include <thread>
 #include <mutex>
 #include <condition_variable>

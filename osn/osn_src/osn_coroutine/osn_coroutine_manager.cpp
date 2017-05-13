@@ -10,8 +10,10 @@
 #include "osn_coroutine_manager.h"
 #include "osn_coroutine.h"
 #include <stdio.h>
-#include<execinfo.h>
+#include <execinfo.h>
+#include <ucontext.h>
 
+const IOsnCoroutine *g_Coroutine = &g_CorotineManager;
 __thread stCoThreadInfo *OsnCoroutineManager::s_pThreadInfo = NULL;
 
 OsnCoroutineManager::OsnCoroutineManager()
@@ -23,7 +25,7 @@ OsnCoroutineManager::~OsnCoroutineManager()
     
 }
 
-oUINT32 OsnCoroutineManager::running()
+oUINT32 OsnCoroutineManager::running() const
 {
     stCoThreadInfo *pInfo = getThreadInfo();
     if (NULL != pInfo)
@@ -36,7 +38,7 @@ oUINT32 OsnCoroutineManager::running()
     }
 }
 
-oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func)
+oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func) const
 {
     oUINT32 unId = m_arrCoroutine.makeObj<OsnCoroutine>();
     OsnCoroutine *pCo = m_arrCoroutine.getObject(unId);
@@ -48,7 +50,7 @@ oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func)
     return unId;
 }
 
-const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
+const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg) const
 {
     stCoThreadInfo *pInfo = getThreadInfo();
     
@@ -56,7 +58,6 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     {
         printf("OsnCoroutineManager::yield Error! Not Running Coroutine! thread id = %lx\n", std::this_thread::get_id());
         pInfo->printInfo();
-        printThreadInfo();
         return pInfo->getArg();
     }
     
@@ -65,7 +66,6 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     {
         printf("OsnCoroutineManager::yield Error! Can not found running coroutine %lu! thread id = %lx\n", pInfo->getRunning(), std::this_thread::get_id());
         pInfo->printInfo();
-        printThreadInfo();
         return pInfo->getArg();
     }
 
@@ -77,7 +77,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg)
     return pInfo->getArg();
 }
 
-const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &arg)
+const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &arg) const
 {
     stCoThreadInfo *pInfo = getThreadInfo();
 
@@ -85,7 +85,6 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
     {
         printf("OsnCoroutineManager::resume Error! Coroutine is already running! thread id = %lx\n", std::this_thread::get_id());
         pInfo->printInfo();
-        printThreadInfo();
         return pInfo->getArg();
     }
     
@@ -94,7 +93,6 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
     {
         printf("OsnCoroutineManager::resume Error! Can not found coroutine %lu!\n", unId);
         pInfo->printInfo();
-        printThreadInfo();
         return pInfo->getArg();
     }
 
@@ -121,7 +119,6 @@ const OSN_CO_ARG& OsnCoroutineManager::resume(oUINT32 unId, const OSN_CO_ARG &ar
             printf("OsnCoroutineManager::resume Error! Coroutine %lu state error! threadId = %lx\n", unId, std::this_thread::get_id());
             pCo->printInfo();
             pInfo->printInfo();
-            printThreadInfo();
             void *buffer[100];
             int nptrs;
             char **str;
@@ -152,7 +149,6 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
     {
         printf("OsnCoroutineManager::mainFunc Error! Can not found coroutine %lu!\n", pInfo->getRunning());
         pInfo->printInfo();
-        pManager->printThreadInfo();
         return;
     }
     OSN_CO_ARG arg = pCo->run(pInfo->getArg());
@@ -162,7 +158,7 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
     pManager->m_arrCoroutine.removeObj(pInfo->getRunning());
 }
 
-stCoThreadInfo* OsnCoroutineManager::getThreadInfo()
+stCoThreadInfo* OsnCoroutineManager::getThreadInfo() const
 {
 //    std::thread::id curThread = std::this_thread::get_id();
 //    return &m_mapInfo[curThread];
@@ -181,15 +177,5 @@ void OsnCoroutineManager::addThread()
 //    }
 }
 
-void OsnCoroutineManager::printThreadInfo()
-{
-//    printf("thread count is %d\n", m_mapInfo.size());
-//    MAP_CO_THREAD_INFO_ITR itr = m_mapInfo.begin();
-//    for (; itr != m_mapInfo.end(); itr++)
-//    {
-//        printf("thread id = %lx, info arrd = %x, running = %u \n", itr->first, &itr->second, itr->second.getRunning());
-//        itr->second.getArg().printContext();
-//    }
-}
 
 

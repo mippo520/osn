@@ -29,13 +29,13 @@ void TestService::dispatchLua(const OsnPreparedStatement &stmt)
         msg.setUInt32(0, 100);
         msg.setString(1, "abc");
         msg.setInt8(2, 20);
-        const OsnPreparedStatement &ret1 = g_ServiceManager.call(n, ePType_Lua, msg);
+        const OsnPreparedStatement &ret1 = g_Osn->call(n, ePType_Lua, msg);
 //      printf("call func=========>");
 //      msg.printContext();
     
         msg.clear();
         msg.setUInt32(0, 101);
-        const OsnPreparedStatement &ret2 = g_ServiceManager.call(n, ePType_Lua, msg);
+        const OsnPreparedStatement &ret2 = g_Osn->call(n, ePType_Lua, msg);
 //      printf("call func=========>");
 //      msg.printContext();
     

@@ -8,7 +8,7 @@
 
 #ifndef osn_thread_worker_hpp
 #define osn_thread_worker_hpp
-#include "osn.h"
+#include "osn_common.h"
 #include "osn_thread.h"
 
 class OsnWorkerThread : public OsnThread {

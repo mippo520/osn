@@ -9,7 +9,7 @@
 #ifndef osn_start_hpp
 #define osn_start_hpp
 #include "osn_singleton.h"
-#include "osn.h"
+#include "osn_common.h"
 #include <vector>
 
 class OsnThread;

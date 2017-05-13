@@ -1,7 +1,8 @@
 #include "osn_socket.h"
-#include "osn_socket_manager.h"
-#include "osn_service_manager.h"
-#include "osn_coroutine_manager.h"
+#include "osn_service_head.h"
+#include "I_osn_service.h"
+#include "I_osn_coroutine.h"
+#include "I_osn_socket.h"
 
 OsnSocket::OsnSocket()
 {
@@ -11,13 +12,13 @@ OsnSocket::OsnSocket()
 OsnSocket::~OsnSocket()
 {
     UnregistDispatchFunc(ePType_Socket);
-    oUINT32 svrId = g_ServiceManager.getCurService();
+    oUINT32 svrId = g_Service->getCurService();
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.begin();
     for (; itr != m_mapSocketInfo.end(); ++itr)
     {
         stSocketInfo &info = itr->second;
         clearBuffer(info.buffer);
-        g_SocketManager.close(svrId, info.id);
+        g_Socket->close(svrId, info.id);
     }
     
     while (m_queBufferPool.size() > 0)
@@ -41,26 +42,26 @@ void OsnSocket::init()
 
 oINT32 OsnSocket::open(const oINT8 *addr, oINT32 port, std::string &err)
 {
-	oUINT32 svrId = g_ServiceManager.getCurService();
-	oINT32 sock = g_SocketManager.connect(svrId, addr, port);
+	oUINT32 svrId = g_Service->getCurService();
+	oINT32 sock = g_Socket->connect(svrId, addr, port);
 	return connect(sock, err);
 }
 
 oINT64 OsnSocket::write(oINT32 sock, const void *pBuff, oINT32 sz)
 {
-	return g_SocketManager.send(sock, pBuff, sz);
+	return g_Socket->send(sock, pBuff, sz);
 }
 
 oINT32 OsnSocket::listen(const oINT8 *addr, oINT32 nPort, oINT32 nBackLog)
 {
-    oUINT32 svrId = g_ServiceManager.getCurService();
-    return g_SocketManager.listen(svrId, addr, nPort);
+    oUINT32 svrId = g_Service->getCurService();
+    return g_Socket->listen(svrId, addr, nPort);
 }
 
 oINT32 OsnSocket::start(oINT32 sock, std::string &err, const ACCPET_FUNC &func)
 {
-    oUINT32 svrId = g_ServiceManager.getCurService();
-    g_SocketManager.start(svrId, sock);
+    oUINT32 svrId = g_Service->getCurService();
+    g_Socket->start(svrId, sock);
     return connect(sock, err, func);
 }
 
@@ -69,20 +70,20 @@ void OsnSocket::close(oINT32 sock)
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.find(sock);
     if (itr == m_mapSocketInfo.end())
     {
-        oUINT32 svrId = g_ServiceManager.getCurService();
-        g_SocketManager.close(svrId, sock);
+        oUINT32 svrId = g_Service->getCurService();
+        g_Socket->close(svrId, sock);
         return;
     }
     stSocketInfo &info = itr->second;
     if (info.bConnected)
     {
-        oUINT32 svrId = g_ServiceManager.getCurService();
-        g_SocketManager.close(svrId, sock);
+        oUINT32 svrId = g_Service->getCurService();
+        g_Socket->close(svrId, sock);
         if (info.co > 0)
         {
             assert(0 != info.closing);
-            info.closing = g_CorotineManager.running();
-            g_ServiceManager.wait(info.closing);
+            info.closing = g_Coroutine->running();
+            g_Osn->wait(info.closing);
         }
         else
         {
@@ -96,11 +97,11 @@ void OsnSocket::close(oINT32 sock)
 
 void OsnSocket::suspend(stSocketInfo &info)
 {
-	info.co = g_CorotineManager.running();
-	g_ServiceManager.wait(info.co);
+	info.co = g_Coroutine->running();
+	g_Osn->wait(info.co);
 	if (info.closing > 0)
 	{
-		g_ServiceManager.wakeup(info.closing);
+		g_Osn->wakeup(info.closing);
 	}
 }
 
@@ -110,7 +111,7 @@ void OsnSocket::wakeup(stSocketInfo &info)
 	if (co > 0)
 	{
 		info.co = 0;
-		g_ServiceManager.wakeup(co);
+		g_Osn->wakeup(co);
 	}
 }
 
@@ -383,8 +384,8 @@ void OsnSocket::close_fd(oINT32 sock)
 
 void OsnSocket::shutdown(oINT32 sock)
 {
-    oUINT32 cur = g_ServiceManager.getCurService();
-    g_SocketManager.shutdown(cur, sock);
+    oUINT32 cur = g_Service->getCurService();
+    g_Socket->shutdown(cur, sock);
 }
 
 oINT8* OsnSocket::__readAll(stSocketBuffer &buffer, oINT32 &nSize)
@@ -584,8 +585,8 @@ void OsnSocket::funcSocketData(const stOsnSocketMsg *msg)
         {
             printf("OsnSocket::funcSocketData Error! socket buffer overflow: fd=%d size=%d", msg->id, sz);
             clearBuffer(info.buffer);
-            oUINT32 svrId = g_ServiceManager.getCurService();
-            g_SocketManager.close(svrId, msg->id);
+            oUINT32 svrId = g_Service->getCurService();
+            g_Socket->close(svrId, msg->id);
         }
         
         if (TYPE_STRING == rrType)
@@ -641,8 +642,8 @@ void OsnSocket::funcSocketAccept(const stOsnSocketMsg *msg)
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.find(msg->id);
     if (itr == m_mapSocketInfo.end())
     {
-        oUINT32 svrId = g_ServiceManager.getCurService();
-        g_SocketManager.close(svrId, msg->ud);
+        oUINT32 svrId = g_Service->getCurService();
+        g_Socket->close(svrId, msg->ud);
     }
     stSocketInfo &info = itr->second;
     info.func(msg->ud, msg->pBuffer, msg->nSize);

@@ -9,8 +9,10 @@
 #include "osn_service_manager.h"
 #include "osn_service.h"
 #include "osn_coroutine_manager.h"
+#include "osn_service_factory.h"
 #include <iostream>
 
+const IOsnService *g_Service = &g_ServiceManager;
 __thread oUINT32 OsnServiceManager::s_unThreadCurService = 0;
 
 OsnServiceManager::OsnServiceManager()
@@ -21,61 +23,47 @@ OsnServiceManager::OsnServiceManager()
 
 OsnServiceManager::~OsnServiceManager()
 {
-    
+    MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.begin();
+    for (; itr != m_mapServiceFactory.end(); ++itr)
+    {
+        OsnServiceFactory *pServiceFactory = itr->second;
+        SAFE_DELETE(pServiceFactory);
+    }
+    m_mapServiceFactory.clear();
 }
 
-oUINT32 OsnServiceManager::send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
+void OsnServiceManager::addServiceFactory(const std::string &strName, OsnServiceFactory *pFactory)
 {
-    return sendMessage(addr, 0, type, 0, &msg);
+    if (NULL == pFactory)
+    {
+        printf("OsnServiceManager::addServiceFactory Error! %s factory is NULL!\n", strName.c_str());
+        assert(false);
+    }
+    MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.find(strName);
+    if (itr == m_mapServiceFactory.end())
+    {
+        m_mapServiceFactory[strName] = pFactory;
+    }
+    else
+    {
+        printf("OsnServiceManager::addServiceFactory Error! %s factory is exist!\n", strName.c_str());
+    }
 }
 
-const OsnPreparedStatement& OsnServiceManager::call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg)
+oUINT32 OsnServiceManager::startService(const std::string &strServiceName)
 {
-    oUINT32 unSession = sendMessage(addr, getCurService(), type, 0, &msg);
-    OSN_CO_ARG arg;
-	arg.setUInt32(0, unSession);
-	arg.pushBackInt32(OsnService::eYT_Call);
-    return g_CorotineManager.yield(arg);
-}
+    oUINT32 unId = 0;
+    MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.find(strServiceName);
+    if (itr != m_mapServiceFactory.end())
+    {
+        unId = addObj(itr->second->create());
+    }
+    else
+    {
+        printf("OsnServiceManager::startService Error! %s can not found!", strServiceName.c_str());
+    }
 
-
-void OsnServiceManager::ret(const OsnPreparedStatement &msg)
-{
-//     OSN_CO_ARG arg;
-//     arg.setInt32(0, OsnService::eYT_Return);
-//     arg.setPoint(1, &msg);
-	msg.pushBackInt32(OsnService::eYT_Return);
-    g_CorotineManager.yield(msg);
-}
-
-void OsnServiceManager::exit()
-{
-    OsnPreparedStatement stmt;
-    stmt.pushBackInt32(OsnService::eYT_Quit);
-    g_CorotineManager.yield(stmt);
-}
-
-void OsnServiceManager::wait(oUINT32 unId)
-{
-    oUINT32 unSession = genId();
-    OsnPreparedStatement stmt;
-    stmt.pushBackUInt32(unSession);
-    stmt.pushBackInt32(OsnService::eYT_Sleep);
-    g_CorotineManager.yield(stmt);
-    
-    stmt.clear();
-    stmt.pushBackUInt32(unSession);
-    stmt.pushBackInt32(OsnService::eYT_CleanSleep);
-    g_CorotineManager.yield(stmt);
-}
-
-oBOOL OsnServiceManager::wakeup(oUINT32 unId)
-{
-    OsnPreparedStatement stmt;
-    stmt.pushBackUInt32(unId);
-    stmt.pushBackInt32(OsnService::eYT_Wakeup);
-    const OsnPreparedStatement &ret = g_CorotineManager.yield(stmt);
-    return ret.getBool(0);
+    return unId;
 }
 
 oUINT32 OsnServiceManager::genId()
@@ -88,7 +76,7 @@ void OsnServiceManager::init()
     OsnArrManager::init();
 }
 
-oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg)
+oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg) const
 {
 	stServiceMessage *pServiceMsg = new stServiceMessage(pMsg);
 	pServiceMsg->unSession = unSession;
@@ -98,7 +86,7 @@ oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oIN
     return pushMsg(unTargetId, pServiceMsg);
 }
 
-oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg)
+oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg) const
 {
     oUINT32 unSession = 0;
     OsnService *pService = getObject(unTargetId);
@@ -129,7 +117,7 @@ OsnService* OsnServiceManager::popWorkingService()
     return pService;
 }
 
-void OsnServiceManager::pushWarkingService(oUINT32 unId)
+void OsnServiceManager::pushWarkingService(oUINT32 unId) const
 {
     if (unId > 0)
     {
@@ -233,22 +221,13 @@ void OsnServiceManager::setCurService(oUINT32 unId)
     s_unThreadCurService = unId;
 }
 
-oUINT32 OsnServiceManager::getCurService()
+oUINT32 OsnServiceManager::getCurService() const
 {
 //    std::thread::id curThread = std::this_thread::get_id();
 //    return m_mapThreadCurService[curThread];
     return s_unThreadCurService;
 }
 
-void OsnServiceManager::printThreadInfo()
-{
-//    std::map<std::thread::id, oUINT32>::iterator itr = m_mapThreadCurService.begin();
-//    for (; itr != m_mapThreadCurService.end(); itr++)
-//    {
-//        printf("threadid = %lx, serviceId = %u | ", itr->first, itr->second);
-//    }
-//    printf("\n");
-}
 
 
 

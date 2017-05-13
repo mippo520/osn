@@ -8,7 +8,7 @@
 
 #ifndef osn_spin_lock_hpp
 #define osn_spin_lock_hpp
-#include "osn.h"
+#include "osn_common.h"
 
 class OsnSpinLock {
 public:
