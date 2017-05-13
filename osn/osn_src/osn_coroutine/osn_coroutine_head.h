@@ -10,10 +10,11 @@
 #define osn_coroutine_head_h
 
 #include <functional>
-#include "osn_common.h"
 #include <map>
 #include <thread>
+#include <ucontext.h>
 #include "osn_prepared_statement.h"
+#include "osn_common.h"
 
 enum eCoroutineState
 {

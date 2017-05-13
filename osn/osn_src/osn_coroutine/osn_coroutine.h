@@ -8,6 +8,7 @@
 
 #ifndef osn_coroutine_hpp
 #define osn_coroutine_hpp
+#include <ucontext.h>
 #include "osn_coroutine_head.h"
 #include "osn_common.h"
 #include "osn_cache_arr_manager.h"

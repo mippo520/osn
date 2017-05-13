@@ -31,12 +31,6 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_worker.cpp">
       <Filter>osn_src\osn_thread</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService.cpp">
-      <Filter>osn_src\osn_service</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService2.cpp">
-      <Filter>osn_src\osn_service</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp">
       <Filter>osn_lib</Filter>
     </ClCompile>
@@ -49,14 +43,14 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_socket.cpp">
       <Filter>osn_src\osn_thread</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService3.cpp">
-      <Filter>osn_src\osn_service</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.cpp">
       <Filter>osn_src\osn_socket</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp">
       <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn.cpp">
+      <Filter>osn_src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -81,11 +75,11 @@
     <Filter Include="osn_src\osn_socket\poll">
       <UniqueIdentifier>{8a01a55a-cd64-47d2-93d1-1f322c41c850}</UniqueIdentifier>
     </Filter>
+    <Filter Include="osn_interface">
+      <UniqueIdentifier>{fc9674c3-a7df-4b53-aca4-057272c0ee81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\osn\osn_lib\osn.h">
-      <Filter>osn_lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h">
       <Filter>osn_lib</Filter>
     </ClInclude>
@@ -134,12 +128,6 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_worker.h">
       <Filter>osn_src\osn_thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService.h">
-      <Filter>osn_src\osn_service</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService2.h">
-      <Filter>osn_src\osn_service</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h">
       <Filter>osn_lib</Filter>
     </ClInclude>
@@ -158,14 +146,32 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_thread\osn_thread_socket.h">
       <Filter>osn_src\osn_thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService3.h">
-      <Filter>osn_src\osn_service</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.h">
       <Filter>osn_src\osn_socket</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h">
       <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_coroutine.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service_factory.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_socket.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn.h">
+      <Filter>osn_src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

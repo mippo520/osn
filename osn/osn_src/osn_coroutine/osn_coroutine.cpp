@@ -7,7 +7,6 @@
 //
 
 #include "osn_coroutine.h"
-#include <ucontext.h>
 
 OsnCoroutine::OsnCoroutine()
     : m_Id(0)

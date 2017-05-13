@@ -1,4 +1,5 @@
 #include "osn_socket.h"
+#include <string.h>
 #include "osn_service_head.h"
 #include "I_osn_service.h"
 #include "I_osn_coroutine.h"

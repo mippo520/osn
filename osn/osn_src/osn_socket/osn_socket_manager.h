@@ -81,7 +81,7 @@ private:
     oINT32 m_nEventN;
     stSocketEvent m_Events[s_nMaxEvents];
     oINT8 m_Buff[s_nMaxInfo];
-    oINT32 m_nAllocId;
+	mutable oINT32 m_nAllocId;
 };
 
 #define g_SocketManager OsnSingleton<OsnSocketManager>::instance()

@@ -638,7 +638,6 @@ oINT32 OsnSocketManager::sendListTcp(OsnSocketData &socket, QUE_WRITE_BUFF_PTR &
 void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMessage &result)
 {
     stOsnSocketMsg *pSM;
-    oINT32 sz = sizeof(*pSM);
 	oINT32 msg_sz = 0;
     if (bPadding)
     {

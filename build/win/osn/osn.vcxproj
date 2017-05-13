@@ -64,18 +64,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>
     </LibraryPath>
+    <OutDir>$(ProjectDir)../bin/$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_manager.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_main.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.cpp" />
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService.cpp" />
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService2.cpp" />
-    <ClCompile Include="..\..\..\osn\osn_src\osn_service\TestService3.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_manager.cpp" />
@@ -87,23 +86,26 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_thread\osn_thread_worker.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\osn\osn_lib\osn.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_coroutine.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service_factory.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_socket.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_cache_arr_manager.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h" />
     <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_head.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_coroutine\osn_coroutine_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.h" />
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService.h" />
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService2.h" />
-    <ClInclude Include="..\..\..\osn\osn_src\osn_service\TestService3.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h" />
@@ -120,10 +122,10 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalDependencies>-lpthread;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>-lpthread;-ldl;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\share\osn\socket;../../../osn/osn_src;../../../osn/osn_src/osn_thread;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_coroutine;../../../osn/osn_lib;../../../osn/osn_src/osn_socket;../../../osn/osn_src/osn_socket/poll;../../../socket;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../osn/osn_src;../../../osn/osn_src/osn_thread;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_coroutine;../../../osn/osn_lib;../../../osn/osn_src/osn_socket;../../../osn/osn_src/osn_socket/poll;../../../socket;../../../osn/osn_interface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

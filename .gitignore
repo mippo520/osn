@@ -1,2 +1,4 @@
 DerivedData/
+bin/
+obj/
 .gitign
