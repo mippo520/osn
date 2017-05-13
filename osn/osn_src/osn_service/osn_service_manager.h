@@ -23,7 +23,7 @@
 #include "I_osn_service.h"
 
 class OsnService;
-class OsnServiceFactory;
+class IServiceFactory;
 
 class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved>, public IOsnService {
     static __thread oUINT32 s_unThreadCurService;
@@ -50,7 +50,8 @@ private:
     OsnService* popWorkingService();
     void setCurService(oUINT32 unId);
     oUINT32 genId();
-    void addServiceFactory(const std::string &strName, OsnServiceFactory *pFactory);
+    void addServiceFactory(const std::string &strName, IServiceFactory *pFactory);
+    void pushDylibHandle(void *handle);
 private:
     mutable std::queue<oUINT32> m_queHadMsgIds;
     mutable OsnSpinLock m_QueSpinLock;
@@ -61,9 +62,11 @@ private:
     oUINT64 m_u64DistroyCount;
     OsnSpinLock m_CountLock;
     
-    typedef std::map<std::string, OsnServiceFactory*> MAP_SERVICE_FACTORY;
+    typedef std::map<std::string, IServiceFactory*> MAP_SERVICE_FACTORY;
     typedef MAP_SERVICE_FACTORY::iterator MAP_SERVICE_FACTORY_ITR;
     MAP_SERVICE_FACTORY m_mapServiceFactory;
+    
+    std::vector<void*> m_vecDylibHandles;
 };
 
 #define g_ServiceManager OsnSingleton<OsnServiceManager>::instance()

@@ -32,7 +32,7 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
     
     do {
         typedef oBOOL (*DYLIB_INIT)(const IOsn *pOsn, const IOsnService *pService, const IOsnCoroutine *pCoroutine, const IOsnSocket *pSocket);
-        typedef OsnServiceFactory* (*DYLIB_GET_FACTORY)();
+        typedef IServiceFactory* (*DYLIB_GET_FACTORY)();
         
         std::string strFullPath = "./lib";
         strFullPath += strServiceName;
@@ -63,10 +63,10 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
             printf("Osn::loadService Error! loal function getFactory error! %s\n", dlerror());
             break;
         }
-        OsnServiceFactory *pFactory = (*getFactory)();
+        IServiceFactory *pFactory = (*getFactory)();
         g_ServiceManager.addServiceFactory(strServiceName, pFactory);
+        g_ServiceManager.pushDylibHandle(handle);
         bRet = true;
-        dlclose(handle);
     } while (false);
     
     return bRet;

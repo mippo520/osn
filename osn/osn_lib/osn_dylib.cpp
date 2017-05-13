@@ -12,6 +12,7 @@
 #include "I_osn_service.h"
 #include "I_osn_socket.h"
 #include "I_osn_coroutine.h"
+#include "osn_service_factory.h"
 
 const IOsn *g_Osn = NULL;
 const IOsnService *g_Service = NULL;
@@ -30,6 +31,9 @@ extern "C"
         if (NULL != pOsn && NULL != pService && NULL != pCoroutine && NULL != pSocket)
         {
             g_Osn = pOsn;
+            g_Service = pService;
+            g_Coroutine = pCoroutine;
+            g_Socket = pSocket;
             bRet = true;
         }
         else
@@ -39,10 +43,10 @@ extern "C"
         return bRet;
     }
     
-    OsnServiceFactory* getFactory()
+    IServiceFactory* getFactory()
     {
         printf("getfactory!\n");
-        return NULL;
+        return new OsnServiceFactory();
     }
 
 }

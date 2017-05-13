@@ -9,8 +9,9 @@
 #include "osn_service_manager.h"
 #include "osn_service.h"
 #include "osn_coroutine_manager.h"
-#include "osn_service_factory.h"
+#include "I_osn_service_factory.h"
 #include <iostream>
+#include <dlfcn.h>
 
 const IOsnService *g_Service = &g_ServiceManager;
 __thread oUINT32 OsnServiceManager::s_unThreadCurService = 0;
@@ -26,13 +27,22 @@ OsnServiceManager::~OsnServiceManager()
     MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.begin();
     for (; itr != m_mapServiceFactory.end(); ++itr)
     {
-        OsnServiceFactory *pServiceFactory = itr->second;
+        IServiceFactory *pServiceFactory = itr->second;
         SAFE_DELETE(pServiceFactory);
     }
     m_mapServiceFactory.clear();
+    
+    if (m_vecDylibHandles.size() > 0)
+    {
+        for (oINT64 i = m_vecDylibHandles.size() - 1; i >= 0; --i)
+        {
+            dlclose(m_vecDylibHandles[i]);
+        }
+        m_vecDylibHandles.clear();
+    }
 }
 
-void OsnServiceManager::addServiceFactory(const std::string &strName, OsnServiceFactory *pFactory)
+void OsnServiceManager::addServiceFactory(const std::string &strName, IServiceFactory *pFactory)
 {
     if (NULL == pFactory)
     {
@@ -47,6 +57,19 @@ void OsnServiceManager::addServiceFactory(const std::string &strName, OsnService
     else
     {
         printf("OsnServiceManager::addServiceFactory Error! %s factory is exist!\n", strName.c_str());
+    }
+}
+
+void OsnServiceManager::pushDylibHandle(void *handle)
+{
+    if (NULL != handle)
+    {
+        m_vecDylibHandles.push_back(handle);
+    }
+    else
+    {
+        printf("OsnServiceManager::pushDylibHandle Error! handle is NULL!\n");
+        assert(false);
     }
 }
 

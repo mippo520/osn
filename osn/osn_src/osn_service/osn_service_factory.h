@@ -1,22 +1,20 @@
 //
 //  osn_service_factory.hpp
-//  osn
+//  TestService
 //
-//  Created by zenghui on 17/5/12.
+//  Created by zenghui on 17/5/13.
 //  Copyright © 2017年 zenghui. All rights reserved.
 //
 
 #ifndef osn_service_factory_hpp
 #define osn_service_factory_hpp
 
-class OsnService;
+#include "I_osn_service_factory.h"
 
-class OsnServiceFactory
+class OsnServiceFactory : public IServiceFactory
 {
 public:
-    virtual ~OsnServiceFactory() {}
-    virtual OsnService* create() = 0;
+    virtual OsnService* create();
 };
-
 
 #endif /* osn_service_factory_hpp */

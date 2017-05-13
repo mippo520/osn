@@ -1,22 +1,23 @@
 //
-//  TestService3.hpp
+//  Service.hpp
 //  osn
 //
 //  Created by zenghui on 17/5/3.
 //  Copyright © 2017年 zenghui. All rights reserved.
 //
 
-#ifndef TestService3_hpp
-#define TestService3_hpp
+#ifndef Service_hpp
+#define Service_hpp
 
 #include "osn_service.h"
 #include "osn_socket.h"
+#include "osn_service_factory.h"
 
-class TestService3 : public OsnService
+class Service : public OsnService
 {
 public:
-    TestService3();
-    ~TestService3();
+    Service();
+    ~Service();
 public:
     virtual void start(const OsnPreparedStatement &stmt) override;
     virtual void exit() override;
@@ -30,4 +31,4 @@ private:
     oUINT32 m_curCO;
 };
 
-#endif /* TestService3_hpp */
+#endif /* Service_hpp */

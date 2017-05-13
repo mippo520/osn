@@ -1,45 +1,45 @@
 //
-//  TestService3.cpp
+//  Service.cpp
 //  osn
 //
 //  Created by zenghui on 17/5/3.
 //  Copyright © 2017年 zenghui. All rights reserved.
 //
 
-#include "TestService3.h"
+#include "Service.h"
 #include "osn_socket.h"
 #include "I_osn_coroutine.h"
 
-TestService3::TestService3()
+Service::Service()
     : m_fd(-1)
 {
     
 }
 
-TestService3::~TestService3()
+Service::~Service()
 {
     
 }
 
-void TestService3::start(const OsnPreparedStatement &stmt)
+void Service::start(const OsnPreparedStatement &stmt)
 {
-	RegistDispatchFunc(ePType_Lua, &TestService3::dispatchLua, this);
+	RegistDispatchFunc(ePType_Lua, &Service::dispatchLua, this);
 	m_Socket.init();
     m_SockId = m_Socket.listen("127.0.0.1", 18523);
     
     g_Osn->send(getId(), ePType_Lua);
     std::string strError = "";
-    m_Socket.start(m_SockId, strError, std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    m_Socket.start(m_SockId, strError, std::bind(&Service::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);
 //	m_Socket.write(fd, "aaaaa", 5);
 }
 
-void TestService3::exit()
+void Service::exit()
 {
     
 }
 
-void TestService3::dispatchLua(const OsnPreparedStatement &stmt)
+void Service::dispatchLua(const OsnPreparedStatement &stmt)
 {
     while (true)
     {
@@ -66,7 +66,7 @@ void TestService3::dispatchLua(const OsnPreparedStatement &stmt)
     }
 }
 
-void TestService3::acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz)
+void Service::acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz)
 {
     std::string strErr;
     m_fd = m_Socket.start(fd, strErr);

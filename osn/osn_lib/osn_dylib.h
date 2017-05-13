@@ -15,12 +15,13 @@ class IOsn;
 class IOsnService;
 class IOsnCoroutine;
 class IOsnSocket;
+class IServiceFactory;
 class OsnServiceFactory;
 
 extern "C"
 {
-    oBOOL init(const IOsn *pOsn, const IOsnService *pService, const IOsnCoroutine *pCoroutine, const IOsnSocket *pSocket);
-    OsnServiceFactory* getFactory();
+    extern oBOOL init(const IOsn *pOsn, const IOsnService *pService, const IOsnCoroutine *pCoroutine, const IOsnSocket *pSocket);
+    extern IServiceFactory* getFactory();
 }
 
 #endif /* osn_dylib_h */
