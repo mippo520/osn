@@ -14,6 +14,7 @@
 #include <queue>
 #include <string>
 #include "osn_prepared_statement.h"
+#include "I_osn_socket.h"
 
 // EAGAIN and EWOULDBLOCK may be not the same value.
 #if (EAGAIN != EWOULDBLOCK)
@@ -222,8 +223,6 @@ union sockaddr_all
     sockaddr_in6 v6;
 };
 
-
-const static oINT32 s_nBacklog = 32;
 
 #define SOCKET_START_FUNC_BIND() std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 

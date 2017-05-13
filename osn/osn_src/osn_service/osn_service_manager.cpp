@@ -81,10 +81,6 @@ oUINT32 OsnServiceManager::startService(const std::string &strServiceName)
     {
         unId = addObj(itr->second->create());
     }
-    else
-    {
-        printf("OsnServiceManager::startService Error! %s can not found!", strServiceName.c_str());
-    }
 
     return unId;
 }

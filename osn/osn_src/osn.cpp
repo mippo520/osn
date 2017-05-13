@@ -42,7 +42,7 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
         strFullPath += ".so";
 #endif
         
-        void *handle = dlopen(strFullPath.c_str(), RTLD_LAZY);
+        void *handle = dlopen(strFullPath.c_str(), RTLD_NOW | RTLD_LOCAL);
         if (NULL == handle)
         {
             printf("Osn::loadService Error! open %s error! %s\n", strFullPath.c_str(), dlerror());
@@ -74,7 +74,24 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
 
 oUINT32 Osn::startService(const std::string &strServiceName) const
 {
-    return g_ServiceManager.startService(strServiceName);
+    oUINT32 unId = g_ServiceManager.startService(strServiceName);
+    do {
+        if (unId > 0)
+        {
+            break;
+        }
+        if (!loadService(strServiceName))
+        {
+            break;
+        }
+        unId = g_ServiceManager.startService(strServiceName);
+        if (0 == unId)
+        {
+            printf("Osn::startService Error! %s can not found!", strServiceName.c_str());
+        }
+    } while (false);
+
+    return unId;
 }
 
 oUINT32 Osn::send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg) const

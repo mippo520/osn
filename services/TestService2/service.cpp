@@ -1,19 +1,19 @@
-#include "TestService2.h"
-#include "osn_service_manager.h"
+#include "service.h"
+#include "I_osn_service.h"
 #include <unistd.h>
-#include "osn_coroutine_manager.h"
+#include "I_osn_coroutine.h"
 
 
-TestService2::TestService2()
+Service::Service()
 {
 }
 
 
-TestService2::~TestService2()
+Service::~Service()
 {
 }
 
-void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
+void Service::dispatchLua(const OsnPreparedStatement &stmt)
 {
 //    printf("ret fun ========>");
 //	stmt.printContext();
@@ -36,14 +36,16 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
     oINT32 tag = stmt.getInt32(0);
     if (100 == tag)
     {
+//        printf("%lu ==========> command!\n", getId());
+        g_Osn->exit();
         
-        OsnPreparedStatement msg2;
-        msg2.setInt32(0, 101);
-        msg2.setUInt32(1, g_CorotineManager.running());
-        g_Osn->send(2, ePType_Lua, msg2);
-        printf("%lu ==========> sleep!\n", getId());
-        g_Osn->wait();
-        printf("%lu ==========> wake up!\n", getId());
+//        OsnPreparedStatement msg2;
+//        msg2.setInt32(0, 101);
+//        msg2.setUInt32(1, g_Coroutine->running());
+//        g_Osn->send(2, ePType_Lua, msg2);
+//        printf("%lu ==========> sleep!\n", getId());
+//        g_Osn->wait();
+//        printf("%lu ==========> wake up!\n", getId());
     }
     else if(101 == tag)
     {
@@ -65,10 +67,10 @@ void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
     }
 }
 
-void TestService2::start(const OsnPreparedStatement &stmt)
+void Service::start(const OsnPreparedStatement &stmt)
 {
-    printf("start %lu\n", getId());
-	RegistDispatchFunc(ePType_Lua, &TestService2::dispatchLua, this);
+//    printf("start %lu\n", getId());
+	RegistDispatchFunc(ePType_Lua, &Service::dispatchLua, this);
 //    OsnPreparedStatement msg;
 //    msg.setString(0, "send begin");
 //    msg.setUInt32(1, getId());
@@ -76,16 +78,16 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    oUINT32 unId = (getId() - 1) % 1000 + 1;
 //    g_ServiceManager.send(unId, ePType_Lua, msg);
     
-    if (1 == getId())
-    {
+//    if (1 == getId())
+//    {
 //        sleep(1);
         OsnPreparedStatement msg;
         msg.setInt32(0, 100);
         g_Osn->send(1, ePType_Lua, msg);
-    }
+//    }
 }
 
-void TestService2::exit()
+void Service::exit()
 {
     g_Osn->startService("TestService2");
 }

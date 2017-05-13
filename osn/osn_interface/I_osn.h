@@ -14,7 +14,6 @@
 class IOsn
 {
 public:
-    virtual oBOOL loadService(const std::string &strServiceName) const = 0;
     virtual oUINT32 startService(const std::string &strServiceName) const = 0;
     virtual oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const = 0;
     virtual const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const = 0;

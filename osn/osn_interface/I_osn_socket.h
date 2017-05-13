@@ -8,7 +8,8 @@
 
 #ifndef I_osn_socket_h
 #define I_osn_socket_h
-#include "osn_socket_head.h"
+
+const static oINT32 s_nBacklog = 32;
 
 class IOsnSocket
 {

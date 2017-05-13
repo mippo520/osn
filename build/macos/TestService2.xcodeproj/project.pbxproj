@@ -1,0 +1,382 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F42EE5A61EC7069F00FF3F2D /* I_osn_coroutine.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5A11EC7069F00FF3F2D /* I_osn_coroutine.h */; };
+		F42EE5A71EC7069F00FF3F2D /* I_osn_service_factory.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5A21EC7069F00FF3F2D /* I_osn_service_factory.h */; };
+		F42EE5A81EC7069F00FF3F2D /* I_osn_service.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5A31EC7069F00FF3F2D /* I_osn_service.h */; };
+		F42EE5AA1EC7069F00FF3F2D /* I_osn.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5A51EC7069F00FF3F2D /* I_osn.h */; };
+		F42EE5B81EC706C400FF3F2D /* osn_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5AC1EC706C400FF3F2D /* osn_arr_manager.h */; };
+		F42EE5B91EC706C400FF3F2D /* osn_cache_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5AD1EC706C400FF3F2D /* osn_cache_arr_manager.h */; };
+		F42EE5BA1EC706C400FF3F2D /* osn_common.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5AE1EC706C400FF3F2D /* osn_common.h */; };
+		F42EE5BB1EC706C400FF3F2D /* osn_dylib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5AF1EC706C400FF3F2D /* osn_dylib.cpp */; };
+		F42EE5BC1EC706C400FF3F2D /* osn_dylib.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B01EC706C400FF3F2D /* osn_dylib.h */; };
+		F42EE5BD1EC706C400FF3F2D /* osn_macro.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B11EC706C400FF3F2D /* osn_macro.h */; };
+		F42EE5BE1EC706C400FF3F2D /* osn_prepared_statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5B21EC706C400FF3F2D /* osn_prepared_statement.cpp */; };
+		F42EE5BF1EC706C400FF3F2D /* osn_prepared_statement.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B31EC706C400FF3F2D /* osn_prepared_statement.h */; };
+		F42EE5C01EC706C400FF3F2D /* osn_singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B41EC706C400FF3F2D /* osn_singleton.h */; };
+		F42EE5C11EC706C400FF3F2D /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5B51EC706C400FF3F2D /* osn_spin_lock.cpp */; };
+		F42EE5C21EC706C400FF3F2D /* osn_spin_lock.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B61EC706C400FF3F2D /* osn_spin_lock.h */; };
+		F42EE5C31EC706C500FF3F2D /* osn_type.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5B71EC706C400FF3F2D /* osn_type.h */; };
+		F42EE5CB1EC7070400FF3F2D /* osn_service_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5C61EC7070400FF3F2D /* osn_service_factory.cpp */; };
+		F42EE5CC1EC7070400FF3F2D /* osn_service_factory.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5C71EC7070400FF3F2D /* osn_service_factory.h */; };
+		F42EE5CD1EC7070400FF3F2D /* osn_service_head.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5C81EC7070400FF3F2D /* osn_service_head.h */; };
+		F42EE5CE1EC7070400FF3F2D /* osn_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5C91EC7070400FF3F2D /* osn_service.cpp */; };
+		F42EE5CF1EC7070400FF3F2D /* osn_service.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5CA1EC7070400FF3F2D /* osn_service.h */; };
+		F42EE5D21EC7073B00FF3F2D /* service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5D01EC7073B00FF3F2D /* service.cpp */; };
+		F42EE5D31EC7073B00FF3F2D /* service.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5D11EC7073B00FF3F2D /* service.h */; };
+		F42EE5D51EC707D300FF3F2D /* I_osn_socket.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5D41EC707D300FF3F2D /* I_osn_socket.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F42EE5981EC7064400FF3F2D /* libTestService2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libTestService2.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		F42EE5A11EC7069F00FF3F2D /* I_osn_coroutine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_coroutine.h; path = ../../osn/osn_interface/I_osn_coroutine.h; sourceTree = "<group>"; };
+		F42EE5A21EC7069F00FF3F2D /* I_osn_service_factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_service_factory.h; path = ../../osn/osn_interface/I_osn_service_factory.h; sourceTree = "<group>"; };
+		F42EE5A31EC7069F00FF3F2D /* I_osn_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_service.h; path = ../../osn/osn_interface/I_osn_service.h; sourceTree = "<group>"; };
+		F42EE5A51EC7069F00FF3F2D /* I_osn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn.h; path = ../../osn/osn_interface/I_osn.h; sourceTree = "<group>"; };
+		F42EE5AC1EC706C400FF3F2D /* osn_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_arr_manager.h; path = ../../osn/osn_lib/osn_arr_manager.h; sourceTree = "<group>"; };
+		F42EE5AD1EC706C400FF3F2D /* osn_cache_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_cache_arr_manager.h; path = ../../osn/osn_lib/osn_cache_arr_manager.h; sourceTree = "<group>"; };
+		F42EE5AE1EC706C400FF3F2D /* osn_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_common.h; path = ../../osn/osn_lib/osn_common.h; sourceTree = "<group>"; };
+		F42EE5AF1EC706C400FF3F2D /* osn_dylib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_dylib.cpp; path = ../../osn/osn_lib/osn_dylib.cpp; sourceTree = "<group>"; };
+		F42EE5B01EC706C400FF3F2D /* osn_dylib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_dylib.h; path = ../../osn/osn_lib/osn_dylib.h; sourceTree = "<group>"; };
+		F42EE5B11EC706C400FF3F2D /* osn_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_macro.h; path = ../../osn/osn_lib/osn_macro.h; sourceTree = "<group>"; };
+		F42EE5B21EC706C400FF3F2D /* osn_prepared_statement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_prepared_statement.cpp; path = ../../osn/osn_lib/osn_prepared_statement.cpp; sourceTree = "<group>"; };
+		F42EE5B31EC706C400FF3F2D /* osn_prepared_statement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_prepared_statement.h; path = ../../osn/osn_lib/osn_prepared_statement.h; sourceTree = "<group>"; };
+		F42EE5B41EC706C400FF3F2D /* osn_singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_singleton.h; path = ../../osn/osn_lib/osn_singleton.h; sourceTree = "<group>"; };
+		F42EE5B51EC706C400FF3F2D /* osn_spin_lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_spin_lock.cpp; path = ../../osn/osn_lib/osn_spin_lock.cpp; sourceTree = "<group>"; };
+		F42EE5B61EC706C400FF3F2D /* osn_spin_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_spin_lock.h; path = ../../osn/osn_lib/osn_spin_lock.h; sourceTree = "<group>"; };
+		F42EE5B71EC706C400FF3F2D /* osn_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_type.h; path = ../../osn/osn_lib/osn_type.h; sourceTree = "<group>"; };
+		F42EE5C61EC7070400FF3F2D /* osn_service_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_service_factory.cpp; path = ../../osn/osn_src/osn_service/osn_service_factory.cpp; sourceTree = "<group>"; };
+		F42EE5C71EC7070400FF3F2D /* osn_service_factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service_factory.h; path = ../../osn/osn_src/osn_service/osn_service_factory.h; sourceTree = "<group>"; };
+		F42EE5C81EC7070400FF3F2D /* osn_service_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service_head.h; path = ../../osn/osn_src/osn_service/osn_service_head.h; sourceTree = "<group>"; };
+		F42EE5C91EC7070400FF3F2D /* osn_service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_service.cpp; path = ../../osn/osn_src/osn_service/osn_service.cpp; sourceTree = "<group>"; };
+		F42EE5CA1EC7070400FF3F2D /* osn_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service.h; path = ../../osn/osn_src/osn_service/osn_service.h; sourceTree = "<group>"; };
+		F42EE5D01EC7073B00FF3F2D /* service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = service.cpp; path = ../../services/TestService2/service.cpp; sourceTree = "<group>"; };
+		F42EE5D11EC7073B00FF3F2D /* service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = service.h; path = ../../services/TestService2/service.h; sourceTree = "<group>"; };
+		F42EE5D41EC707D300FF3F2D /* I_osn_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_socket.h; path = ../../osn/osn_interface/I_osn_socket.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F42EE5951EC7064400FF3F2D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F42EE58F1EC7064400FF3F2D = {
+			isa = PBXGroup;
+			children = (
+				F42EE5C41EC706DF00FF3F2D /* osn_src */,
+				F42EE5AB1EC706A600FF3F2D /* osn_lib */,
+				F42EE5A01EC7068500FF3F2D /* osn_interface */,
+				F42EE59F1EC7067600FF3F2D /* src */,
+				F42EE5991EC7064400FF3F2D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F42EE5991EC7064400FF3F2D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5981EC7064400FF3F2D /* libTestService2.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F42EE59F1EC7067600FF3F2D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5D01EC7073B00FF3F2D /* service.cpp */,
+				F42EE5D11EC7073B00FF3F2D /* service.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		F42EE5A01EC7068500FF3F2D /* osn_interface */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5D41EC707D300FF3F2D /* I_osn_socket.h */,
+				F42EE5A11EC7069F00FF3F2D /* I_osn_coroutine.h */,
+				F42EE5A21EC7069F00FF3F2D /* I_osn_service_factory.h */,
+				F42EE5A31EC7069F00FF3F2D /* I_osn_service.h */,
+				F42EE5A51EC7069F00FF3F2D /* I_osn.h */,
+			);
+			name = osn_interface;
+			sourceTree = "<group>";
+		};
+		F42EE5AB1EC706A600FF3F2D /* osn_lib */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5AC1EC706C400FF3F2D /* osn_arr_manager.h */,
+				F42EE5AD1EC706C400FF3F2D /* osn_cache_arr_manager.h */,
+				F42EE5AE1EC706C400FF3F2D /* osn_common.h */,
+				F42EE5AF1EC706C400FF3F2D /* osn_dylib.cpp */,
+				F42EE5B01EC706C400FF3F2D /* osn_dylib.h */,
+				F42EE5B11EC706C400FF3F2D /* osn_macro.h */,
+				F42EE5B21EC706C400FF3F2D /* osn_prepared_statement.cpp */,
+				F42EE5B31EC706C400FF3F2D /* osn_prepared_statement.h */,
+				F42EE5B41EC706C400FF3F2D /* osn_singleton.h */,
+				F42EE5B51EC706C400FF3F2D /* osn_spin_lock.cpp */,
+				F42EE5B61EC706C400FF3F2D /* osn_spin_lock.h */,
+				F42EE5B71EC706C400FF3F2D /* osn_type.h */,
+			);
+			name = osn_lib;
+			sourceTree = "<group>";
+		};
+		F42EE5C41EC706DF00FF3F2D /* osn_src */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5C51EC706EA00FF3F2D /* osn_service */,
+			);
+			name = osn_src;
+			sourceTree = "<group>";
+		};
+		F42EE5C51EC706EA00FF3F2D /* osn_service */ = {
+			isa = PBXGroup;
+			children = (
+				F42EE5C61EC7070400FF3F2D /* osn_service_factory.cpp */,
+				F42EE5C71EC7070400FF3F2D /* osn_service_factory.h */,
+				F42EE5C81EC7070400FF3F2D /* osn_service_head.h */,
+				F42EE5C91EC7070400FF3F2D /* osn_service.cpp */,
+				F42EE5CA1EC7070400FF3F2D /* osn_service.h */,
+			);
+			name = osn_service;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F42EE5961EC7064400FF3F2D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F42EE5B91EC706C400FF3F2D /* osn_cache_arr_manager.h in Headers */,
+				F42EE5BA1EC706C400FF3F2D /* osn_common.h in Headers */,
+				F42EE5B81EC706C400FF3F2D /* osn_arr_manager.h in Headers */,
+				F42EE5AA1EC7069F00FF3F2D /* I_osn.h in Headers */,
+				F42EE5A71EC7069F00FF3F2D /* I_osn_service_factory.h in Headers */,
+				F42EE5A61EC7069F00FF3F2D /* I_osn_coroutine.h in Headers */,
+				F42EE5C01EC706C400FF3F2D /* osn_singleton.h in Headers */,
+				F42EE5BF1EC706C400FF3F2D /* osn_prepared_statement.h in Headers */,
+				F42EE5CD1EC7070400FF3F2D /* osn_service_head.h in Headers */,
+				F42EE5D31EC7073B00FF3F2D /* service.h in Headers */,
+				F42EE5D51EC707D300FF3F2D /* I_osn_socket.h in Headers */,
+				F42EE5CC1EC7070400FF3F2D /* osn_service_factory.h in Headers */,
+				F42EE5CF1EC7070400FF3F2D /* osn_service.h in Headers */,
+				F42EE5BC1EC706C400FF3F2D /* osn_dylib.h in Headers */,
+				F42EE5BD1EC706C400FF3F2D /* osn_macro.h in Headers */,
+				F42EE5C21EC706C400FF3F2D /* osn_spin_lock.h in Headers */,
+				F42EE5A81EC7069F00FF3F2D /* I_osn_service.h in Headers */,
+				F42EE5C31EC706C500FF3F2D /* osn_type.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F42EE5971EC7064400FF3F2D /* TestService2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F42EE59C1EC7064400FF3F2D /* Build configuration list for PBXNativeTarget "TestService2" */;
+			buildPhases = (
+				F42EE5941EC7064400FF3F2D /* Sources */,
+				F42EE5951EC7064400FF3F2D /* Frameworks */,
+				F42EE5961EC7064400FF3F2D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestService2;
+			productName = TestService2;
+			productReference = F42EE5981EC7064400FF3F2D /* libTestService2.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F42EE5901EC7064400FF3F2D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = zenghui;
+				TargetAttributes = {
+					F42EE5971EC7064400FF3F2D = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F42EE5931EC7064400FF3F2D /* Build configuration list for PBXProject "TestService2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F42EE58F1EC7064400FF3F2D;
+			productRefGroup = F42EE5991EC7064400FF3F2D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F42EE5971EC7064400FF3F2D /* TestService2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F42EE5941EC7064400FF3F2D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F42EE5C11EC706C400FF3F2D /* osn_spin_lock.cpp in Sources */,
+				F42EE5D21EC7073B00FF3F2D /* service.cpp in Sources */,
+				F42EE5BB1EC706C400FF3F2D /* osn_dylib.cpp in Sources */,
+				F42EE5BE1EC706C400FF3F2D /* osn_prepared_statement.cpp in Sources */,
+				F42EE5CB1EC7070400FF3F2D /* osn_service_factory.cpp in Sources */,
+				F42EE5CE1EC7070400FF3F2D /* osn_service.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F42EE59A1EC7064400FF3F2D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F42EE59B1EC7064400FF3F2D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F42EE59D1EC7064400FF3F2D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F42EE59E1EC7064400FF3F2D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F42EE5931EC7064400FF3F2D /* Build configuration list for PBXProject "TestService2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F42EE59A1EC7064400FF3F2D /* Debug */,
+				F42EE59B1EC7064400FF3F2D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F42EE59C1EC7064400FF3F2D /* Build configuration list for PBXNativeTarget "TestService2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F42EE59D1EC7064400FF3F2D /* Debug */,
+				F42EE59E1EC7064400FF3F2D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F42EE5901EC7064400FF3F2D /* Project object */;
+}

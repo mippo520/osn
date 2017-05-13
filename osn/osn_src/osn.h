@@ -17,7 +17,6 @@ class Osn : public IOsn
     Osn();
 public:
     ~Osn();
-    virtual oBOOL loadService(const std::string &strServiceName) const;
     virtual oUINT32 startService(const std::string &strServiceName) const;
     virtual oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
     virtual const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
@@ -27,6 +26,8 @@ public:
     virtual oBOOL wakeup(oUINT32 unId) const;
     virtual void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr) const;
     virtual void unregistDispatchFunc(oINT32 nPType) const;
+private:
+    virtual oBOOL loadService(const std::string &strServiceName) const;
 };
 
 #endif /* osn_hpp */

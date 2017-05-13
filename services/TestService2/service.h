@@ -1,11 +1,11 @@
 #pragma once
 #include "osn_service.h"
 
-class TestService2 : public OsnService
+class Service : public OsnService
 {
 public:
-	TestService2();
-	~TestService2();
+	Service();
+	~Service();
 public:
 	virtual void start(const OsnPreparedStatement &stmt) override;
 	virtual void exit() override;

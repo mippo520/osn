@@ -17,7 +17,6 @@ int main(int argc, const char * argv[]) {
     if (argc > 1) {
         config_file = argv[1];
         printf("config_file = %s\n", config_file);
-        g_Osn->loadService(config_file);
     } else {
         printf("Need a config file. \n");
         return 1;
