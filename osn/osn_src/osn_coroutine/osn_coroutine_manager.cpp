@@ -50,6 +50,20 @@ oUINT32 OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func) const
     return unId;
 }
 
+oBOOL OsnCoroutineManager::destroy(oUINT32 co) const
+{
+    oBOOL bRet = false;
+    do {
+        if ( 0 == co )
+        {
+            break;
+        }
+        m_arrCoroutine.removeObj(co);
+        bRet = true;
+    } while (false);
+    return bRet;
+}
+
 const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg) const
 {
     stCoThreadInfo *pInfo = getThreadInfo();

@@ -56,7 +56,6 @@ public:
             {
                 addObject(unId, pObj);
                 pObj->setId(unId);
-                pObj->init();
             }
             else
             {

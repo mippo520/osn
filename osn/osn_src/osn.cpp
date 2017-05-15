@@ -77,9 +77,9 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
     return bRet;
 }
 
-oUINT32 Osn::startService(const std::string &strServiceName) const
+oUINT32 Osn::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt) const
 {
-    oUINT32 unId = g_ServiceManager.startService(strServiceName);
+    oUINT32 unId = g_ServiceManager.startService(strServiceName, stmt);
     do {
         if (unId > 0)
         {
@@ -89,7 +89,7 @@ oUINT32 Osn::startService(const std::string &strServiceName) const
         {
             break;
         }
-        unId = g_ServiceManager.startService(strServiceName);
+        unId = g_ServiceManager.startService(strServiceName, stmt);
         if (0 == unId)
         {
             printf("Osn::startService Error! %s can not found!", strServiceName.c_str());

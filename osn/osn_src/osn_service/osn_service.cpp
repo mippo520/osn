@@ -58,8 +58,26 @@ OsnService::~OsnService()
 
 void OsnService::exit()
 {
+    MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.begin();
+    for (; itr != m_mapSessionCoroutine.end(); ++itr)
+    {
+        oUINT32 co = itr->second;
+        if (co > 0)
+        {
+            g_Coroutine->destroy(itr->second);
+        }
+    }
 }
 
+void OsnService::onStart(const OsnPreparedStatement &stmt)
+{
+    oINT32 nType = stmt.popBackInt32();
+    this->start(stmt);
+    if (eYT_Call == nType)
+    {
+        g_Osn->ret();
+    }
+}
 
 void OsnService::dispatch(const OsnPreparedStatement &stmt)
 {
@@ -70,10 +88,19 @@ void OsnService::dispatch(const OsnPreparedStatement &stmt)
 	}
 }
 
-void OsnService::init()
+void OsnService::init(const OsnPreparedStatement &stmt)
 {
-	registDispatchFunc(ePType_Start, std::bind(&OsnService::start, this, std::placeholders::_1));
-    g_Osn->send(getId(), ePType_Start);
+	registDispatchFunc(ePType_Start, std::bind(&OsnService::onStart, this, std::placeholders::_1));
+    if (g_Service->getCurService() > 0)
+    {
+        stmt.pushBackInt32(eYT_Call);
+        g_Osn->call(getId(), ePType_Start, stmt);
+    }
+    else
+    {
+        stmt.pushBackInt32(eYT_None);
+        g_Osn->send(getId(), ePType_Start, stmt);
+    }
 }
 
 stServiceMessage* OsnService::popMessage()

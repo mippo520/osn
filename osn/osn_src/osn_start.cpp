@@ -37,7 +37,7 @@ void OsnStart::init()
 // 	for (oINT32 i = 0; i < 1000; ++i)
 // 	{
     g_Osn->startService("TestService2");
-    g_Osn->startService("TestService");
+//    g_Osn->startService("TestService");
 // 	}
 // 
 // 	for (oINT32 i = 0; i < 1000; ++i)

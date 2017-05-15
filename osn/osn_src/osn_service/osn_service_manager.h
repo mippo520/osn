@@ -43,7 +43,7 @@ private:
     virtual oUINT32 getCurService() const;
     virtual void pushWarkingService(oUINT32 unId) const;
     virtual oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg) const;
-    oUINT32 startService(const std::string &strServiceName);
+    oUINT32 startService(const std::string &strServiceName, const OsnPreparedStatement &stmt);
     void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
     void unregistDispatchFunc(oINT32 nPType);
     oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg) const;

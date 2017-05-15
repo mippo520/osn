@@ -82,13 +82,24 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    if (1 == getId())
 //    {
 //        sleep(1);
-        OsnPreparedStatement msg;
-        msg.setInt32(0, 100);
-        g_Osn->send(1, ePType_Lua, msg);
+    static oBOOL b = false;
+    if (!b)
+    {
+        b = true;
+        g_Osn->startService("TestService");
+        printf("start TestService!\n");
+    }
+    
+    OsnPreparedStatement msg;
+    msg.setInt32(0, 100);
+    g_Osn->send(getId(), ePType_Lua, msg);
+    
+
 //    }
 }
 
 void TestService2::exit()
 {
+    OsnService::exit();
     g_Osn->startService("TestService2");
 }

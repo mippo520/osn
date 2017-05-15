@@ -11,7 +11,6 @@
 
 #include "osn_service.h"
 #include "osn_socket.h"
-#include "osn_service_factory.h"
 #include "I_osn_service_factory.h"
 
 class TestService : public OsnService
@@ -21,7 +20,6 @@ public:
     ~TestService();
 public:
     virtual void start(const OsnPreparedStatement &stmt) override;
-    virtual void exit() override;
     void dispatchLua(const OsnPreparedStatement &stmt);
 private:
     void acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz);

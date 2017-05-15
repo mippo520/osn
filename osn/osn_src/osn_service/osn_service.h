@@ -44,14 +44,16 @@ protected:
 	typedef void (OsnService::*CO_MEMBER_FUNC)(const OsnPreparedStatement &);
 
     OsnService();
+    virtual void exit();
 private:
     virtual void start(const OsnPreparedStatement &stmt) = 0;
-    virtual void dispatch(const OsnPreparedStatement &stmt);
-    void init();
-    virtual void exit();
+    
+    void onStart(const OsnPreparedStatement &stmt);
+    void dispatch(const OsnPreparedStatement &stmt);
+    void init(const OsnPreparedStatement &stmt);
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
-    virtual oBOOL dispatchMessage(oINT32 &nType);
+    oBOOL dispatchMessage(oINT32 &nType);
     oUINT32 pushMsg(stServiceMessage *pMsg);
     oUINT32 getMsgSize();
     oUINT32 createCO(OSN_SERVICE_CO_FUNC func);

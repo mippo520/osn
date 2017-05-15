@@ -17,7 +17,7 @@ class Osn : public IOsn
     Osn();
 public:
     ~Osn();
-    virtual oUINT32 startService(const std::string &strServiceName) const;
+    virtual oUINT32 startService(const std::string &strServiceName, const OsnPreparedStatement &stmt = OsnPreparedStatement()) const;
     virtual oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
     virtual const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
     virtual void ret(const OsnPreparedStatement &msg) const;

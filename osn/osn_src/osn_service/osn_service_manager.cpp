@@ -73,13 +73,15 @@ void OsnServiceManager::pushDylibHandle(void *handle)
     }
 }
 
-oUINT32 OsnServiceManager::startService(const std::string &strServiceName)
+oUINT32 OsnServiceManager::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt)
 {
     oUINT32 unId = 0;
     MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.find(strServiceName);
     if (itr != m_mapServiceFactory.end())
     {
-        unId = addObj(itr->second->create());
+        OsnService *pService = itr->second->create();
+        unId = addObj(pService);
+        pService->init(stmt);
     }
 
     return unId;

@@ -34,11 +34,7 @@ void TestService::start(const OsnPreparedStatement &stmt)
     m_Socket.start(m_SockId, strError, std::bind(&TestService::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);
 //	m_Socket.write(fd, "aaaaa", 5);
-}
-
-void TestService::exit()
-{
-    
+    printf("TestService::start!\n");
 }
 
 void TestService::dispatchLua(const OsnPreparedStatement &stmt)
