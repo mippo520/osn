@@ -140,7 +140,7 @@ void OsnSocketManager::sendRequest(stRequestPackage &request, oINT8 type, oUINT8
     request.header[7] = len;
     for (;;)
     {
-        oINT32 nSize = (oINT32)write(m_nSendFD, &request.header[6], len + 2);
+        oINT32 nSize = (oINT32)::write(m_nSendFD, &request.header[6], len + 2);
         if (nSize < 0)
         {
             if (errno != EINTR)
@@ -982,7 +982,7 @@ oINT32 OsnSocketManager::connect(ID_SERVICE opaque, const char *szAddr, oINT32 p
     {
         return -1;
     }
-    sendRequest(request, 'O', sizeof(request.u.open) + len);
+    sendRequest(request, 'O', (oUINT8)(sizeof(request.u.open) + len));
     return request.u.open.id;
 }
 

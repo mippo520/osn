@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestService", "TestService\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestService2", "TestService2\TestService2.vcxproj", "{5434EE3B-1E90-4B74-8246-5C10CE4F2445}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gate", "gate\gate.vcxproj", "{A2F73BEA-B99D-403B-952B-904D09ECF52B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -55,6 +57,18 @@ Global
 		{5434EE3B-1E90-4B74-8246-5C10CE4F2445}.Release|x64.Build.0 = Release|x64
 		{5434EE3B-1E90-4B74-8246-5C10CE4F2445}.Release|x86.ActiveCfg = Release|x86
 		{5434EE3B-1E90-4B74-8246-5C10CE4F2445}.Release|x86.Build.0 = Release|x86
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|ARM.Build.0 = Debug|ARM
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|x64.ActiveCfg = Debug|x64
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|x64.Build.0 = Debug|x64
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|x86.ActiveCfg = Debug|x86
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Debug|x86.Build.0 = Debug|x86
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|ARM.ActiveCfg = Release|ARM
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|ARM.Build.0 = Release|ARM
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x64.ActiveCfg = Release|x64
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x64.Build.0 = Release|x64
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x86.ActiveCfg = Release|x86
+		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

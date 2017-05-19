@@ -561,7 +561,7 @@ oINT32 OsnPreparedStatement::popBackInt32() const
 	}
     else
     {
-        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, unSize - 1, (*m_vecStatementData)[unSize - 1].type);
+        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, (oUINT8)(unSize - 1), (*m_vecStatementData)[unSize - 1].type);
         assert(0);
     }
 	return nRet;
@@ -579,7 +579,7 @@ oUINT32 OsnPreparedStatement::popBackUInt32() const
     }
     else
     {
-        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, unSize - 1, (*m_vecStatementData)[unSize - 1].type);
+        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, (oUINT8)(unSize - 1), (*m_vecStatementData)[unSize - 1].type);
         assert(0);
     }
     return unRet;
@@ -597,7 +597,7 @@ oUINT64 OsnPreparedStatement::popBackUInt64() const
     }
     else
     {
-        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, unSize - 1, (*m_vecStatementData)[unSize - 1].type);
+        OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, (oUINT8)(unSize - 1), (*m_vecStatementData)[unSize - 1].type);
         assert(0);
     }
     return unRet;

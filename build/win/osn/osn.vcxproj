@@ -77,6 +77,7 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_driver.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_manager.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_socket\poll\osn_epoll.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_start.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_data.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_driver.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_manager.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\poll\osn_epoll.h" />

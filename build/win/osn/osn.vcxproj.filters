@@ -52,6 +52,9 @@
     <ClCompile Include="..\..\..\osn\osn_src\osn.cpp">
       <Filter>osn_src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket_driver.cpp">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="osn_lib">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn.h">
       <Filter>osn_src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_driver.h">
+      <Filter>osn_src\osn_socket</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
