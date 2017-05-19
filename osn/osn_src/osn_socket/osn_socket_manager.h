@@ -21,6 +21,7 @@ class OsnSocketManager
 {
     const static oINT32 s_nMaxSocketShift = 16;
     const static oUINT64 s_u64MaxSocket = 1 << s_nMaxSocketShift;
+	const static oUINT64 s_u64MaxSocketMask = s_u64MaxSocket - 1;
     const static oINT32 s_nMaxEvents = 64;
     const static oINT32 s_nMaxInfo = 128;
     const static oINT32 s_nMinReadBuffer = 64;

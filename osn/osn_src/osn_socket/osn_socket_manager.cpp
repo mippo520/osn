@@ -504,7 +504,7 @@ void OsnSocketManager::socketKeepAlive(oINT32 nFd)
 
 oINT32 OsnSocketManager::hashId(oINT32 nId)
 {
-    return (((oUINT32)nId) % s_u64MaxSocket);
+    return (((oUINT32)nId) & s_u64MaxSocketMask);
 }
 
 void OsnSocketManager::forceClose(OsnSocketData &socket, stSocketMessage &result)

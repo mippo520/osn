@@ -86,7 +86,7 @@ void TestService2::start(const OsnPreparedStatement &stmt)
     if (!b)
     {
         b = true;
-        g_Osn->startService("Gate");
+        g_Osn->startService("TestService");
         printf("start TestService!\n");
     }
     
