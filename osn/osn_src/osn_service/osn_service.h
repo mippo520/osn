@@ -31,7 +31,7 @@ class OsnService {
         eYT_CleanSleep,
     };
     typedef std::function<void (const OsnPreparedStatement &)> OSN_SERVICE_CO_FUNC;
-    static std::queue<oUINT32> s_queCoroutine;
+    static std::queue<ID_COROUTINE> s_queCoroutine;
     static OsnSpinLock s_CoQueSpinLock;
     static oUINT64 s_u64CoroutineCount;
     static OsnSpinLock s_CoCountLock;
@@ -54,33 +54,40 @@ private:
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
     oBOOL dispatchMessage(oINT32 &nType);
-    oUINT32 pushMsg(stServiceMessage *pMsg);
+    ID_SESSION pushMsg(stServiceMessage *pMsg);
     oUINT32 getMsgSize();
-    oUINT32 createCO(OSN_SERVICE_CO_FUNC func);
-    oINT32 suspend(oUINT32 co, const OSN_CO_ARG &arg);
-    void pushToCoroutinePool(oUINT32 co);
-    oUINT32 popFromCoroutinePool();
+    ID_COROUTINE createCO(OSN_SERVICE_CO_FUNC func);
+    oINT32 suspend(ID_COROUTINE co, const OSN_CO_ARG &arg);
+    void pushToCoroutinePool(ID_COROUTINE co);
+    ID_COROUTINE popFromCoroutinePool();
     stServiceMessage* popMessage();
     oINT32 dispatchWakeup();
 	void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC func);
     void unregistDispatchFunc(oINT32 nPType);
+    
+    void setCoroutineSession(ID_COROUTINE co, ID_SESSION session);
+    ID_SESSION getCoroutineSession(ID_COROUTINE co);
+    
+    void setCoroutineService(ID_COROUTINE co, ID_SERVICE service);
+    ID_SERVICE getCoroutineService(ID_COROUTINE co);
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;
 
 	oBOOL m_IsInGlobal;
     
-    MEMBER_VALUE(oUINT32, Id)
-    oUINT32 m_unSessionCount;
-	std::map<oUINT32, oUINT32> m_mapCoroutineSession;
-	std::map<oUINT32, oUINT32> m_mapCoroutineSource;
+    MEMBER_VALUE(ID_SERVICE, Id);
+    ID_SESSION m_unSessionCount;
+    
+    std::vector<ID_SESSION> m_vecCoroutineSession;
+    std::vector<ID_SERVICE> m_vecCoroutineService;
 
-	typedef std::map<oUINT32, oUINT32> MAP_SESSION_CO;
+	typedef std::map<ID_SESSION, ID_COROUTINE> MAP_SESSION_CO;
 	typedef MAP_SESSION_CO::iterator MAP_SESSION_CO_ITR;
 	MAP_SESSION_CO m_mapSessionCoroutine;
 	OSN_COROUTINE_FUNC m_CoroutineFunction;
-    std::map<oUINT32, oUINT32> m_mapSleepSession;
-    std::queue<oUINT32> m_queWakeup;
+    std::map<ID_COROUTINE, ID_SESSION> m_mapSleepCoSession;
+    std::queue<ID_COROUTINE> m_queWakeup;
 	MAP_DISPATCH_FUNC m_mapDispatchFunc;
 };
 

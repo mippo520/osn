@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include <memory>
 #include "osn_type.h"
 
 //- Union for data buffer (upper-level bind -> queue -> lower-level bind)
@@ -61,7 +62,6 @@ public:
     const char* getCharPtr() const;
     
     PreparedStatementValueType getType() const;
-    
 private:
     friend class OsnPreparedStatement;
     PreparedStatementDataUnion data;
@@ -74,11 +74,9 @@ class OsnPreparedStatement
 {
 public:
     OsnPreparedStatement();
-    OsnPreparedStatement(const OsnPreparedStatement& right);
-    OsnPreparedStatement(const OsnPreparedStatement* pRight);
     ~OsnPreparedStatement();
 
-	void setBool(const oUINT8 index, const oBOOL value);
+    void setBool(const oUINT8 index, const oBOOL value);
 	void setUInt8(const oUINT8 index, const oUINT8 value);
 	void setUInt16(const oUINT8 index, const oUINT16 value);
 	void setUInt32(const oUINT8 index, const oUINT32 value);
@@ -91,7 +89,6 @@ public:
 	void setFloat64(const oUINT8 index, const oFLOAT64 value);
 	void setString(const oUINT8 index, const std::string& value);
 	void setNull(const oUINT8 index);
-    void setFunction(const oUINT8 index, const VOID_STMT_FUNC &func);
 	void setBuffer(const oUINT8 index, const oINT8 *pBuffer, oUINT32 sz);
 
 	oBOOL getBool(const oUINT8 index) const;
@@ -106,13 +103,14 @@ public:
 	oFLOAT32 getFloat32(const oUINT8 index)const;
 	oFLOAT64 getFloat64(const oUINT8 index)const;
 	std::string getString(const oUINT8 index)const;
-    VOID_STMT_FUNC getFunction(const oUINT8 index)const;
 	const oINT8* getBuffer(const oUINT8 index, oUINT32 &sz)const;
 
     oINT32 popBackInt32() const;
     oUINT32 popBackUInt32() const;
+    oUINT64 popBackUInt64() const;
     void pushBackInt32(oINT32 nValue) const;
     void pushBackUInt32(oUINT32 unValue) const;
+    void pushBackUInt64(oUINT64 unValue) const;
     
 	oBOOL isEmpty() const;
 	void clear();
@@ -123,11 +121,15 @@ public:
 	oUINT8 getPreparedStatementDataCount() const;
 
 private:
-    OsnPreparedStatement& operator=(const OsnPreparedStatement& right);
+    friend class OsnService;
+    void setFunction(const oUINT8 index, const VOID_STMT_FUNC &func);
+    VOID_STMT_FUNC getFunction(const oUINT8 index)const;
+    
     static void errorInvalidIndex(const std::string &strFuncName, const oUINT8 index);
 	static void errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType);
 protected:
-	mutable std::vector<PreparedStatementData> m_vecStatementData;    //- Buffer of parameters, not tied to MySQL in any way yet
+    typedef std::vector<PreparedStatementData> VEC_DATA;
+    mutable std::shared_ptr<VEC_DATA> m_vecStatementData;
 };
 
 typedef std::map<oINT32, VOID_STMT_FUNC> MAP_DISPATCH_FUNC;

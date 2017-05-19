@@ -14,7 +14,7 @@
 #include <dlfcn.h>
 
 const IOsnService *g_Service = &g_ServiceManager;
-__thread oUINT32 OsnServiceManager::s_unThreadCurService = 0;
+__thread ID_SERVICE OsnServiceManager::s_u64ThreadCurService = 0;
 
 OsnServiceManager::OsnServiceManager()
     : m_u64DistroyCount(0)
@@ -73,9 +73,9 @@ void OsnServiceManager::pushDylibHandle(void *handle)
     }
 }
 
-oUINT32 OsnServiceManager::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt)
+ID_SERVICE OsnServiceManager::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt)
 {
-    oUINT32 unId = 0;
+    ID_SERVICE unId = 0;
     MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.find(strServiceName);
     if (itr != m_mapServiceFactory.end())
     {
@@ -87,9 +87,9 @@ oUINT32 OsnServiceManager::startService(const std::string &strServiceName, const
     return unId;
 }
 
-oUINT32 OsnServiceManager::genId()
+ID_SESSION OsnServiceManager::genId()
 {
-    return sendMessage(getCurService(), 0, ePType_None, 0, NULL);
+    return sendMessage(getCurService(), 0, ePType_None, 0);
 }
 
 void OsnServiceManager::init()
@@ -97,30 +97,24 @@ void OsnServiceManager::init()
     OsnArrManager::init();
 }
 
-oUINT32 OsnServiceManager::sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg) const
+ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const
 {
-	stServiceMessage *pServiceMsg = new stServiceMessage(pMsg);
-	pServiceMsg->unSession = unSession;
-	pServiceMsg->unSource = unSource;
-	pServiceMsg->nType = type;
-
-    return pushMsg(unTargetId, pServiceMsg);
-}
-
-oUINT32 OsnServiceManager::pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg) const
-{
-    oUINT32 unSession = 0;
+    ID_SESSION unRet = 0;
     OsnService *pService = getObject(unTargetId);
     if (NULL != pService)
     {
-        unSession = pService->pushMsg(pMsg);
+        stServiceMessage *pServiceMsg = new stServiceMessage(msg);
+        pServiceMsg->unSession = unSession;
+        pServiceMsg->unSource = unSource;
+        pServiceMsg->nType = type;
+        unRet = pService->pushMsg(pServiceMsg);
     }
     else
     {
-        printf("OsnServiceManager::pushMsg Error! can not found service, id is %lu\n", unTargetId);
+        printf("OsnServiceManager::pushMsg Error! can not found service, id is %llu\n", unTargetId);
     }
-
-    return unSession;
+    
+    return unRet;
 }
 
 OsnService* OsnServiceManager::popWorkingService()
@@ -129,7 +123,7 @@ OsnService* OsnServiceManager::popWorkingService()
     m_QueSpinLock.lock();
     if (m_queHadMsgIds.size() > 0)
     {
-        oUINT32 unServiceId = m_queHadMsgIds.front();
+        ID_SERVICE unServiceId = m_queHadMsgIds.front();
         pService = getObject(unServiceId);
         m_queHadMsgIds.pop();
     }
@@ -138,7 +132,7 @@ OsnService* OsnServiceManager::popWorkingService()
     return pService;
 }
 
-void OsnServiceManager::pushWarkingService(oUINT32 unId) const
+void OsnServiceManager::pushWarkingService(ID_SERVICE unId) const
 {
     if (unId > 0)
     {
@@ -150,7 +144,7 @@ void OsnServiceManager::pushWarkingService(oUINT32 unId) const
 
 void OsnServiceManager::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr)
 {
-	oUINT32 unId = getCurService();
+	ID_SERVICE unId = getCurService();
 	OsnService *pService = getObject(unId);
 	if (NULL != pService)
 	{
@@ -160,7 +154,7 @@ void OsnServiceManager::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr
 
 void OsnServiceManager::unregistDispatchFunc(oINT32 nPType)
 {
-    oUINT32 unId = getCurService();
+    ID_SERVICE unId = getCurService();
     OsnService *pService = getObject(unId);
     if (NULL != pService)
     {
@@ -232,21 +226,21 @@ void OsnServiceManager::addThread()
 //    m_CurServiceLock.lock();
 //    m_mapThreadCurService[curThread] = 0;
 //    m_CurServiceLock.unlock();
-    s_unThreadCurService = 0;
+    s_u64ThreadCurService = 0;
 }
 
-void OsnServiceManager::setCurService(oUINT32 unId)
+void OsnServiceManager::setCurService(ID_SERVICE unId)
 {
 //    std::thread::id curThread = std::this_thread::get_id();
 //    m_mapThreadCurService[curThread] = unId;
-    s_unThreadCurService = unId;
+    s_u64ThreadCurService = unId;
 }
 
-oUINT32 OsnServiceManager::getCurService() const
+ID_SERVICE OsnServiceManager::getCurService() const
 {
 //    std::thread::id curThread = std::this_thread::get_id();
 //    return m_mapThreadCurService[curThread];
-    return s_unThreadCurService;
+    return s_u64ThreadCurService;
 }
 
 

@@ -27,11 +27,11 @@ class OsnCoroutineManager : public IOsnCoroutine
 public:
     ~OsnCoroutineManager();
     
-    virtual oUINT32 create(const OSN_COROUTINE_FUNC &func) const;
-    virtual oBOOL destroy(oUINT32 co) const;
+    virtual ID_COROUTINE create(const OSN_COROUTINE_FUNC &func) const;
+    virtual oBOOL destroy(ID_COROUTINE co) const;
     virtual const OSN_CO_ARG& yield(const OSN_CO_ARG &arg = OSN_CO_ARG()) const;
-    virtual const OSN_CO_ARG& resume(oUINT32 unId, const OSN_CO_ARG &arg = OSN_CO_ARG()) const;
-    virtual oUINT32 running() const;
+    virtual const OSN_CO_ARG& resume(ID_COROUTINE unId, const OSN_CO_ARG &arg = OSN_CO_ARG()) const;
+    virtual ID_COROUTINE running() const;
     void addThread();
 private:
     stCoThreadInfo* getThreadInfo() const;

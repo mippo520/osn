@@ -41,7 +41,7 @@ private:
     MEMBER_VALUE(oINT32, Type);
     MEMBER_VALUE(oINT32, Id);
     MEMBER_VALUE(oINT32, Fd);
-    MEMBER_VALUE(oUINT32, Opaque);
+    MEMBER_VALUE(ID_SERVICE, Opaque);
     MEMBER_VALUE(oINT32, Protocol);
     MEMBER_VALUE(oINT64, WBSize);
 };

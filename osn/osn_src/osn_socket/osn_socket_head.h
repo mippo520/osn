@@ -73,7 +73,7 @@ enum eSocketPriority
 struct stRequestOpen {
     oINT32 id;
     oINT32 port;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
     oINT8 host[1];
 };
 
@@ -86,25 +86,25 @@ struct stRequestSend {
 struct stRequestClose {
     oINT32 id;
     oINT32 shutdown;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
 };
 
 struct stRequestListen {
     oINT32 id;
     oINT32 fd;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
     oINT8 host[1];
 };
 
 struct stRequestBind {
     oINT32 id;
     oINT32 fd;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
 };
 
 struct stRequestStart {
     oINT32 id;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
 };
 
 struct stRequestSetopt {
@@ -132,7 +132,7 @@ struct stRequestPackage
 struct stSocketMessage
 {
     oINT32 id;
-    oUINT32 opaque;
+    ID_SERVICE opaque;
     oINT32 ud;	// for accept, ud is new connection id ; for data, ud is size of data
     oINT8 *data;
     

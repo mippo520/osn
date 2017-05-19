@@ -13,7 +13,7 @@ OsnSocket::OsnSocket()
 OsnSocket::~OsnSocket()
 {
     UnregistDispatchFunc(ePType_Socket);
-    oUINT32 svrId = g_Service->getCurService();
+    ID_SERVICE svrId = g_Service->getCurService();
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.begin();
     for (; itr != m_mapSocketInfo.end(); ++itr)
     {
@@ -33,17 +33,18 @@ OsnSocket::~OsnSocket()
 void OsnSocket::init()
 {
 	RegistDispatchFunc(ePType_Socket, &OsnSocket::dispatchSocket, this);
-	m_mapDispatchFunc[eOST_Data] = std::bind(&OsnSocket::funcSocketData, this, std::placeholders::_1);
-	m_mapDispatchFunc[eOST_Connect] = std::bind(&OsnSocket::funcSocketConnect, this, std::placeholders::_1);
-	m_mapDispatchFunc[eOST_Accept] = std::bind(&OsnSocket::funcSocketAccept, this, std::placeholders::_1);
-	m_mapDispatchFunc[eOST_Error] = std::bind(&OsnSocket::funcSocketError, this, std::placeholders::_1);
-	m_mapDispatchFunc[eOST_Close] = std::bind(&OsnSocket::funcSocketClose, this, std::placeholders::_1);
-	m_mapDispatchFunc[eOST_Warning] = std::bind(&OsnSocket::funcSocketWarning, this, std::placeholders::_1);
+    m_vecDispatchFunc.resize(eOST_Warning + 1);
+	m_vecDispatchFunc[eOST_Data] = std::bind(&OsnSocket::funcSocketData, this, std::placeholders::_1);
+	m_vecDispatchFunc[eOST_Connect] = std::bind(&OsnSocket::funcSocketConnect, this, std::placeholders::_1);
+	m_vecDispatchFunc[eOST_Accept] = std::bind(&OsnSocket::funcSocketAccept, this, std::placeholders::_1);
+	m_vecDispatchFunc[eOST_Error] = std::bind(&OsnSocket::funcSocketError, this, std::placeholders::_1);
+	m_vecDispatchFunc[eOST_Close] = std::bind(&OsnSocket::funcSocketClose, this, std::placeholders::_1);
+	m_vecDispatchFunc[eOST_Warning] = std::bind(&OsnSocket::funcSocketWarning, this, std::placeholders::_1);
 }
 
 oINT32 OsnSocket::open(const oINT8 *addr, oINT32 port, std::string &err)
 {
-	oUINT32 svrId = g_Service->getCurService();
+	ID_SERVICE svrId = g_Service->getCurService();
 	oINT32 sock = g_Socket->connect(svrId, addr, port);
 	return connect(sock, err);
 }
@@ -55,13 +56,13 @@ oINT64 OsnSocket::write(oINT32 sock, const void *pBuff, oINT32 sz)
 
 oINT32 OsnSocket::listen(const oINT8 *addr, oINT32 nPort, oINT32 nBackLog)
 {
-    oUINT32 svrId = g_Service->getCurService();
+    ID_SERVICE svrId = g_Service->getCurService();
     return g_Socket->listen(svrId, addr, nPort);
 }
 
 oINT32 OsnSocket::start(oINT32 sock, std::string &err, const ACCPET_FUNC &func)
 {
-    oUINT32 svrId = g_Service->getCurService();
+    ID_SERVICE svrId = g_Service->getCurService();
     g_Socket->start(svrId, sock);
     return connect(sock, err, func);
 }
@@ -71,14 +72,14 @@ void OsnSocket::close(oINT32 sock)
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.find(sock);
     if (itr == m_mapSocketInfo.end())
     {
-        oUINT32 svrId = g_Service->getCurService();
+        ID_SERVICE svrId = g_Service->getCurService();
         g_Socket->close(svrId, sock);
         return;
     }
     stSocketInfo &info = itr->second;
     if (info.bConnected)
     {
-        oUINT32 svrId = g_Service->getCurService();
+        ID_SERVICE svrId = g_Service->getCurService();
         g_Socket->close(svrId, sock);
         if (info.co > 0)
         {
@@ -108,7 +109,7 @@ void OsnSocket::suspend(stSocketInfo &info)
 
 void OsnSocket::wakeup(stSocketInfo &info)
 {
-	oUINT32 co = info.co;
+	ID_COROUTINE co = info.co;
 	if (co > 0)
 	{
 		info.co = 0;
@@ -302,11 +303,10 @@ void OsnSocket::dispatchSocket(const OsnPreparedStatement &stmt)
 	const stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
 	if (NULL != pSM)
 	{
-		MAP_SOCKET_MSG_FUNC_ITR itr = m_mapDispatchFunc.find(pSM->type);
-		if (itr != m_mapDispatchFunc.end())
-		{
-			itr->second(pSM);
-		}
+        if (pSM->type > eOST_None && pSM->type <= eOST_Warning)
+        {
+            m_vecDispatchFunc[pSM->type](pSM);
+        }
 	}
     SAFE_DELETE(pSM);
 }
@@ -385,7 +385,7 @@ void OsnSocket::close_fd(oINT32 sock)
 
 void OsnSocket::shutdown(oINT32 sock)
 {
-    oUINT32 cur = g_Service->getCurService();
+    ID_SERVICE cur = g_Service->getCurService();
     g_Socket->shutdown(cur, sock);
 }
 
@@ -586,7 +586,7 @@ void OsnSocket::funcSocketData(const stOsnSocketMsg *msg)
         {
             printf("OsnSocket::funcSocketData Error! socket buffer overflow: fd=%d size=%d", msg->id, sz);
             clearBuffer(info.buffer);
-            oUINT32 svrId = g_Service->getCurService();
+            ID_SERVICE svrId = g_Service->getCurService();
             g_Socket->close(svrId, msg->id);
         }
         
@@ -643,7 +643,7 @@ void OsnSocket::funcSocketAccept(const stOsnSocketMsg *msg)
     MAP_SOCKET_INFO_ITR itr = m_mapSocketInfo.find(msg->id);
     if (itr == m_mapSocketInfo.end())
     {
-        oUINT32 svrId = g_Service->getCurService();
+        ID_SERVICE svrId = g_Service->getCurService();
         g_Socket->close(svrId, msg->ud);
     }
     stSocketInfo &info = itr->second;

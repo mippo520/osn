@@ -472,7 +472,7 @@ oINT32 OsnSocketManager::reserveId() const
     return -1;
 }
 
-OsnSocketData* OsnSocketManager::newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd)
+OsnSocketData* OsnSocketManager::newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, ID_SERVICE unOpaque, oBOOL bAdd)
 {
     OsnSocketData &socket = m_Socket[hashId(nId)];
     
@@ -672,7 +672,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
 
     OsnPreparedStatement stmt;
     stmt.setUInt64(0, (oUINT64)pSM);
-    oUINT32 unSession = g_Osn->send(result.opaque, ePType_Socket, stmt);
+    ID_SESSION unSession = g_Osn->send(result.opaque, ePType_Socket, stmt);
     if (0 == unSession)
     {
         SAFE_DELETE(pSM);
@@ -733,7 +733,7 @@ oINT32 OsnSocketManager::forwardMessageTcp(OsnSocketData &socket, stSocketMessag
     }
 }
 
-void OsnSocketManager::start(oUINT32 opaque, oINT32 sock) const
+void OsnSocketManager::start(ID_SERVICE opaque, oINT32 sock) const
 {
     stRequestPackage request;
     request.u.start.id = sock;
@@ -741,7 +741,7 @@ void OsnSocketManager::start(oUINT32 opaque, oINT32 sock) const
     sendRequest(request, 'S', sizeof(request.u.start));
 }
 
-void OsnSocketManager::close(oUINT32 opaque, oINT32 sock) const
+void OsnSocketManager::close(ID_SERVICE opaque, oINT32 sock) const
 {
 	stRequestPackage request;
 	request.u.close.id = sock;
@@ -750,7 +750,7 @@ void OsnSocketManager::close(oUINT32 opaque, oINT32 sock) const
 	sendRequest(request, 'K', sizeof(request.u.close));
 }
 
-void OsnSocketManager::shutdown(oUINT32 opaque, oINT32 sock) const
+void OsnSocketManager::shutdown(ID_SERVICE opaque, oINT32 sock) const
 {
     stRequestPackage request;
     request.u.close.id = sock;
@@ -759,7 +759,7 @@ void OsnSocketManager::shutdown(oUINT32 opaque, oINT32 sock) const
     sendRequest(request, 'K', sizeof(request.u.close));
 }
 
-oINT32 OsnSocketManager::listen(oUINT32 opaque, std::string &&strAddr, oINT32 port, oINT32 nBackLog) const
+oINT32 OsnSocketManager::listen(ID_SERVICE opaque, std::string &&strAddr, oINT32 port, oINT32 nBackLog) const
 {
     oINT32 fd = doListen(strAddr, port, nBackLog);
     if (fd < 0)
@@ -961,7 +961,7 @@ oINT64 OsnSocketManager::send(oINT32 sock, const void *pBuff, oINT32 sz) const
     return socket.getWBSize();
 }
 
-oINT32 OsnSocketManager::connect(oUINT32 opaque, const char *szAddr, oINT32 port) const
+oINT32 OsnSocketManager::connect(ID_SERVICE opaque, const char *szAddr, oINT32 port) const
 {
     stRequestPackage request;
     oINT32 len = (oINT32)strlen(szAddr);
@@ -1096,7 +1096,7 @@ oINT32 OsnSocketManager::sendSocket(stRequestSend &request, stSocketMessage &res
     {
         if (eSProtocol_TCP == socket.getProtocol())
         {
-            oINT32 n = ::write(socket.getFd(), request.buffer, request.sz);
+            oINT32 n = (oINT32)::write(socket.getFd(), request.buffer, request.sz);
             if (n < 0)
             {
                 switch (errno)

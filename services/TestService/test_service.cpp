@@ -25,11 +25,11 @@ TestService::~TestService()
 
 void TestService::start(const OsnPreparedStatement &stmt)
 {
-	RegistDispatchFunc(ePType_Lua, &TestService::dispatchLua, this);
+	RegistDispatchFunc(ePType_User, &TestService::dispatchLua, this);
 	m_Socket.init();
     m_SockId = m_Socket.listen("127.0.0.1", 18523);
     
-    g_Osn->send(getId(), ePType_Lua);
+    g_Osn->send(getId(), ePType_User);
     std::string strError = "";
     m_Socket.start(m_SockId, strError, std::bind(&TestService::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);

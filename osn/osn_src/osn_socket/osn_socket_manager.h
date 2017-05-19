@@ -32,12 +32,12 @@ public:
     void exit();
     void release();
     oINT32 poll();
-    virtual oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const;
-    virtual void start(oUINT32 opaque, oINT32 sock) const;
-    virtual void close(oUINT32 opaque, oINT32 sock) const;
-    virtual void shutdown(oUINT32 opaque, oINT32 sock) const;
+    virtual oINT32 listen(ID_SERVICE opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const;
+    virtual void start(ID_SERVICE opaque, oINT32 sock) const;
+    virtual void close(ID_SERVICE opaque, oINT32 sock) const;
+    virtual void shutdown(ID_SERVICE opaque, oINT32 sock) const;
     virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const;
-    virtual oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port) const;
+    virtual oINT32 connect(ID_SERVICE opaque, const char *szAddr, oINT32 port) const;
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();
@@ -58,7 +58,7 @@ private:
     oINT32 reserveId() const;
     static oINT32 hashId(oINT32 nId);
     void socketKeepAlive(oINT32 nFd);
-    OsnSocketData* newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, oUINT32 unOpaque, oBOOL bAdd);
+    OsnSocketData* newFd(oINT32 nId, oINT32 nFd, oINT32 nProtocol, ID_SERVICE unOpaque, oBOOL bAdd);
     void forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMessage &result);
     oINT32 forwardMessageTcp(OsnSocketData &socket, stSocketMessage &result);
     oINT32 doListen(std::string &strAddr, oINT32 nPort, oINT32 nBackLog) const;

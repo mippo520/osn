@@ -77,9 +77,9 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
     return bRet;
 }
 
-oUINT32 Osn::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt) const
+ID_SERVICE Osn::startService(const std::string &strServiceName, const OsnPreparedStatement &stmt) const
 {
-    oUINT32 unId = g_ServiceManager.startService(strServiceName, stmt);
+    ID_SERVICE unId = g_ServiceManager.startService(strServiceName, stmt);
     do {
         if (unId > 0)
         {
@@ -99,14 +99,14 @@ oUINT32 Osn::startService(const std::string &strServiceName, const OsnPreparedSt
     return unId;
 }
 
-oUINT32 Osn::send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg) const
+ID_SESSION Osn::send(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg) const
 {
-    return g_ServiceManager.sendMessage(addr, 0, type, 0, &msg);
+    return g_ServiceManager.sendMessage(addr, 0, type, 0, msg);
 }
 
-const OsnPreparedStatement& Osn::call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg) const
+const OsnPreparedStatement& Osn::call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg) const
 {
-    oUINT32 unSession = g_ServiceManager.sendMessage(addr, g_ServiceManager.getCurService(), type, 0, &msg);
+    ID_SESSION unSession = g_ServiceManager.sendMessage(addr, g_ServiceManager.getCurService(), type, 0, msg);
     OSN_CO_ARG arg;
     arg.setUInt32(0, unSession);
     arg.pushBackInt32(OsnService::eYT_Call);
@@ -126,9 +126,9 @@ void Osn::exit() const
     g_CorotineManager.yield(stmt);
 }
 
-void Osn::wait(oUINT32 unId) const
+void Osn::wait(ID_SERVICE unId) const
 {
-    oUINT32 unSession = g_ServiceManager.genId();
+    ID_SESSION unSession = g_ServiceManager.genId();
     OsnPreparedStatement stmt;
     stmt.pushBackUInt32(unSession);
     stmt.pushBackInt32(OsnService::eYT_Sleep);
@@ -140,10 +140,10 @@ void Osn::wait(oUINT32 unId) const
     g_CorotineManager.yield(stmt);
 }
 
-oBOOL Osn::wakeup(oUINT32 unId) const
+oBOOL Osn::wakeup(ID_SERVICE unId) const
 {
     OsnPreparedStatement stmt;
-    stmt.pushBackUInt32(unId);
+    stmt.pushBackUInt64(unId);
     stmt.pushBackInt32(OsnService::eYT_Wakeup);
     const OsnPreparedStatement &ret = g_CorotineManager.yield(stmt);
     return ret.getBool(0);

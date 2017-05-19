@@ -17,13 +17,13 @@ class Osn : public IOsn
     Osn();
 public:
     ~Osn();
-    virtual oUINT32 startService(const std::string &strServiceName, const OsnPreparedStatement &stmt = OsnPreparedStatement()) const;
-    virtual oUINT32 send(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
-    virtual const OsnPreparedStatement& call(oUINT32 addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
+    virtual ID_SERVICE startService(const std::string &strServiceName, const OsnPreparedStatement &stmt = OsnPreparedStatement()) const;
+    virtual ID_SESSION send(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
+    virtual const OsnPreparedStatement& call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
     virtual void ret(const OsnPreparedStatement &msg) const;
     virtual void exit() const;
-    virtual void wait(oUINT32 unId = 0) const;
-    virtual oBOOL wakeup(oUINT32 unId) const;
+    virtual void wait(ID_SERVICE unId = 0) const;
+    virtual oBOOL wakeup(ID_SERVICE unId) const;
     virtual void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr) const;
     virtual void unregistDispatchFunc(oINT32 nPType) const;
 private:

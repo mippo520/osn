@@ -68,13 +68,13 @@ private:
     
     struct stSocketInfo
     {
-        oUINT32 co;
+        ID_COROUTINE co;
         oINT32 id;
         oBOOL bConnected;
         PreparedStatementData connecting;
         std::string strProtocal;
         stSocketBuffer buffer;
-        oUINT32 closing;
+        ID_COROUTINE closing;
         ACCPET_FUNC func;
         PreparedStatementData readRequired;
         oINT32 nBuffLimit;
@@ -133,12 +133,9 @@ private:
 	void funcSocketWarning(const stOsnSocketMsg *msg);
 
     static void socketNullFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz);
-
 private:
 	typedef std::function<void(const stOsnSocketMsg *)> SOCKET_MSG_FUNC;
-	typedef std::map<oINT32, SOCKET_MSG_FUNC> MAP_SOCKET_MSG_FUNC;
-	typedef MAP_SOCKET_MSG_FUNC::iterator MAP_SOCKET_MSG_FUNC_ITR;
-	MAP_SOCKET_MSG_FUNC m_mapDispatchFunc;
+    std::vector<SOCKET_MSG_FUNC> m_vecDispatchFunc;
 	typedef std::map<oINT32, stSocketInfo> MAP_SOCKET_INFO;
 	typedef MAP_SOCKET_INFO::iterator MAP_SOCKET_INFO_ITR;
 	MAP_SOCKET_INFO m_mapSocketInfo;

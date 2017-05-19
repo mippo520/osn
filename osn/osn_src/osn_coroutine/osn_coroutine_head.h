@@ -27,30 +27,22 @@ enum eCoroutineState
 
 struct stCoThreadInfo {
 
-    MEMBER_VALUE(oUINT32, Running);
+    MEMBER_VALUE(ID_COROUTINE, Running);
     ucontext_t m_MainCtx;
     
     stCoThreadInfo()
         : m_Running(0)
     {
-        m_pArg = &m_ArgCache;
     }
     
-    void setArg(const OSN_CO_ARG *pArg)
+    void setArg(const OSN_CO_ARG &arg)
     {
-        if(NULL != pArg)
-        {
-            m_pArg = pArg;
-        }
-        else
-        {
-            m_pArg = &m_ArgCache;
-        }
+        m_Arg = arg;
     }
     
     const OSN_CO_ARG& getArg()
     {
-        return *m_pArg;
+        return m_Arg;
     }
     
     oBOOL isRunning()
@@ -65,15 +57,14 @@ struct stCoThreadInfo {
     
     void printInfo()
     {
-        printf("stCoThreadInfo ==========> addr = %llx, running = %lu, \n", (oUINT64)this, m_Running);
-        m_pArg->printContext();
+        printf("stCoThreadInfo ==========> addr = %llx, running = %llu, \n", (oUINT64)this, m_Running);
+        m_Arg.printContext();
     }
 private:
-    const OSN_CO_ARG *m_pArg;
-    OSN_CO_ARG m_ArgCache;
+    OSN_CO_ARG m_Arg;
 };
 
-typedef std::map<std::thread::id, stCoThreadInfo> MAP_CO_THREAD_INFO;
-typedef MAP_CO_THREAD_INFO::iterator MAP_CO_THREAD_INFO_ITR;
+//typedef std::map<std::thread::id, stCoThreadInfo> MAP_CO_THREAD_INFO;
+//typedef MAP_CO_THREAD_INFO::iterator MAP_CO_THREAD_INFO_ITR;
 
 #endif /* osn_coroutine_head_h */

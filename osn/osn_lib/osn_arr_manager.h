@@ -20,22 +20,38 @@ enum eThreadType
     eThread_Saved,
 };
 
-template<class T, int ThreadType = eThread_Normal>
-class OsnArrManager {
+class OsnArrTools
+{
+    const static oUINT64 s_u64ArrPosMask = 0xffffffff;
+public:
     const static oINT32 s_nObjCountBegin = 750;
+    static oUINT64 getPos(oUINT64 u64Id)
+    {
+        return u64Id & s_u64ArrPosMask;
+    }
+};
+
+template<class T, int ThreadType = eThread_Normal>
+class OsnArrManager
+{
+    const static oUINT64 s_u64RepeatTimeMask = 32;
     static oINT32 s_nObjIdx;
 public:
+
+    
     virtual void init()
     {
-        if (0 == m_vecObjs.size()) {
-            m_vecObjs.resize(s_nObjCountBegin);
+        if (0 == m_vecObjs.size())
+        {
+            m_vecObjs.resize(OsnArrTools::s_nObjCountBegin);
         }
     }
     
     virtual ~OsnArrManager()
     {
         oUINT32 unSize = m_vecObjs.size();
-        for (oUINT32 i = 0; i < unSize; ++i) {
+        for (oUINT32 i = 0; i < unSize; ++i)
+        {
             SAFE_DELETE(m_vecObjs[i]);
         }
         m_vecObjs.clear();
@@ -43,12 +59,12 @@ public:
 
     OsnArrManager()
     {
-        m_vecObjs.resize(s_nObjCountBegin);
+        m_vecObjs.resize(OsnArrTools::s_nObjCountBegin);
     }
 
-    oUINT32 addObj(T *pObj)
+    oUINT64 addObj(T *pObj)
     {
-        oUINT32 unId = 0;
+        oUINT64 unId = 0;
         if (NULL != pObj)
         {
             unId = createId();
@@ -66,10 +82,11 @@ public:
     }
     
     template<class OBJ_T>
-    oUINT32 makeObj()
+    oUINT64 makeObj()
     {
-        oUINT32 unId = createId();
-        if (unId > 0) {
+        oUINT64 unId = createId();
+        if (unId > 0)
+        {
             T *pObj = new OBJ_T();
             addObject(unId, pObj);
             pObj->setId(unId);
@@ -78,11 +95,12 @@ public:
         return unId;
     }
 
-    virtual oUINT32 createId()
+    virtual oUINT64 createId()
     {
-		oUINT32 unId = 0;
+		oUINT64 unId = 0;
         lock();
-        if (m_queFreeIds.size() > 0) {
+        if (m_queFreeIds.size() > 0)
+        {
             unId = m_queFreeIds.front();
             m_queFreeIds.pop();
         }
@@ -94,42 +112,54 @@ public:
         return unId;    
     }
     
-    virtual void addObject(oUINT32 unId, T *pObj)
+    virtual void addObject(oUINT64 unId, T *pObj)
     {
         lock();
+        oUINT64 u64Pos = OsnArrTools::getPos(unId);
         oUINT32 nCurCount = m_vecObjs.size();
-        if (unId >= nCurCount) {
-            if (0 == nCurCount) {
-                nCurCount = s_nObjCountBegin;
+        while (u64Pos >= nCurCount)
+        {
+            if (0 == nCurCount)
+            {
+                nCurCount = OsnArrTools::s_nObjCountBegin;
             }
             m_vecObjs.resize(nCurCount * 2);
+            nCurCount = m_vecObjs.size();
         }
-        m_vecObjs[unId] = pObj;
+        m_vecObjs[u64Pos] = pObj;
         unlock();
     }
     
-    virtual T* getObject(oUINT32 unId) const
+    virtual T* getObject(oUINT64 unId) const
     {
         T *pObj = NULL;
         lock();
-        if (unId < m_vecObjs.size()) {
-            pObj = m_vecObjs[unId];
+        oUINT64 u64Pos = OsnArrTools::getPos(unId);
+        if (u64Pos < m_vecObjs.size())
+        {
+            pObj = m_vecObjs[u64Pos];
         }
         unlock();
         return pObj;
     }
     
-    virtual void removeObj(oUINT32 unId)
+    virtual void removeObj(oUINT64 unId)
     {
         T *pObj = NULL;
         lock();
-        if (m_vecObjs.size() > unId) {
-            pObj = m_vecObjs[unId];
-            m_vecObjs[unId] = NULL;
+        oUINT64 u64Pos = OsnArrTools::getPos(unId);
+        if (m_vecObjs.size() > u64Pos)
+        {
+            pObj = m_vecObjs[u64Pos];
+            m_vecObjs[u64Pos] = NULL;
+            oUINT64 u64Repeat = unId >> s_u64RepeatTimeMask;
+            ++u64Repeat;
+            unId = (u64Repeat << s_u64RepeatTimeMask) + u64Pos;
             m_queFreeIds.push(unId);
         }
         unlock();
-        if (NULL != pObj) {
+        if (NULL != pObj)
+        {
             pObj->exit();
             SAFE_DELETE(pObj);
         }
@@ -137,20 +167,22 @@ public:
 protected:
     void lock() const
     {
-        if (eThread_Saved == ThreadType) {
+        if (eThread_Saved == ThreadType)
+        {
             m_Mutex.lock();
         }
     }
     
     void unlock() const
     {
-        if (eThread_Saved == ThreadType) {
+        if (eThread_Saved == ThreadType)
+        {
             m_Mutex.unlock();
         }
     }
 protected:
     std::vector<T*> m_vecObjs;
-    std::queue<oUINT32> m_queFreeIds;
+    std::queue<oUINT64> m_queFreeIds;
     mutable OsnSpinLock m_Mutex;
 };
 

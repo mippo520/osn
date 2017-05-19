@@ -21,4 +21,9 @@ typedef float               oFLOAT32;
 typedef double              oFLOAT64;
 typedef bool                oBOOL;
 
+
+typedef oUINT64 ID_SERVICE;
+typedef oUINT64 ID_COROUTINE;
+typedef oUINT32 ID_SESSION;
+
 #endif /* osn_type_h */

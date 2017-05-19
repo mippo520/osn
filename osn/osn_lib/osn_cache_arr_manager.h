@@ -12,7 +12,8 @@
 #include <queue>
 
 template<class T, int ThreadType = eThread_Normal>
-class OsnCacheArrManager : public OsnArrManager<T, ThreadType> {
+class OsnCacheArrManager : public OsnArrManager<T, ThreadType>
+{
 public:
     OsnCacheArrManager()
         : m_unCachePercent(100)
@@ -21,7 +22,8 @@ public:
     
     virtual ~OsnCacheArrManager()
     {
-        while (m_queObjCache.size() > 0) {
+        while (m_queObjCache.size() > 0)
+        {
             T *pObj = m_queObjCache.front();
             SAFE_DELETE(pObj);
             m_queObjCache.pop();
@@ -31,19 +33,22 @@ public:
     void setCachePercent(oINT32 nPercent)
     {
         ATOM_SET(&m_unCachePercent, nPercent);
-        if (m_unCachePercent <= 0 || m_unCachePercent > 100) {
+        if (m_unCachePercent <= 0 || m_unCachePercent > 100)
+        {
             ATOM_SET(&m_unCachePercent, 100);
         }
     }
 
     template<class OBJ_T>
-    oUINT32 makeObj()
+    oUINT64 makeObj()
     {
-        oUINT32 unId = this->createId();
-        if (unId > 0) {
+        oUINT64 unId = this->createId();
+        if (unId > 0)
+        {
             OBJ_T *pObj = NULL;
             this->lock();
-            if (m_queObjCache.size() > 0) {
+            if (m_queObjCache.size() > 0)
+            {
                 pObj = m_queObjCache.front();
                 m_queObjCache.pop();
             }
@@ -59,17 +64,19 @@ public:
         return unId;
     }
     
-    virtual void removeObj(oUINT32 nId)
+    virtual void removeObj(oUINT64 nId)
     {
         this->lock();
-        if (this->m_vecObjs.size() > nId) {
-            T *pObj = this->m_vecObjs[nId];
+        oUINT64 u64Pos = OsnArrTools::getPos(nId);
+        if (this->m_vecObjs.size() > u64Pos)
+        {
+            T *pObj = this->m_vecObjs[u64Pos];
             pObj->exit();
             if (100 == m_unCachePercent || (this->m_vecObjs.size() > 0 && m_queObjCache.size() / this->m_vecObjs.size() < m_unCachePercent))
             {
                 m_queObjCache.push(pObj);
             }
-            this->m_vecObjs[nId] = NULL;
+            this->m_vecObjs[u64Pos] = NULL;
             this->m_queFreeIds.push(nId);
         }
         this->unlock();

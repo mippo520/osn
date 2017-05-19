@@ -14,12 +14,12 @@ const static oINT32 s_nBacklog = 32;
 class IOsnSocket
 {
 public:
-    virtual oINT32 listen(oUINT32 opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const = 0;
-    virtual void start(oUINT32 opaque, oINT32 sock) const = 0;
-    virtual void close(oUINT32 opaque, oINT32 sock) const = 0;
-    virtual void shutdown(oUINT32 opaque, oINT32 sock) const = 0;
+    virtual oINT32 listen(ID_SERVICE opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const = 0;
+    virtual void start(ID_SERVICE opaque, oINT32 sock) const = 0;
+    virtual void close(ID_SERVICE opaque, oINT32 sock) const = 0;
+    virtual void shutdown(ID_SERVICE opaque, oINT32 sock) const = 0;
     virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const = 0;
-    virtual oINT32 connect(oUINT32 opaque, const char *szAddr, oINT32 port) const = 0;
+    virtual oINT32 connect(ID_SERVICE opaque, const char *szAddr, oINT32 port) const = 0;
 };
 
 extern const IOsnSocket *g_Socket;

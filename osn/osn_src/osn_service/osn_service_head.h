@@ -15,25 +15,24 @@ enum eProtoType
 {
 	ePType_None = 0,
 	ePType_Response,
-	ePType_Lua,
+	ePType_User,
 	ePType_Client,
     ePType_Start,
     ePType_Socket,
-	ePType_Text,
 };
 
 struct stServiceMessage
 {
-	oUINT32 unSource;
-	oUINT32 unSession;
+	ID_SERVICE unSource;
+	ID_SESSION unSession;
 	oINT32	nType;
 	OsnPreparedStatement stmt;
 
-	stServiceMessage(const OsnPreparedStatement *pStmt)
+	stServiceMessage(const OsnPreparedStatement &stmt)
 		: unSource(0)
 		, unSession(0)
 		, nType(ePType_None)
-        , stmt(pStmt)
+        , stmt(stmt)
 	{}
     
     ~stServiceMessage() {}

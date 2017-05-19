@@ -27,7 +27,7 @@ private:
 	OsnSocket m_Socket;
     oINT32 m_SockId;
     oINT32 m_fd;
-    oUINT32 m_curCO;
+    ID_COROUTINE m_curCO;
 };
 
 AddService_Declare(TestService)

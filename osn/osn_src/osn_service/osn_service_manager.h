@@ -25,8 +25,9 @@
 class OsnService;
 class IServiceFactory;
 
-class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved>, public IOsnService {
-    static __thread oUINT32 s_unThreadCurService;
+class OsnServiceManager : public OsnArrManager<OsnService, eThread_Saved>, public IOsnService
+{
+    static __thread ID_SERVICE s_u64ThreadCurService;
     friend class OsnSingleton<OsnServiceManager>;
     friend class OsnService;
     friend class OsnStart;
@@ -40,24 +41,20 @@ public:
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
     void addThread();
 private:
-    virtual oUINT32 getCurService() const;
-    virtual void pushWarkingService(oUINT32 unId) const;
-    virtual oUINT32 sendMessage(oUINT32 unTargetId, oUINT32 unSource, oINT32 type, oUINT32 unSession, const OsnPreparedStatement *pMsg) const;
-    oUINT32 startService(const std::string &strServiceName, const OsnPreparedStatement &stmt);
+    virtual ID_SERVICE getCurService() const;
+    virtual void pushWarkingService(ID_SERVICE unId) const;
+    virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
+    ID_SERVICE startService(const std::string &strServiceName, const OsnPreparedStatement &stmt);
     void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
     void unregistDispatchFunc(oINT32 nPType);
-    oUINT32 pushMsg(oUINT32 unTargetId, stServiceMessage *pMsg) const;
     OsnService* popWorkingService();
-    void setCurService(oUINT32 unId);
-    oUINT32 genId();
+    void setCurService(ID_SERVICE unId);
+    ID_SESSION genId();
     void addServiceFactory(const std::string &strName, IServiceFactory *pFactory);
     void pushDylibHandle(void *handle);
 private:
-    mutable std::queue<oUINT32> m_queHadMsgIds;
+    mutable std::queue<ID_SERVICE> m_queHadMsgIds;
     mutable OsnSpinLock m_QueSpinLock;
-    
-//    std::map<std::thread::id, oUINT32> m_mapThreadCurService;
-//    OsnSpinLock m_CurServiceLock;
     
     oUINT64 m_u64DistroyCount;
     OsnSpinLock m_CountLock;
