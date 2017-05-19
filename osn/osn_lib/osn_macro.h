@@ -57,7 +57,7 @@ OsnService* SERVICE_NAME##Factory::create()	\
 const IOsn *g_Osn = NULL;	\
 const IOsnService *g_Service = NULL;	\
 const IOsnCoroutine *g_Coroutine = NULL;	\
-const IOsnSocket *g_Socket = NULL;	\
+const IOsnSocket *g_SocketDriver = NULL;	\
 extern "C"	\
 {	\
 	oBOOL init##SERVICE_NAME(const IOsn *pOsn	\
@@ -72,7 +72,7 @@ extern "C"	\
 			g_Osn = pOsn;	\
 			g_Service = pService;	\
 			g_Coroutine = pCoroutine;	\
-			g_Socket = pSocket;	\
+			g_SocketDriver = pSocket;	\
 			bRet = true;	\
 		}	\
 		else	\

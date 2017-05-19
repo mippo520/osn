@@ -16,15 +16,13 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "osn_prepared_statement.h"
-#include "osn_service_manager.h"
+#include "osn_service_head.h"
 
 #ifdef __APPLE__
 #include "osn_kqueue.h"
 #elif defined __linux__
 #include "osn_epoll.h"
 #endif
-
-const IOsnSocket *g_Socket = &g_SocketManager;
 
 OsnSocketManager::OsnSocketManager()
     : m_nEventFD(0)
@@ -759,7 +757,7 @@ void OsnSocketManager::shutdown(ID_SERVICE opaque, oINT32 sock) const
     sendRequest(request, 'K', sizeof(request.u.close));
 }
 
-oINT32 OsnSocketManager::listen(ID_SERVICE opaque, std::string &&strAddr, oINT32 port, oINT32 nBackLog) const
+oINT32 OsnSocketManager::listen(ID_SERVICE opaque, std::string &strAddr, oINT32 port, oINT32 nBackLog) const
 {
     oINT32 fd = doListen(strAddr, port, nBackLog);
     if (fd < 0)

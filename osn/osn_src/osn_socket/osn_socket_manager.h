@@ -14,11 +14,10 @@
 #include "osn_singleton.h"
 #include "osn_socket_data.h"
 #include "osn_socket_head.h"
-#include "I_osn_socket.h"
 
 class OsnPoll;
 
-class OsnSocketManager : public IOsnSocket
+class OsnSocketManager
 {
     const static oINT32 s_nMaxSocketShift = 16;
     const static oUINT64 s_u64MaxSocket = 1 << s_nMaxSocketShift;
@@ -32,12 +31,12 @@ public:
     void exit();
     void release();
     oINT32 poll();
-    virtual oINT32 listen(ID_SERVICE opaque, std::string &&strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const;
-    virtual void start(ID_SERVICE opaque, oINT32 sock) const;
-    virtual void close(ID_SERVICE opaque, oINT32 sock) const;
-    virtual void shutdown(ID_SERVICE opaque, oINT32 sock) const;
-    virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const;
-    virtual oINT32 connect(ID_SERVICE opaque, const char *szAddr, oINT32 port) const;
+    oINT32 listen(ID_SERVICE opaque, std::string &strAddr, oINT32 nPort, oINT32 nBackLog = s_nBacklog) const;
+    void start(ID_SERVICE opaque, oINT32 sock) const;
+    void close(ID_SERVICE opaque, oINT32 sock) const;
+    void shutdown(ID_SERVICE opaque, oINT32 sock) const;
+    oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const;
+    oINT32 connect(ID_SERVICE opaque, const char *szAddr, oINT32 port) const;
 private:
     friend class OsnSingleton<OsnSocketManager>;
     OsnSocketManager();

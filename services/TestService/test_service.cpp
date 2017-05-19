@@ -27,7 +27,7 @@ void TestService::start(const OsnPreparedStatement &stmt)
 {
 	RegistDispatchFunc(ePType_User, &TestService::dispatchLua, this);
 	m_Socket.init();
-    m_SockId = m_Socket.listen("127.0.0.1", 18523);
+    m_SockId = m_Socket.listen("", 18523);
     
     g_Osn->send(getId(), ePType_User);
     std::string strError = "";

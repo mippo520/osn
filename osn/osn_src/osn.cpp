@@ -57,7 +57,7 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
             printf("Osn::loadService Error! loal function init error! %s\n", dlerror());
             break;
         }
-        (*init)(this, g_Service, g_Coroutine, g_Socket);
+        (*init)(this, g_Service, g_Coroutine, g_SocketDriver);
         
 		std::string strGetFactoryFunc = "get";
 		strGetFactoryFunc += strServiceName;
