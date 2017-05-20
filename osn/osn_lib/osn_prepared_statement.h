@@ -102,8 +102,9 @@ public:
 	oINT64 getInt64(const oUINT8 index)const;
 	oFLOAT32 getFloat32(const oUINT8 index)const;
 	oFLOAT64 getFloat64(const oUINT8 index)const;
-	std::string getString(const oUINT8 index)const;
-	const oINT8* getBuffer(const oUINT8 index, oUINT32 &sz)const;
+    std::string getString(const oUINT8 index)const;
+    const char* getCharPtr(const oUINT8 index)const;
+    const oINT8* getBuffer(const oUINT8 index, oUINT32 &sz)const;
 
     oINT32 popBackInt32() const;
     oUINT32 popBackUInt32() const;
@@ -132,7 +133,8 @@ protected:
     mutable std::shared_ptr<VEC_DATA> m_vecStatementData;
 };
 
-typedef std::map<oINT32, VOID_STMT_FUNC> MAP_DISPATCH_FUNC;
+typedef std::function<void (ID_SERVICE, ID_SESSION, const OsnPreparedStatement &)> DISPATCH_FUNC;
+typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
 typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
 
 #endif//_PreparedStatement_h__

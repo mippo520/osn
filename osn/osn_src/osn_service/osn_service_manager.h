@@ -45,12 +45,13 @@ private:
     virtual void pushWarkingService(ID_SERVICE unId) const;
     virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
     ID_SERVICE startService(const std::string &strServiceName, const OsnPreparedStatement &stmt);
-    void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr);
+    void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr);
     void unregistDispatchFunc(oINT32 nPType);
     OsnService* popWorkingService();
     void setCurService(ID_SERVICE unId);
     ID_SESSION genId();
     void addServiceFactory(const std::string &strName, IServiceFactory *pFactory);
+    oBOOL isServiceFactoryExist(const std::string &strName);
     void pushDylibHandle(void *handle);
 private:
     mutable std::queue<ID_SERVICE> m_queHadMsgIds;

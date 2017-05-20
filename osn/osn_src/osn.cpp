@@ -28,9 +28,16 @@ Osn::~Osn()
 
 oBOOL Osn::loadService(const std::string &strServiceName) const
 {
+    m_LoadLock.lock();
     oBOOL bRet = false;
     
     do {
+        if (g_ServiceManager.isServiceFactoryExist(strServiceName))
+        {
+            bRet = true;
+            break;
+        }
+        
         typedef oBOOL (*DYLIB_INIT)(const IOsn *pOsn, const IOsnService *pService, const IOsnCoroutine *pCoroutine, const IOsnSocket *pSocket);
         typedef IServiceFactory* (*DYLIB_GET_FACTORY)();
         
@@ -74,6 +81,7 @@ oBOOL Osn::loadService(const std::string &strServiceName) const
         bRet = true;
     } while (false);
     
+    m_LoadLock.unlock();
     return bRet;
 }
 
@@ -113,6 +121,11 @@ const OsnPreparedStatement& Osn::call(ID_SERVICE addr, oINT32 type, const OsnPre
     return g_CorotineManager.yield(arg);
 }
 
+void Osn::redirect(ID_SERVICE addr, ID_SERVICE source, oINT32 type, ID_SESSION session, const OsnPreparedStatement &msg) const
+{
+    g_ServiceManager.sendMessage(addr, source, type, session, msg);
+}
+
 void Osn::ret(const OsnPreparedStatement &msg) const
 {
     msg.pushBackInt32(OsnService::eYT_Return);
@@ -149,7 +162,7 @@ oBOOL Osn::wakeup(ID_SERVICE unId) const
     return ret.getBool(0);
 }
 
-void Osn::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr) const
+void Osn::registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr) const
 {
     g_ServiceManager.registDispatchFunc(nPType, funcPtr);
 }

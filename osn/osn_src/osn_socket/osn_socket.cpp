@@ -292,7 +292,7 @@ void OsnSocket::retrieveBufferNode(stBufferNode *pNode)
     m_queBufferPool.push(pNode);
 }
 
-void OsnSocket::dispatchSocket(const OsnPreparedStatement &stmt)
+void OsnSocket::dispatchSocket(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
 	const stOsnSocketMsg *pSM = (stOsnSocketMsg*)stmt.getUInt64(0);
 	if (NULL != pSM)

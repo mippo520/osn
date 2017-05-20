@@ -28,7 +28,7 @@ OsnService::OsnService()
     m_vecCoroutineService.resize(OsnArrTools::s_nObjCountBegin);
 }
 
-void OsnService::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC func)
+void OsnService::registDispatchFunc(oINT32 nPType, DISPATCH_FUNC func)
 {
 	m_mapDispatchFunc[nPType] = func;
 }
@@ -71,7 +71,7 @@ void OsnService::exit()
     }
 }
 
-void OsnService::onStart(const OsnPreparedStatement &stmt)
+void OsnService::onStart(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
     oINT32 nType = stmt.popBackInt32();
     this->start(stmt);
@@ -83,16 +83,19 @@ void OsnService::onStart(const OsnPreparedStatement &stmt)
 
 void OsnService::dispatch(const OsnPreparedStatement &stmt)
 {
-	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(stmt.popBackInt32());
+    ID_SESSION session = stmt.popBackUInt32();
+    ID_SERVICE source = stmt.popBackUInt64();
+    oINT32 type = stmt.popBackInt32();
+	MAP_DISPATCH_FUNC_ITR itr = m_mapDispatchFunc.find(type);
 	if (itr != m_mapDispatchFunc.end())
 	{
-        itr->second(stmt);
+        itr->second(source, session, stmt);
 	}
 }
 
 void OsnService::init(const OsnPreparedStatement &stmt)
 {
-	registDispatchFunc(ePType_Start, std::bind(&OsnService::onStart, this, std::placeholders::_1));
+	registDispatchFunc(ePType_Start, std::bind(&OsnService::onStart, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     if (g_Service->getCurService() > 0)
     {
         stmt.pushBackInt32(eYT_Call);
@@ -151,8 +154,10 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 			ID_COROUTINE co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
             setCoroutineSession(co, pMsg->unSession);
             setCoroutineService(co, pMsg->unSource);
-			pMsg->stmt.pushBackInt32(pMsg->nType);
-			nType = suspend(co, g_Coroutine->resume(co, pMsg->stmt));
+            pMsg->stmt.pushBackInt32(pMsg->nType);
+            pMsg->stmt.pushBackUInt64(pMsg->unSource);
+            pMsg->stmt.pushBackUInt32(pMsg->unSession);
+            nType = suspend(co, g_Coroutine->resume(co, pMsg->stmt));
 		}
 
         SAFE_DELETE(pMsg);
@@ -350,9 +355,9 @@ ID_COROUTINE OsnService::popFromCoroutinePool()
 void OsnService::setCoroutineSession(ID_COROUTINE co, ID_SESSION session)
 {
     oUINT64 pos = OsnArrTools::getPos(co);
-    if (pos > m_vecCoroutineSession.size())
+    if (pos >= m_vecCoroutineSession.size())
     {
-        m_vecCoroutineSession.resize(pos);
+        m_vecCoroutineSession.resize(pos + 1);
     }
     m_vecCoroutineSession[pos] = session;
 }
@@ -365,24 +370,34 @@ ID_SESSION OsnService::getCoroutineSession(ID_COROUTINE co)
     {
         session = m_vecCoroutineSession[pos];
     }
+    else
+    {
+        assert(0);
+    }
     return session;
 }
 
 void OsnService::setCoroutineService(ID_COROUTINE co, ID_SERVICE service)
 {
-    if (co > m_vecCoroutineService.size())
+    oUINT64 pos = OsnArrTools::getPos(co);
+    if (pos >= m_vecCoroutineService.size())
     {
-        m_vecCoroutineService.resize(co);
+        m_vecCoroutineService.resize(pos + 1);
     }
-    m_vecCoroutineService[co] = service;
+    m_vecCoroutineService[pos] = service;
 }
 
 ID_SERVICE OsnService::getCoroutineService(ID_COROUTINE co)
 {
     ID_SERVICE service = 0;
-    if (m_vecCoroutineService.size() > co)
+    oUINT64 pos = OsnArrTools::getPos(co);
+    if (m_vecCoroutineService.size() > pos)
     {
-        service = m_vecCoroutineService[co];
+        service = m_vecCoroutineService[pos];
+    }
+    else
+    {
+        assert(0);
     }
     return service;
 }

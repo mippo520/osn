@@ -17,6 +17,8 @@ public:
     Gate();
     ~Gate();
     virtual void start(const OsnPreparedStatement &stmt) override;
+    void dispatchUser(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
+    
 };
 
 AddService_Declare(Gate)

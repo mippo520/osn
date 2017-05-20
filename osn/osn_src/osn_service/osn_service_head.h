@@ -38,7 +38,7 @@ struct stServiceMessage
     ~stServiceMessage() {}
 };
 
-#define RegistDispatchFunc(type, func, ptr) g_Osn->registDispatchFunc(type, std::bind(func, ptr, std::placeholders::_1));
+#define RegistDispatchFunc(type, func, ptr) g_Osn->registDispatchFunc(type, std::bind(func, ptr, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 #define UnregistDispatchFunc(type) g_Osn->unregistDispatchFunc(type)
 
 #endif /* osn_service_head */

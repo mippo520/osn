@@ -14,7 +14,7 @@ TestService2::~TestService2()
 {
 }
 
-void TestService2::dispatchLua(const OsnPreparedStatement &stmt)
+void TestService2::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
 //    printf("ret fun ========>");
 //	stmt.printContext();
@@ -82,17 +82,19 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    if (1 == getId())
 //    {
 //        sleep(1);
-    static oBOOL b = false;
-    if (!b)
-    {
-        b = true;
-        g_Osn->startService("TestService");
-        printf("start TestService!\n");
-    }
+
+    ID_SERVICE ts = g_Osn->startService("TestService");
+    m_Gate = g_Osn->startService("Gate");
+    printf("start TestService!\n");
     
     OsnPreparedStatement msg;
-    msg.setInt32(0, 100);
-    g_Osn->send(getId(), ePType_User, msg);
+    msg.setUInt64(0, getId());
+    msg.setUInt64(1, m_Gate);
+    msg.setString(2, "abc");
+    const OsnPreparedStatement &ret = g_Osn->call(ts, ePType_User, msg);
+    printf("call finish! %s!\n", ret.getCharPtr(0));
+    g_Osn->exit();
+
     
 
 //    }

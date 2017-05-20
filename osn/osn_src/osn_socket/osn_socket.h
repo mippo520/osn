@@ -124,7 +124,7 @@ private:
     void returnFreeNode(stSocketBuffer &buffer);
     oBOOL checkSep(LST_BUFFER_NODE_ITR itrBegin, const LST_BUFFER_NODE_ITR &itrEnd, oINT32 from, const char *szSep, oINT32 sepLen);
     
-	void dispatchSocket(const OsnPreparedStatement &stmt);
+	void dispatchSocket(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
 	void funcSocketData(const stOsnSocketMsg *msg);
 	void funcSocketConnect(const stOsnSocketMsg *msg);
 	void funcSocketClose(const stOsnSocketMsg *msg);

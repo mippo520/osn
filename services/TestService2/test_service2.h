@@ -11,7 +11,9 @@ public:
 public:
 	virtual void start(const OsnPreparedStatement &stmt) override;
 	virtual void exit() override;
-	void dispatchLua(const OsnPreparedStatement &stmt);
+	void dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
+private:
+    ID_SERVICE m_Gate;
 };
 
 AddService_Declare(TestService2)

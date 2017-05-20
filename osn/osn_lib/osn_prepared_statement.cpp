@@ -502,6 +502,28 @@ std::string OsnPreparedStatement::getString( const oUINT8 index ) const
 	return value;
 }
 
+const char* OsnPreparedStatement::getCharPtr(const oUINT8 index) const
+{
+    const char *sz = NULL;
+    if ( index < 0 || index >= m_vecStatementData->size() )
+    {
+        OsnPreparedStatement::errorInvalidIndex(__FUNCTION__, index);
+    }
+    else
+    {
+        if (TYPE_STRING == (*m_vecStatementData)[index].type)
+        {
+            sz = (*m_vecStatementData)[index].str.c_str();
+        }
+        else
+        {
+            OsnPreparedStatement::errorTypeMismatch(__FUNCTION__, index, (*m_vecStatementData)[index].type);
+            assert(0);
+        }
+    }
+    return sz;
+}
+
 VOID_STMT_FUNC OsnPreparedStatement::getFunction(const oUINT8 index)const
 {
     VOID_STMT_FUNC func;

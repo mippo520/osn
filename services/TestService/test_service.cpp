@@ -26,42 +26,47 @@ TestService::~TestService()
 void TestService::start(const OsnPreparedStatement &stmt)
 {
 	RegistDispatchFunc(ePType_User, &TestService::dispatchLua, this);
-	m_Socket.init();
-    m_SockId = m_Socket.listen("", 18523);
-    
-    g_Osn->send(getId(), ePType_User);
-    std::string strError = "";
-    m_Socket.start(m_SockId, strError, std::bind(&TestService::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+//	m_Socket.init();
+//    m_SockId = m_Socket.listen("", 18523);
+//    
+//    g_Osn->send(getId(), ePType_User);
+//    std::string strError = "";
+//    m_Socket.start(m_SockId, strError, std::bind(&TestService::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);
 //	m_Socket.write(fd, "aaaaa", 5);
     printf("TestService::start!\n");
 }
 
-void TestService::dispatchLua(const OsnPreparedStatement &stmt)
+void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
-    while (true)
-    {
-        if (m_fd > 0)
-        {
-            oINT32 nSize = 0;
-            oINT8 *pBuff = m_Socket.readLine(m_fd, nSize);
-            if (NULL == pBuff)
-            {
-                m_fd = 0;
-            }
-            else
-            {
-                printf("buff Size = %d\n", nSize);
-                SAFE_FREE(pBuff);
-            }
-
-        }
-        else
-        {
-            m_curCO = g_Coroutine->running();
-            g_Osn->wait(m_curCO);
-        }
-    }
+    ID_SERVICE ts2 = stmt.getUInt64(0);
+    ID_SERVICE gate = stmt.getUInt64(1);
+    g_Osn->redirect(gate, source, ePType_User, session, stmt);
+    printf("redirect finish!\n");
+    g_Osn->exit();
+//    while (true)
+//    {
+//        if (m_fd > 0)
+//        {
+//            oINT32 nSize = 0;
+//            oINT8 *pBuff = m_Socket.readLine(m_fd, nSize);
+//            if (NULL == pBuff)
+//            {
+//                m_fd = 0;
+//            }
+//            else
+//            {
+//                printf("buff Size = %d\n", nSize);
+//                SAFE_FREE(pBuff);
+//            }
+//
+//        }
+//        else
+//        {
+//            m_curCO = g_Coroutine->running();
+//            g_Osn->wait(m_curCO);
+//        }
+//    }
 }
 
 void TestService::acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz)

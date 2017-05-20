@@ -48,7 +48,7 @@ protected:
 private:
     virtual void start(const OsnPreparedStatement &stmt) = 0;
     
-    void onStart(const OsnPreparedStatement &stmt);
+    void onStart(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
     void dispatch(const OsnPreparedStatement &stmt);
     void init(const OsnPreparedStatement &stmt);
     oBOOL getIsInGlobal();
@@ -62,7 +62,7 @@ private:
     ID_COROUTINE popFromCoroutinePool();
     stServiceMessage* popMessage();
     oINT32 dispatchWakeup();
-	void registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC func);
+	void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC func);
     void unregistDispatchFunc(oINT32 nPType);
     
     void setCoroutineSession(ID_COROUTINE co, ID_SESSION session);

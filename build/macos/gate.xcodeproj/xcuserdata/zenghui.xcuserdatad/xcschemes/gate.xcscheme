@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F46B41EB1ECEEA3C00E44999"
-               BuildableName = "libgate.dylib"
-               BlueprintName = "gate"
-               ReferencedContainer = "container:gate.xcodeproj">
+               BlueprintIdentifier = "F46B422B1ED0148F00E44999"
+               BuildableName = "libGate.dylib"
+               BlueprintName = "Gate"
+               ReferencedContainer = "container:Gate.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F46B41EB1ECEEA3C00E44999"
-            BuildableName = "libgate.dylib"
-            BlueprintName = "gate"
-            ReferencedContainer = "container:gate.xcodeproj">
+            BlueprintIdentifier = "F46B422B1ED0148F00E44999"
+            BuildableName = "libGate.dylib"
+            BlueprintName = "Gate"
+            ReferencedContainer = "container:Gate.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F46B41EB1ECEEA3C00E44999"
-            BuildableName = "libgate.dylib"
-            BlueprintName = "gate"
-            ReferencedContainer = "container:gate.xcodeproj">
+            BlueprintIdentifier = "F46B422B1ED0148F00E44999"
+            BuildableName = "libGate.dylib"
+            BlueprintName = "Gate"
+            ReferencedContainer = "container:Gate.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

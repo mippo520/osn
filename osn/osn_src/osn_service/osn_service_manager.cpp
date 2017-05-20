@@ -42,6 +42,17 @@ OsnServiceManager::~OsnServiceManager()
     }
 }
 
+oBOOL OsnServiceManager::isServiceFactoryExist(const std::string &strName)
+{
+    oBOOL bRet = false;
+    MAP_SERVICE_FACTORY_ITR itr = m_mapServiceFactory.find(strName);
+    if (itr != m_mapServiceFactory.end())
+    {
+        bRet = true;
+    }
+    return bRet;
+}
+
 void OsnServiceManager::addServiceFactory(const std::string &strName, IServiceFactory *pFactory)
 {
     if (NULL == pFactory)
@@ -57,6 +68,7 @@ void OsnServiceManager::addServiceFactory(const std::string &strName, IServiceFa
     else
     {
         printf("OsnServiceManager::addServiceFactory Error! %s factory is exist!\n", strName.c_str());
+        assert(0);
     }
 }
 
@@ -112,6 +124,7 @@ ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSo
     else
     {
         printf("OsnServiceManager::pushMsg Error! can not found service, id is %llu\n", unTargetId);
+        assert(0);
     }
     
     return unRet;
@@ -142,7 +155,7 @@ void OsnServiceManager::pushWarkingService(ID_SERVICE unId) const
     }
 }
 
-void OsnServiceManager::registDispatchFunc(oINT32 nPType, VOID_STMT_FUNC funcPtr)
+void OsnServiceManager::registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr)
 {
 	ID_SERVICE unId = getCurService();
 	OsnService *pService = getObject(unId);
