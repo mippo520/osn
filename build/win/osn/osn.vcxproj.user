@@ -6,5 +6,6 @@
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteDebuggerCommandArguments>TestService</RemoteDebuggerCommandArguments>
     <RemoteDebuggerWorkingDirectory>$(RemoteRootDir)/bin/$(Configuration)</RemoteDebuggerWorkingDirectory>
+    <RemoteDebuggingMode>gdb</RemoteDebuggingMode>
   </PropertyGroup>
 </Project>
