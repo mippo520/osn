@@ -41,17 +41,20 @@ oBOOL OsnKqueue::add(oINT32 kfd, oINT32 sock, void *ud)
 {
     struct kevent ke;
     EV_SET(&ke, sock, EVFILT_READ, EV_ADD, 0, 0, ud);
-    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1) {
+    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1 || ke.flags & EV_ERROR)
+    {
         return false;
     }
     EV_SET(&ke, sock, EVFILT_WRITE, EV_ADD, 0, 0, ud);
-    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1) {
+    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1 || ke.flags & EV_ERROR)
+    {
         EV_SET(&ke, sock, EVFILT_READ, EV_DELETE, 0, 0, NULL);
         kevent(kfd, &ke, 1, NULL, 0, NULL);
         return false;
     }
     EV_SET(&ke, sock, EVFILT_WRITE, EV_DISABLE, 0, 0, ud);
-    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1) {
+    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1 || ke.flags & EV_ERROR)
+    {
         del(kfd, sock);
         return false;
     }
@@ -78,6 +81,7 @@ oINT32 OsnKqueue::wait(oINT32 kfd, stSocketEvent *pEvent, oINT32 nMax)
         oUINT32 filter = ev[i].filter;
         pEvent[i].bWrite = (filter == EVFILT_WRITE);
         pEvent[i].bRead = (filter == EVFILT_READ);
+        pEvent[i].bError = false;   // kevent has not error event
     }
     
     return n;
@@ -87,7 +91,7 @@ void OsnKqueue::write(oINT32 kfd, oINT32 sock, void *ud, oBOOL enable)
 {
     struct kevent ke;
     EV_SET(&ke, sock, EVFILT_WRITE, enable ? EV_ENABLE : EV_DISABLE, 0, 0, ud);
-    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1)
+    if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1 || ke.flags & EV_ERROR)
     {
         // todo: check error
     }

@@ -62,6 +62,7 @@ oINT32 OsnEpoll::wait(oINT32 efd, stSocketEvent *pEvent, oINT32 max)
 		oUINT32 flag = ev[i].events;
 		pEvent[i].bWrite = (flag & EPOLLOUT) != 0;
 		pEvent[i].bRead = (flag & EPOLLIN) != 0;
+		pEvent[i].bError = (flag & EPOLLERR) != 0;
 	}
 
 	return n;

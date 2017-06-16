@@ -271,6 +271,26 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
                     }
                     return nType;
                 }
+                if (event.bError)
+                {
+                    oINT32 error;
+                    socklen_t len = sizeof(error);
+                    oINT32 code = getsockopt(pSocket->getFd(), SOL_SOCKET, SO_ERROR, &error, &len);
+                    if (code < 0)
+                    {
+                        result.data = strerror(errno);
+                    }
+                    else if (0 != code)
+                    {
+                        result.data = strerror(error);
+                    }
+                    else
+                    {
+                        result.data = "Unknown error!";
+                    }
+                    forceClose(*pSocket, result);
+                    return eSockStatus_Error;
+                }
                 break;
         }
     }

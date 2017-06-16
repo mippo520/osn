@@ -208,11 +208,13 @@ struct stSocketEvent
     OsnSocketData *socket;
     oBOOL bRead;
     oBOOL bWrite;
+    oBOOL bError;
     
     stSocketEvent()
         : socket(NULL)
         , bRead(false)
         , bWrite(false)
+        , bError(false)
     {}
 };
 
