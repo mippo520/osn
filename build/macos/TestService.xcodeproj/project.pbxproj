@@ -30,6 +30,7 @@
 		F42EE58A1EC6FA1F00FF3F2D /* I_osn_service_factory.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5891EC6FA1F00FF3F2D /* I_osn_service_factory.h */; };
 		F42EE5DC1EC93BC400FF3F2D /* test_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F42EE5DA1EC93BC400FF3F2D /* test_service.cpp */; };
 		F42EE5DD1EC93BC400FF3F2D /* test_service.h in Headers */ = {isa = PBXBuildFile; fileRef = F42EE5DB1EC93BC400FF3F2D /* test_service.h */; };
+		F4B730331F07A37800711BDB /* osn_gate_head.h in Headers */ = {isa = PBXBuildFile; fileRef = F4B730321F07A37800711BDB /* osn_gate_head.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		F42EE5891EC6FA1F00FF3F2D /* I_osn_service_factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_service_factory.h; path = ../../osn/osn_interface/I_osn_service_factory.h; sourceTree = "<group>"; };
 		F42EE5DA1EC93BC400FF3F2D /* test_service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_service.cpp; path = ../../services/TestService/test_service.cpp; sourceTree = "<group>"; };
 		F42EE5DB1EC93BC400FF3F2D /* test_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_service.h; path = ../../services/TestService/test_service.h; sourceTree = "<group>"; };
+		F4B730321F07A37800711BDB /* osn_gate_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_gate_head.h; path = ../../services/gate/osn_gate_head.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 		F42EE5541EC5B0B000FF3F2D /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F4B730321F07A37800711BDB /* osn_gate_head.h */,
 				F42EE5DA1EC93BC400FF3F2D /* test_service.cpp */,
 				F42EE5DB1EC93BC400FF3F2D /* test_service.h */,
 			);
@@ -165,6 +168,7 @@
 			files = (
 				F42EE5601EC5B27E00FF3F2D /* osn_service_head.h in Headers */,
 				F42EE5421EC5973300FF3F2D /* osn_prepared_statement.h in Headers */,
+				F4B730331F07A37800711BDB /* osn_gate_head.h in Headers */,
 				F42EE58A1EC6FA1F00FF3F2D /* I_osn_service_factory.h in Headers */,
 				F42EE5801EC5ED0100FF3F2D /* I_osn_service.h in Headers */,
 				F42EE56F1EC5B3E700FF3F2D /* osn_cache_arr_manager.h in Headers */,

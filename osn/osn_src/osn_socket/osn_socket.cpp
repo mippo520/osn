@@ -191,7 +191,7 @@ oINT8* OsnSocket::read(oINT32 sock, oINT32 &nSize)
     {
         if (info.bConnected)
         {
-            printf("OsnSocket::read Error! socket connected but not enough data to read! read size = %d, data size = %d!", nSize, info.buffer.size);
+            printf("OsnSocket::read Error! socket connected but not enough data to read! read size = %d, data size = %d!\n", nSize, info.buffer.size);
             assert(false);
         }
         clearBuffer(info.buffer);
@@ -300,6 +300,10 @@ void OsnSocket::dispatchSocket(ID_SERVICE source, ID_SESSION session, const OsnP
         if (pSM->type > eOST_None && pSM->type <= eOST_Warning)
         {
             m_vecDispatchFunc[pSM->type](pSM);
+        }
+        else
+        {
+            printf("OsnSocket::dispatchSocket Error! message type %d error!\n", pSM->type);
         }
 	}
     SAFE_DELETE(pSM);
@@ -577,7 +581,7 @@ void OsnSocket::funcSocketData(const stOsnSocketMsg *msg)
     {
         if (info.nBuffLimit > 0 && sz > info.nBuffLimit)
         {
-            printf("OsnSocket::funcSocketData Error! socket buffer overflow: fd=%d size=%d", msg->id, sz);
+            printf("OsnSocket::funcSocketData Error! socket buffer overflow: fd=%d size=%d\n", msg->id, sz);
             clearBuffer(info.buffer);
             g_SocketDriver->close(msg->id);
         }

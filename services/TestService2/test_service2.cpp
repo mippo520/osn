@@ -2,6 +2,7 @@
 #include "I_osn_service.h"
 #include <unistd.h>
 #include "I_osn_coroutine.h"
+#include "osn_gate_head.h"
 
 AddService_Instance(TestService2)
 
@@ -16,6 +17,10 @@ TestService2::~TestService2()
 
 void TestService2::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
+    g_Osn->exit();
+//    g_Osn->ret();
+//    g_Osn->ret();
+    return;
 //    printf("ret fun ========>");
 //	stmt.printContext();
 //	OsnPreparedStatement msg;
@@ -83,17 +88,26 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    {
 //        sleep(1);
 
-    ID_SERVICE ts = g_Osn->startService("TestService");
+//    OsnPreparedStatement arg;
+//    arg.setUInt64(0, g_Osn->self());
+//    ID_SERVICE ts = g_Osn->startService("TestService", arg);
     m_Gate = g_Osn->startService("Gate");
-    printf("start TestService!\n");
+    OsnPreparedStatement arg;
+    arg.setInt32(0, osn_gate::Func_Open);
+    arg.setString(1, "");
+    arg.setInt32(2, 12366);
+    g_Osn->call(m_Gate, ePType_User, arg);
+    printf("gate open finish!\n");
     
-    OsnPreparedStatement msg;
-    msg.setUInt64(0, getId());
-    msg.setUInt64(1, m_Gate);
-    msg.setString(2, "abc");
-    const OsnPreparedStatement &ret = g_Osn->call(ts, ePType_User, msg);
-    printf("call finish! %s!\n", ret.getCharPtr(0));
-    g_Osn->exit();
+//    printf("start TestService!\n");
+    
+//    OsnPreparedStatement msg;
+//    msg.setUInt64(0, getId());
+//    msg.setUInt64(1, m_Gate);
+//    msg.setString(2, "abc");
+//    const OsnPreparedStatement &ret = g_Osn->call(ts, ePType_User, msg);
+//    printf("call finish! %s!\n", ret.getCharPtr(0));
+//    g_Osn->exit();
 
     
 
@@ -103,5 +117,5 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 void TestService2::exit()
 {
     OsnService::exit();
-    g_Osn->startService("TestService2");
+//    g_Osn->startService("TestService2");
 }

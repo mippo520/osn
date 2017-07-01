@@ -13,6 +13,7 @@
 #include "osn_cache_arr_manager.h"
 #include "osn_singleton.h"
 #include "I_osn_coroutine.h"
+#include "osn_spin_lock.h"
 
 class OsnCoroutine;
 
@@ -22,6 +23,8 @@ class OsnCoroutineManager : public IOsnCoroutine
     friend class OsnSingleton<OsnCoroutineManager>;
     friend class OsnCoroutine;
     static __thread stCoThreadInfo *s_pThreadInfo;
+    static oUINT64 s_u64CoroutineCount;
+    static OsnSpinLock s_CoCountLock;
     
     OsnCoroutineManager();
 public:

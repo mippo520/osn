@@ -12,6 +12,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <queue>
+#include <list>
 #include <string>
 #include "osn_prepared_statement.h"
 #include "I_osn_socket.h"
@@ -156,7 +157,7 @@ struct stOsnSocketMsg
 {
     oINT32 type;
     oINT32 id;
-    oINT32 ud;
+    oINT32 ud;  // for accept, ud is new connection id
     mutable oINT8 *pBuffer;
 	mutable oINT32 nSize;
     
@@ -183,6 +184,8 @@ struct stOsnSocketMsg
         nSize = 0;
     }
 };
+
+typedef std::function<void(const stOsnSocketMsg *)> SOCKET_MSG_FUNC;
 
 struct stWriteBuff
 {
@@ -225,6 +228,44 @@ union sockaddr_all
     sockaddr_in6 v6;
 };
 
+#define OSN_NETPACK_QUEUESIZE 1024
+#define OSN_NETPACK_HASHSIZE 4096
+#define OSN_NETPACK_SMALLSTRING 2048
+
+struct stNetPack
+{
+    oINT32 id;
+    oINT32 size;
+    oUINT8 *pBuffer;
+    
+    stNetPack()
+        : id(-1)
+        , size(0)
+        , pBuffer(NULL)
+    {}
+    
+};
+
+struct stUncomlete
+{
+    stNetPack pack;
+    oINT32 read;
+    oINT32 header;
+    
+    stUncomlete()
+        : read(0)
+        , header(0)
+    {}
+};
+
+typedef std::list<stUncomlete*> LST_SOCK_UNCOMPLETE;
+typedef std::queue<stNetPack> QUE_NETPACK;
+
+struct stOsnSockQueue
+{
+    LST_SOCK_UNCOMPLETE hash[OSN_NETPACK_HASHSIZE];
+    QUE_NETPACK queNetpack;
+};
 
 #define SOCKET_START_FUNC_BIND() std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 

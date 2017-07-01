@@ -33,8 +33,30 @@ class OsnService {
     typedef std::function<void (const OsnPreparedStatement &)> OSN_SERVICE_CO_FUNC;
     static std::queue<ID_COROUTINE> s_queCoroutine;
     static OsnSpinLock s_CoQueSpinLock;
-    static oUINT64 s_u64CoroutineCount;
-    static OsnSpinLock s_CoCountLock;
+    
+    struct stMsgCoroutineInfo
+    {
+        ID_SESSION session;
+        ID_SERVICE source;
+        
+        stMsgCoroutineInfo()
+            : session(0)
+            , source(0)
+        {}
+        
+        void clear()
+        {
+            session = 0;
+            source = 0;
+        }
+        
+        oBOOL isNone()
+        {
+            return 0 == session and 0 == source;
+        }
+        
+        static stMsgCoroutineInfo NONE;
+    };
 public:
     virtual ~OsnService();
 protected:
@@ -65,11 +87,9 @@ private:
 	void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC func);
     void unregistDispatchFunc(oINT32 nPType);
     
-    void setCoroutineSession(ID_COROUTINE co, ID_SESSION session);
-    ID_SESSION getCoroutineSession(ID_COROUTINE co);
-    
-    void setCoroutineService(ID_COROUTINE co, ID_SERVICE service);
-    ID_SERVICE getCoroutineService(ID_COROUTINE co);
+    void setCoroutineMsg(ID_COROUTINE co, ID_SESSION session, ID_SERVICE source);
+    stMsgCoroutineInfo& getCoroutineMsg(ID_COROUTINE co);
+    void removeCoroutineMsg(ID_COROUTINE co);
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;
@@ -78,9 +98,8 @@ private:
     
     MEMBER_VALUE(ID_SERVICE, Id);
     ID_SESSION m_unSessionCount;
-    
-    std::vector<ID_SESSION> m_vecCoroutineSession;
-    std::vector<ID_SERVICE> m_vecCoroutineService;
+    std::map<ID_COROUTINE, stMsgCoroutineInfo> m_mapCoroutineMsg;
+    std::vector<stMsgCoroutineInfo> m_vecUnreturnCall;
 
 	typedef std::map<ID_SESSION, ID_COROUTINE> MAP_SESSION_CO;
 	typedef MAP_SESSION_CO::iterator MAP_SESSION_CO_ITR;

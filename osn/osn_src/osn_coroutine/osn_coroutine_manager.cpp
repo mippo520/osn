@@ -15,6 +15,8 @@
 
 const IOsnCoroutine *g_Coroutine = &g_CorotineManager;
 __thread stCoThreadInfo *OsnCoroutineManager::s_pThreadInfo = NULL;
+oUINT64 OsnCoroutineManager::s_u64CoroutineCount = 0;
+OsnSpinLock OsnCoroutineManager::s_CoCountLock;
 
 OsnCoroutineManager::OsnCoroutineManager()
 {
@@ -46,6 +48,10 @@ ID_COROUTINE OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func) const
     {
         pCo->setFunc(func);
         pCo->setState(eCS_Ready);
+        s_CoCountLock.lock();
+        ++s_u64CoroutineCount;
+        printf("OsnCoroutineManager::create ====> coroutine count is %llu\n", s_u64CoroutineCount);
+        s_CoCountLock.unlock();
     }
     return unId;
 }
@@ -60,6 +66,10 @@ oBOOL OsnCoroutineManager::destroy(ID_COROUTINE co) const
         }
         m_arrCoroutine.removeObj(co);
         bRet = true;
+        s_CoCountLock.lock();
+        --s_u64CoroutineCount;
+        s_CoCountLock.unlock();
+        printf("OsnCoroutineManager::destroy ====> coroutine count is %llu\n", s_u64CoroutineCount);
     } while (false);
     return bRet;
 }

@@ -100,7 +100,7 @@ ID_SERVICE Osn::startService(const std::string &strServiceName, const OsnPrepare
         unId = g_ServiceManager.startService(strServiceName, stmt);
         if (0 == unId)
         {
-            printf("Osn::startService Error! %s can not found!", strServiceName.c_str());
+            printf("Osn::startService Error! %s can not found!\n", strServiceName.c_str());
         }
     } while (false);
 
@@ -115,10 +115,17 @@ ID_SESSION Osn::send(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &m
 const OsnPreparedStatement& Osn::call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg) const
 {
     ID_SESSION unSession = g_ServiceManager.sendMessage(addr, g_ServiceManager.getCurService(), type, 0, msg);
-    OSN_CO_ARG arg;
-    arg.setUInt32(0, unSession);
-    arg.pushBackInt32(OsnService::eYT_Call);
-    return g_CorotineManager.yield(arg);
+    if (unSession > 0)
+    {
+        OSN_CO_ARG arg;
+        arg.setUInt32(0, unSession);
+        arg.pushBackInt32(OsnService::eYT_Call);
+        return g_CorotineManager.yield(arg);
+    }
+    else
+    {
+        return STMT_NONE;
+    }
 }
 
 void Osn::redirect(ID_SERVICE addr, ID_SERVICE source, oINT32 type, ID_SESSION session, const OsnPreparedStatement &msg) const
@@ -172,3 +179,7 @@ void Osn::unregistDispatchFunc(oINT32 nPType) const
     g_ServiceManager.unregistDispatchFunc(nPType);
 }
 
+ID_SERVICE Osn::self() const
+{
+    return g_ServiceManager.getCurService();
+}

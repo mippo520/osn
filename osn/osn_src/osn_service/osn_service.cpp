@@ -16,16 +16,13 @@
 
 std::queue<ID_COROUTINE> OsnService::s_queCoroutine;
 OsnSpinLock OsnService::s_CoQueSpinLock;
-oUINT64 OsnService::s_u64CoroutineCount = 0;
-OsnSpinLock OsnService::s_CoCountLock;
+OsnService::stMsgCoroutineInfo OsnService::stMsgCoroutineInfo::NONE;
 
 OsnService::OsnService()
     : m_IsInGlobal(false)
     , m_Id(0)
     , m_unSessionCount(0)
 {
-    m_vecCoroutineSession.resize(OsnArrTools::s_nObjCountBegin);
-    m_vecCoroutineService.resize(OsnArrTools::s_nObjCountBegin);
 }
 
 void OsnService::registDispatchFunc(oINT32 nPType, DISPATCH_FUNC func)
@@ -60,6 +57,7 @@ OsnService::~OsnService()
 
 void OsnService::exit()
 {
+    // destroy the coroutines yielded in service
     MAP_SESSION_CO_ITR itr = m_mapSessionCoroutine.begin();
     for (; itr != m_mapSessionCoroutine.end(); ++itr)
     {
@@ -68,6 +66,23 @@ void OsnService::exit()
         {
             g_Coroutine->destroy(co);
         }
+    }
+    
+    // return the call coroutines by default value
+    std::map<ID_COROUTINE, stMsgCoroutineInfo>::iterator msgItr = m_mapCoroutineMsg.begin();
+    for (; msgItr != m_mapCoroutineMsg.end(); ++msgItr)
+    {
+        stMsgCoroutineInfo &info = msgItr->second;
+        if (0 != info.source and 0 != info.session)
+        {
+            g_Service->sendMessage(info.source, 0, ePType_Response, info.session);
+        }
+    }
+    
+    for (oUINT32 i = 0; i < m_vecUnreturnCall.size(); ++i)
+    {
+        stMsgCoroutineInfo &info = m_vecUnreturnCall[i];
+        g_Service->sendMessage(info.source, 0, ePType_Response, info.session);
     }
 }
 
@@ -152,8 +167,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 		else
 		{
 			ID_COROUTINE co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
-            setCoroutineSession(co, pMsg->unSession);
-            setCoroutineService(co, pMsg->unSource);
+            setCoroutineMsg(co, pMsg->unSession, pMsg->unSource);
             pMsg->stmt.pushBackInt32(pMsg->nType);
             pMsg->stmt.pushBackUInt64(pMsg->unSource);
             pMsg->stmt.pushBackUInt32(pMsg->unSession);
@@ -171,7 +185,7 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 ID_SESSION OsnService::pushMsg(stServiceMessage *pMsg)
 {
     ID_SESSION unSession = pMsg->unSession;
-	if (0 == unSession)
+	while (0 == unSession)
 	{
         unSession = ATOM_INC(&m_unSessionCount);
 		pMsg->unSession = unSession;
@@ -204,11 +218,7 @@ ID_COROUTINE OsnService::createCO(OSN_SERVICE_CO_FUNC func)
 	ID_COROUTINE curCo = popFromCoroutinePool();
 
     if (0 == curCo)
-    {
-        s_CoCountLock.lock();
-        ++s_u64CoroutineCount;
-        s_CoCountLock.unlock();
-        
+    {       
         curCo = g_Coroutine->create([=](ID_COROUTINE co, const OsnPreparedStatement &arg){
             func(arg);
             while (true) {
@@ -221,7 +231,6 @@ ID_COROUTINE OsnService::createCO(OSN_SERVICE_CO_FUNC func)
             }
             return arg;
         });
-
     }
     else
     {
@@ -281,16 +290,32 @@ oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
             break;
         case eYT_Return:
 		{
-			ID_SESSION unSession = getCoroutineSession(co);
-			ID_SERVICE unSource = getCoroutineService(co);
-			g_Service->sendMessage(unSource, 0, ePType_Response, unSession, arg);
-			nType = suspend(co, g_Coroutine->resume(co));
+            stMsgCoroutineInfo &info = getCoroutineMsg(co);
+            if (!info.isNone())
+            {
+                g_Service->sendMessage(info.source, 0, ePType_Response, info.session, arg);
+                info.clear();
+            }
+            else
+            {
+                printf("OsnService::suspend return Error! return without a call!\n");
+                assert(0);
+            }
+            nType = suspend(co, g_Coroutine->resume(co));
 		}
             break;
         case eYT_Exit:
-            setCoroutineSession(co, 0);
-            setCoroutineService(co, 0);
+        {
+            stMsgCoroutineInfo &info = getCoroutineMsg(co);
+            if (0 != info.source)
+            {
+                printf("a call from %llu to %llu does not return!\n", info.source, getId());
+                m_vecUnreturnCall.push_back(info);
+                assert(0);
+            }
+            removeCoroutineMsg(co);
             pushToCoroutinePool(co);
+        }
             break;
         case eYT_Response:
             
@@ -336,6 +361,7 @@ void OsnService::pushToCoroutinePool(ID_COROUTINE co)
 {
     s_CoQueSpinLock.lock();
     s_queCoroutine.push(co);
+    printf("OsnService::pushToCoroutinePool ====> in pool coroutine count is %lu\n", s_queCoroutine.size());
     s_CoQueSpinLock.unlock();
 }
 
@@ -347,58 +373,38 @@ ID_COROUTINE OsnService::popFromCoroutinePool()
     {
         co = s_queCoroutine.front();
         s_queCoroutine.pop();
+        printf("OsnService::popFromCoroutinePool ====> in pool coroutine count is %lu\n", s_queCoroutine.size());
     }
     s_CoQueSpinLock.unlock();
     return co;
 }
 
-void OsnService::setCoroutineSession(ID_COROUTINE co, ID_SESSION session)
+void OsnService::setCoroutineMsg(ID_COROUTINE co, ID_SESSION session, ID_SERVICE source)
 {
-    oUINT64 pos = OsnArrTools::getPos(co);
-    if (pos >= m_vecCoroutineSession.size())
-    {
-        m_vecCoroutineSession.resize(pos + 1);
-    }
-    m_vecCoroutineSession[pos] = session;
+    stMsgCoroutineInfo &info = m_mapCoroutineMsg[co];
+    info.source = source;
+    info.session = session;
 }
 
-ID_SESSION OsnService::getCoroutineSession(ID_COROUTINE co)
+OsnService::stMsgCoroutineInfo& OsnService::getCoroutineMsg(ID_COROUTINE co)
 {
-    ID_SESSION session = 0;
-    oUINT64 pos = OsnArrTools::getPos(co);
-    if (m_vecCoroutineSession.size() > pos)
+    std::map<ID_COROUTINE, stMsgCoroutineInfo>::iterator itr = m_mapCoroutineMsg.find(co);
+    if (itr != m_mapCoroutineMsg.end())
     {
-        session = m_vecCoroutineSession[pos];
+        return itr->second;
     }
     else
     {
-        assert(0);
+        return stMsgCoroutineInfo::NONE;
     }
-    return session;
 }
 
-void OsnService::setCoroutineService(ID_COROUTINE co, ID_SERVICE service)
+void OsnService::removeCoroutineMsg(ID_COROUTINE co)
 {
-    oUINT64 pos = OsnArrTools::getPos(co);
-    if (pos >= m_vecCoroutineService.size())
+    std::map<ID_COROUTINE, stMsgCoroutineInfo>::iterator itr = m_mapCoroutineMsg.find(co);
+    if (itr != m_mapCoroutineMsg.end())
     {
-        m_vecCoroutineService.resize(pos + 1);
+        m_mapCoroutineMsg.erase(co);
     }
-    m_vecCoroutineService[pos] = service;
-}
-
-ID_SERVICE OsnService::getCoroutineService(ID_COROUTINE co)
-{
-    ID_SERVICE service = 0;
-    oUINT64 pos = OsnArrTools::getPos(co);
-    if (m_vecCoroutineService.size() > pos)
-    {
-        service = m_vecCoroutineService[pos];
-    }
-    else
-    {
-        assert(0);
-    }
-    return service;
 }
 

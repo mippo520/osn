@@ -28,6 +28,7 @@ public:
     virtual oBOOL wakeup(ID_SERVICE unId) const;
     virtual void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr) const;
     virtual void unregistDispatchFunc(oINT32 nPType) const;
+    virtual ID_SERVICE self() const;
 private:
     virtual oBOOL loadService(const std::string &strServiceName) const;
 private:

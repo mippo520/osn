@@ -134,7 +134,6 @@ private:
 
     static void socketNullFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz);
 private:
-	typedef std::function<void(const stOsnSocketMsg *)> SOCKET_MSG_FUNC;
     std::vector<SOCKET_MSG_FUNC> m_vecDispatchFunc;
 	typedef std::map<oINT32, stSocketInfo> MAP_SOCKET_INFO;
 	typedef MAP_SOCKET_INFO::iterator MAP_SOCKET_INFO_ITR;

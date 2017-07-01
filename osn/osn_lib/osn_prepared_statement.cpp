@@ -72,6 +72,10 @@ const char* PreparedStatementData::getCharPtr() const
     return str.c_str();
 }
 
+oBOOL PreparedStatementData::isNull() const
+{
+    return TYPE_NULL == type;
+}
 
 PreparedStatementValueType PreparedStatementData::getType() const
 {
@@ -734,7 +738,7 @@ void OsnPreparedStatement::printContext() const
 		}
 	}
 	strPrintInfo += "]]]\n";
-	printf("OsnPreparedStatement = %s", strPrintInfo.c_str());
+	printf("OsnPreparedStatement = %s\n", strPrintInfo.c_str());
 }
 
 PreparedStatementValueType OsnPreparedStatement::getType( const oUINT8 index ) const

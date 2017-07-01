@@ -24,6 +24,7 @@ public:
     virtual oBOOL wakeup(ID_SERVICE unId) const = 0;
     virtual void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr) const = 0;
     virtual void unregistDispatchFunc(oINT32 nPType) const = 0;
+    virtual ID_SERVICE self() const = 0;
 };
 
 extern const IOsn *g_Osn;

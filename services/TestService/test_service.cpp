@@ -9,6 +9,8 @@
 #include "test_service.h"
 #include "osn_socket.h"
 #include "I_osn_coroutine.h"
+#include <unistd.h>
+#include "osn_gate_head.h"
 
 AddService_Instance(TestService)
 
@@ -27,23 +29,34 @@ void TestService::start(const OsnPreparedStatement &stmt)
 {
 	RegistDispatchFunc(ePType_User, &TestService::dispatchLua, this);
 //	m_Socket.init();
-//    m_SockId = m_Socket.listen("", 18523);
-//    
+//    m_SockId = m_Socket.listen("", 12366);
+//
 //    g_Osn->send(getId(), ePType_User);
 //    std::string strError = "";
 //    m_Socket.start(m_SockId, strError, std::bind(&TestService::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 //	oINT32 fd = m_Socket.open("127.0.0.1", 18888);
 //	m_Socket.write(fd, "aaaaa", 5);
-    printf("TestService::start!\n");
+//    printf("TestService::start!\n");
+//    ID_SERVICE id = stmt.getUInt64(0);
+//    g_Osn->call(id, ePType_User);
+//    printf("TestService::start finish!\n");
 }
 
 void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
-    ID_SERVICE ts2 = stmt.getUInt64(0);
+    sleep(5);
+    oINT32 fd = stmt.getInt32(0);
     ID_SERVICE gate = stmt.getUInt64(1);
-    g_Osn->redirect(gate, source, ePType_User, session, stmt);
-    printf("redirect finish!\n");
-    g_Osn->exit();
+    OsnPreparedStatement arg;
+    arg.setInt32(0, osn_gate::Func_Kick);
+    arg.setInt32(1, fd);
+    g_Osn->call(gate, ePType_User, arg);
+    printf("kick finish!\n");
+//    ID_SERVICE ts2 = stmt.getUInt64(0);
+//    ID_SERVICE gate = stmt.getUInt64(1);
+//    g_Osn->redirect(gate, source, ePType_User, session, stmt);
+//    printf("redirect finish!\n");
+//    g_Osn->exit();
 //    while (true)
 //    {
 //        if (m_fd > 0)
@@ -73,10 +86,10 @@ void TestService::acceptFunc(oINT32 fd, const oINT8 *pBuffer, oINT32 sz)
 {
     std::string strErr;
     m_fd = m_Socket.start(fd, strErr);
-    if (m_fd > 0)
-    {
-        g_Osn->wakeup(m_curCO);
-    }
+//    if (m_fd > 0)
+//    {
+//        g_Osn->wakeup(m_curCO);
+//    }
 //    static oINT32 i = 0;
 //    ++i;
 //    m_Socket.closeFD(stmt.getInt32(0));

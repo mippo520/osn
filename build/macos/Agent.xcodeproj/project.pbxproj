@@ -1,0 +1,372 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F457818F1F0354300060683D /* osn_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781851F0354300060683D /* osn_arr_manager.h */; };
+		F45781901F0354300060683D /* osn_cache_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781861F0354300060683D /* osn_cache_arr_manager.h */; };
+		F45781911F0354300060683D /* osn_common.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781871F0354300060683D /* osn_common.h */; };
+		F45781921F0354300060683D /* osn_macro.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781881F0354300060683D /* osn_macro.h */; };
+		F45781931F0354300060683D /* osn_prepared_statement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F45781891F0354300060683D /* osn_prepared_statement.cpp */; };
+		F45781941F0354300060683D /* osn_prepared_statement.h in Headers */ = {isa = PBXBuildFile; fileRef = F457818A1F0354300060683D /* osn_prepared_statement.h */; };
+		F45781951F0354300060683D /* osn_singleton.h in Headers */ = {isa = PBXBuildFile; fileRef = F457818B1F0354300060683D /* osn_singleton.h */; };
+		F45781961F0354300060683D /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F457818C1F0354300060683D /* osn_spin_lock.cpp */; };
+		F45781971F0354300060683D /* osn_spin_lock.h in Headers */ = {isa = PBXBuildFile; fileRef = F457818D1F0354300060683D /* osn_spin_lock.h */; };
+		F45781981F0354300060683D /* osn_type.h in Headers */ = {isa = PBXBuildFile; fileRef = F457818E1F0354300060683D /* osn_type.h */; };
+		F457819F1F03544B0060683D /* I_osn_coroutine.h in Headers */ = {isa = PBXBuildFile; fileRef = F457819A1F03544B0060683D /* I_osn_coroutine.h */; };
+		F45781A01F03544B0060683D /* I_osn_service_factory.h in Headers */ = {isa = PBXBuildFile; fileRef = F457819B1F03544B0060683D /* I_osn_service_factory.h */; };
+		F45781A11F03544B0060683D /* I_osn_service.h in Headers */ = {isa = PBXBuildFile; fileRef = F457819C1F03544B0060683D /* I_osn_service.h */; };
+		F45781A21F03544B0060683D /* I_osn_socket.h in Headers */ = {isa = PBXBuildFile; fileRef = F457819D1F03544B0060683D /* I_osn_socket.h */; };
+		F45781A31F03544B0060683D /* I_osn.h in Headers */ = {isa = PBXBuildFile; fileRef = F457819E1F03544B0060683D /* I_osn.h */; };
+		F45781A91F0354850060683D /* osn_service_head.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781A61F0354850060683D /* osn_service_head.h */; };
+		F45781AA1F0354850060683D /* osn_service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F45781A71F0354850060683D /* osn_service.cpp */; };
+		F45781AB1F0354850060683D /* osn_service.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781A81F0354850060683D /* osn_service.h */; };
+		F45781AF1F0354B10060683D /* agent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F45781AD1F0354B10060683D /* agent.cpp */; };
+		F45781B01F0354B10060683D /* agent.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781AE1F0354B10060683D /* agent.h */; };
+		F45781B51F04AA540060683D /* osn_gate_head.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781B41F04AA540060683D /* osn_gate_head.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F457817D1F0353AB0060683D /* libAgent.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAgent.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		F45781851F0354300060683D /* osn_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_arr_manager.h; path = ../../osn/osn_lib/osn_arr_manager.h; sourceTree = "<group>"; };
+		F45781861F0354300060683D /* osn_cache_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_cache_arr_manager.h; path = ../../osn/osn_lib/osn_cache_arr_manager.h; sourceTree = "<group>"; };
+		F45781871F0354300060683D /* osn_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_common.h; path = ../../osn/osn_lib/osn_common.h; sourceTree = "<group>"; };
+		F45781881F0354300060683D /* osn_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_macro.h; path = ../../osn/osn_lib/osn_macro.h; sourceTree = "<group>"; };
+		F45781891F0354300060683D /* osn_prepared_statement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_prepared_statement.cpp; path = ../../osn/osn_lib/osn_prepared_statement.cpp; sourceTree = "<group>"; };
+		F457818A1F0354300060683D /* osn_prepared_statement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_prepared_statement.h; path = ../../osn/osn_lib/osn_prepared_statement.h; sourceTree = "<group>"; };
+		F457818B1F0354300060683D /* osn_singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_singleton.h; path = ../../osn/osn_lib/osn_singleton.h; sourceTree = "<group>"; };
+		F457818C1F0354300060683D /* osn_spin_lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_spin_lock.cpp; path = ../../osn/osn_lib/osn_spin_lock.cpp; sourceTree = "<group>"; };
+		F457818D1F0354300060683D /* osn_spin_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_spin_lock.h; path = ../../osn/osn_lib/osn_spin_lock.h; sourceTree = "<group>"; };
+		F457818E1F0354300060683D /* osn_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_type.h; path = ../../osn/osn_lib/osn_type.h; sourceTree = "<group>"; };
+		F457819A1F03544B0060683D /* I_osn_coroutine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_coroutine.h; path = ../../osn/osn_interface/I_osn_coroutine.h; sourceTree = "<group>"; };
+		F457819B1F03544B0060683D /* I_osn_service_factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_service_factory.h; path = ../../osn/osn_interface/I_osn_service_factory.h; sourceTree = "<group>"; };
+		F457819C1F03544B0060683D /* I_osn_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_service.h; path = ../../osn/osn_interface/I_osn_service.h; sourceTree = "<group>"; };
+		F457819D1F03544B0060683D /* I_osn_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn_socket.h; path = ../../osn/osn_interface/I_osn_socket.h; sourceTree = "<group>"; };
+		F457819E1F03544B0060683D /* I_osn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = I_osn.h; path = ../../osn/osn_interface/I_osn.h; sourceTree = "<group>"; };
+		F45781A61F0354850060683D /* osn_service_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service_head.h; path = ../../osn/osn_src/osn_service/osn_service_head.h; sourceTree = "<group>"; };
+		F45781A71F0354850060683D /* osn_service.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_service.cpp; path = ../../osn/osn_src/osn_service/osn_service.cpp; sourceTree = "<group>"; };
+		F45781A81F0354850060683D /* osn_service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_service.h; path = ../../osn/osn_src/osn_service/osn_service.h; sourceTree = "<group>"; };
+		F45781AD1F0354B10060683D /* agent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agent.cpp; path = ../../services/agent/agent.cpp; sourceTree = "<group>"; };
+		F45781AE1F0354B10060683D /* agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = agent.h; path = ../../services/agent/agent.h; sourceTree = "<group>"; };
+		F45781B11F0356260060683D /* osn_agent_head.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osn_agent_head.h; path = ../../services/agent/osn_agent_head.h; sourceTree = "<group>"; };
+		F45781B41F04AA540060683D /* osn_gate_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_gate_head.h; path = ../../services/gate/osn_gate_head.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F457817A1F0353AB0060683D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F45781741F0353AB0060683D = {
+			isa = PBXGroup;
+			children = (
+				F45781AC1F0354940060683D /* src */,
+				F45781A41F03545D0060683D /* osn_src */,
+				F45781991F0354380060683D /* osn_interface */,
+				F45781841F03541C0060683D /* osn_lib */,
+				F457817E1F0353AB0060683D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F457817E1F0353AB0060683D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F457817D1F0353AB0060683D /* libAgent.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F45781841F03541C0060683D /* osn_lib */ = {
+			isa = PBXGroup;
+			children = (
+				F45781851F0354300060683D /* osn_arr_manager.h */,
+				F45781861F0354300060683D /* osn_cache_arr_manager.h */,
+				F45781871F0354300060683D /* osn_common.h */,
+				F45781881F0354300060683D /* osn_macro.h */,
+				F45781891F0354300060683D /* osn_prepared_statement.cpp */,
+				F457818A1F0354300060683D /* osn_prepared_statement.h */,
+				F457818B1F0354300060683D /* osn_singleton.h */,
+				F457818C1F0354300060683D /* osn_spin_lock.cpp */,
+				F457818D1F0354300060683D /* osn_spin_lock.h */,
+				F457818E1F0354300060683D /* osn_type.h */,
+			);
+			name = osn_lib;
+			sourceTree = "<group>";
+		};
+		F45781991F0354380060683D /* osn_interface */ = {
+			isa = PBXGroup;
+			children = (
+				F457819A1F03544B0060683D /* I_osn_coroutine.h */,
+				F457819B1F03544B0060683D /* I_osn_service_factory.h */,
+				F457819C1F03544B0060683D /* I_osn_service.h */,
+				F457819D1F03544B0060683D /* I_osn_socket.h */,
+				F457819E1F03544B0060683D /* I_osn.h */,
+			);
+			name = osn_interface;
+			sourceTree = "<group>";
+		};
+		F45781A41F03545D0060683D /* osn_src */ = {
+			isa = PBXGroup;
+			children = (
+				F45781A51F0354680060683D /* osn_service */,
+			);
+			name = osn_src;
+			sourceTree = "<group>";
+		};
+		F45781A51F0354680060683D /* osn_service */ = {
+			isa = PBXGroup;
+			children = (
+				F45781A61F0354850060683D /* osn_service_head.h */,
+				F45781A71F0354850060683D /* osn_service.cpp */,
+				F45781A81F0354850060683D /* osn_service.h */,
+			);
+			name = osn_service;
+			sourceTree = "<group>";
+		};
+		F45781AC1F0354940060683D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				F45781B41F04AA540060683D /* osn_gate_head.h */,
+				F45781AD1F0354B10060683D /* agent.cpp */,
+				F45781AE1F0354B10060683D /* agent.h */,
+				F45781B11F0356260060683D /* osn_agent_head.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F457817B1F0353AB0060683D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F45781901F0354300060683D /* osn_cache_arr_manager.h in Headers */,
+				F45781981F0354300060683D /* osn_type.h in Headers */,
+				F45781951F0354300060683D /* osn_singleton.h in Headers */,
+				F45781971F0354300060683D /* osn_spin_lock.h in Headers */,
+				F45781A21F03544B0060683D /* I_osn_socket.h in Headers */,
+				F45781B51F04AA540060683D /* osn_gate_head.h in Headers */,
+				F45781A91F0354850060683D /* osn_service_head.h in Headers */,
+				F45781A01F03544B0060683D /* I_osn_service_factory.h in Headers */,
+				F45781A11F03544B0060683D /* I_osn_service.h in Headers */,
+				F45781911F0354300060683D /* osn_common.h in Headers */,
+				F45781AB1F0354850060683D /* osn_service.h in Headers */,
+				F45781A31F03544B0060683D /* I_osn.h in Headers */,
+				F457819F1F03544B0060683D /* I_osn_coroutine.h in Headers */,
+				F45781921F0354300060683D /* osn_macro.h in Headers */,
+				F457818F1F0354300060683D /* osn_arr_manager.h in Headers */,
+				F45781B01F0354B10060683D /* agent.h in Headers */,
+				F45781941F0354300060683D /* osn_prepared_statement.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		F457817C1F0353AB0060683D /* Agent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F45781811F0353AB0060683D /* Build configuration list for PBXNativeTarget "Agent" */;
+			buildPhases = (
+				F45781791F0353AB0060683D /* Sources */,
+				F457817A1F0353AB0060683D /* Frameworks */,
+				F457817B1F0353AB0060683D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Agent;
+			productName = Agent;
+			productReference = F457817D1F0353AB0060683D /* libAgent.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F45781751F0353AB0060683D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = zenghui;
+				TargetAttributes = {
+					F457817C1F0353AB0060683D = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F45781781F0353AB0060683D /* Build configuration list for PBXProject "Agent" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F45781741F0353AB0060683D;
+			productRefGroup = F457817E1F0353AB0060683D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F457817C1F0353AB0060683D /* Agent */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F45781791F0353AB0060683D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F45781931F0354300060683D /* osn_prepared_statement.cpp in Sources */,
+				F45781AF1F0354B10060683D /* agent.cpp in Sources */,
+				F45781AA1F0354850060683D /* osn_service.cpp in Sources */,
+				F45781961F0354300060683D /* osn_spin_lock.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F457817F1F0353AB0060683D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F45781801F0353AB0060683D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F45781821F0353AB0060683D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F45781831F0353AB0060683D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F45781781F0353AB0060683D /* Build configuration list for PBXProject "Agent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F457817F1F0353AB0060683D /* Debug */,
+				F45781801F0353AB0060683D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F45781811F0353AB0060683D /* Build configuration list for PBXNativeTarget "Agent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F45781821F0353AB0060683D /* Debug */,
+				F45781831F0353AB0060683D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F45781751F0353AB0060683D /* Project object */;
+}

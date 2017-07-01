@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 #include "osn_type.h"
+#include "osn_singleton.h"
 
 //- Union for data buffer (upper-level bind -> queue -> lower-level bind)
 union PreparedStatementDataUnion
@@ -60,6 +61,7 @@ public:
     oINT32 getInt32() const;
     std::string getString() const;
     const char* getCharPtr() const;
+    oBOOL isNull() const;
     
     PreparedStatementValueType getType() const;
 private:
@@ -120,7 +122,6 @@ public:
 	// 返回类型，调试用
 	PreparedStatementValueType getType( const oUINT8 index ) const;
 	oUINT8 getPreparedStatementDataCount() const;
-
 private:
     friend class OsnService;
     void setFunction(const oUINT8 index, const VOID_STMT_FUNC &func);
@@ -132,6 +133,8 @@ protected:
     typedef std::vector<PreparedStatementData> VEC_DATA;
     mutable std::shared_ptr<VEC_DATA> m_vecStatementData;
 };
+
+#define STMT_NONE OsnSingleton<OsnPreparedStatement>::instance()
 
 typedef std::function<void (ID_SERVICE, ID_SESSION, const OsnPreparedStatement &)> DISPATCH_FUNC;
 typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
