@@ -33,11 +33,12 @@ void Agent::funcUserStart(const OsnPreparedStatement &stmt)
     arg.setInt32(1, m_nClientFD);
     g_Osn->call(gate, ePType_User, arg);
     
-    ID_SERVICE ts = g_Osn->startService("TestService");
-    OsnPreparedStatement closeArg;
-    closeArg.setInt32(0, m_nClientFD);
-    closeArg.setUInt64(1, gate);
-    g_Osn->send(ts, ePType_User, closeArg);
+//    ID_SERVICE ts = g_Osn->startService("TestService");
+//    OsnPreparedStatement closeArg;
+//    closeArg.setInt32(0, m_nClientFD);
+//    closeArg.setUInt64(1, gate);
+//    g_Osn->send(ts, ePType_User, closeArg);
+    g_Osn->ret();
 }
 
 void Agent::funcUserDisconnect(const OsnPreparedStatement &stmt)
@@ -49,9 +50,15 @@ void Agent::funcUserDisconnect(const OsnPreparedStatement &stmt)
 void Agent::start(const OsnPreparedStatement &stmt)
 {
     RegistDispatchFunc(ePType_User, &Agent::dispatchUser, this);
+    RegistDispatchFunc(ePType_Client, &Agent::dispatchClient, this);
     m_vecUserDispatchFunc.resize(osn_agent::Func_Count);
     m_vecUserDispatchFunc[osn_agent::Func_Start] = std::bind(&Agent::funcUserStart, this, std::placeholders::_1);
     m_vecUserDispatchFunc[osn_agent::Func_Disconnect] = std::bind(&Agent::funcUserDisconnect, this, std::placeholders::_1);
+}
+
+void Agent::dispatchClient(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
+{
+    printf("Agent::dispatchClien ===========> !\n");
 }
 
 void Agent::dispatchUser(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)

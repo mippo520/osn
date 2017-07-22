@@ -19,20 +19,20 @@ class Gate : public OsnService
     struct stConnectInfo
     {
         oINT32 fd;
-        oINT32 nClient;
+        ID_SERVICE client;
         ID_SERVICE agent;
         std::string strIP;
         
         stConnectInfo()
             : fd(-1)
-            , nClient(-1)
+            , client(0)
             , agent(0)
             , strIP("")
         {}
         
         void unforward()
         {
-            nClient = -1;
+            client = 0;
             agent = 0;
         }
     };
@@ -55,6 +55,7 @@ private:
     void funcUserClose(ID_SERVICE source, const OsnPreparedStatement &stmt);
     void funcUserKick(ID_SERVICE source, const OsnPreparedStatement &stmt);
     void funcUserForward(ID_SERVICE source, const OsnPreparedStatement &stmt);
+    void funcUserAccept(ID_SERVICE source, const OsnPreparedStatement &stmt);
     
     void unforward(stConnectInfo &info);
     void openClient(oINT32 fd);

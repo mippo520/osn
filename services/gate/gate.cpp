@@ -34,19 +34,31 @@ void Gate::funcSocketData(const stOsnSocketMsg *msg)
     oUINT8 *pBuffer = (oUINT8*)msg->pBuffer;
     oINT32 nSize = msg->nSize;
     oINT32 fd = msg->id;
-    oINT32 h = OsnNetpack::hashFD(fd);
-    LST_SOCK_UNCOMPLETE &lstUncomplete = m_sockQueue.hash[h];
-    OsnNetpack::filterData(m_sockQueue.queNetpack, lstUncomplete, fd, pBuffer, nSize);
-    while (m_sockQueue.queNetpack.size() > 0)
+    printf("msg fd is %d\n", fd);
+    
+    std::map<oINT32, stConnectInfo>::iterator itr = m_mapConnect.find(fd);
+    if (itr != m_mapConnect.end())
     {
-        stNetPack &pack = m_sockQueue.queNetpack.front();
-        printf("fd = %d\n", pack.id);
-        for (oINT32 i = 0; i < pack.size; ++i)
+        stConnectInfo &info = itr->second;
+        OsnPreparedStatement arg;
+        g_Osn->redirect(info.agent, info.client, ePType_Client, 1, arg);
+    }
+    else
+    {
+        oINT32 h = OsnNetpack::hashFD(fd);
+        LST_SOCK_UNCOMPLETE &lstUncomplete = m_sockQueue.hash[h];
+        OsnNetpack::filterData(m_sockQueue.queNetpack, lstUncomplete, fd, pBuffer, nSize);
+        while (m_sockQueue.queNetpack.size() > 0)
         {
-            printf("%c", pack.pBuffer[i]);
+            stNetPack &pack = m_sockQueue.queNetpack.front();
+            printf("fd = %d\n", pack.id);
+            for (oINT32 i = 0; i < pack.size; ++i)
+            {
+                printf("%c", pack.pBuffer[i]);
+            }
+            printf("\n");
+            m_sockQueue.queNetpack.pop();
         }
-        printf("\n");
-        m_sockQueue.queNetpack.pop();
     }
 }
 
@@ -159,6 +171,19 @@ void Gate::funcUserKick(ID_SERVICE source, const OsnPreparedStatement &stmt)
 void Gate::funcUserForward(ID_SERVICE source, const OsnPreparedStatement &stmt)
 {
     oINT32 fd = stmt.getInt32(1);
+    
+    ID_SERVICE client = 0;
+    if (stmt.getPreparedStatementDataCount() >= 3)
+    {
+        client = stmt.getUInt64(2);
+    }
+    
+    ID_SERVICE address = 0;
+    if (stmt.getPreparedStatementDataCount() >= 4)
+    {
+        address = stmt.getUInt64(3);
+    }
+    
     std::map<oINT32, stConnectInfo>::iterator itr = m_mapConnect.find(fd);
     if (itr == m_mapConnect.end())
     {
@@ -168,10 +193,24 @@ void Gate::funcUserForward(ID_SERVICE source, const OsnPreparedStatement &stmt)
     
     stConnectInfo &info = itr->second;
     unforward(info);
-    info.agent = source;
-    m_mapForward[fd] = &info;
+    info.agent = address > 0 ? address : source;
+    info.client = client;
+    m_mapForward[info.agent] = &info;
     openClient(fd);
-    g_Osn->ret();
+}
+
+void Gate::funcUserAccept(ID_SERVICE source, const OsnPreparedStatement &stmt)
+{
+    oINT32 fd = stmt.getInt32(1);
+    std::map<oINT32, stConnectInfo>::iterator itr = m_mapConnect.find(fd);
+    if (itr == m_mapConnect.end())
+    {
+        assert(0);
+        return;
+    }
+    stConnectInfo &info = itr->second;
+    unforward(info);
+    openClient(fd);
 }
 
 void Gate::unforward(stConnectInfo &info)
@@ -210,8 +249,8 @@ void Gate::closeClient(oINT32 fd)
     }
     else
     {
-        assert(0);
         printf("Gate::closeClient Error! can not found fd:%d\n", fd);
+        assert(0);
     }
 }
 
@@ -220,12 +259,8 @@ void Gate::closeFD(oINT32 fd)
     std::map<oINT32, stConnectInfo>::iterator itr = m_mapConnect.find(fd);
     if (itr != m_mapConnect.end())
     {
+        unforward(itr->second);
         m_mapConnect.erase(itr);
-    }
-    else
-    {
-        assert(0);
-        printf("Gate::closeFD Error! can not found fd:%d\n", fd);
     }
 }
 
@@ -259,6 +294,7 @@ void Gate::start(const OsnPreparedStatement &stmt)
     m_vecUserDispatchFunc[osn_gate::Func_Close] = std::bind(&Gate::funcUserClose, this, std::placeholders::_1, std::placeholders::_2);
     m_vecUserDispatchFunc[osn_gate::Func_Kick] = std::bind(&Gate::funcUserKick, this, std::placeholders::_1, std::placeholders::_2);
     m_vecUserDispatchFunc[osn_gate::Func_Forward] = std::bind(&Gate::funcUserForward, this, std::placeholders::_1, std::placeholders::_2);
+    m_vecUserDispatchFunc[osn_gate::Func_Accept] = std::bind(&Gate::funcUserAccept, this, std::placeholders::_1, std::placeholders::_2);
 }
 
 void Gate::dispatchUser(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)

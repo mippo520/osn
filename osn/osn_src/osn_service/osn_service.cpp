@@ -309,7 +309,7 @@ oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
             stMsgCoroutineInfo &info = getCoroutineMsg(co);
             if (0 != info.source)
             {
-                printf("a call from %llu to %llu does not return!\n", info.source, getId());
+                printf("a call session:%lu from service:%llu to service:%llu does not return!\n", info.session, info.source, getId());
                 m_vecUnreturnCall.push_back(info);
                 assert(0);
             }

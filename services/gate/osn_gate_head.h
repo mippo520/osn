@@ -17,6 +17,7 @@ namespace osn_gate
         Func_Close,         // 关闭socket
         Func_Kick,          // 关闭客户端
         Func_Forward,
+        Func_Accept,        
         
         Func_Count
     };

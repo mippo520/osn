@@ -19,6 +19,7 @@ public:
 private:
     virtual void start(const OsnPreparedStatement &stmt) override;
     void dispatchUser(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
+    void dispatchClient(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt);
     void funcUserStart(const OsnPreparedStatement &stmt);
     void funcUserDisconnect(const OsnPreparedStatement &stmt);
 private:
