@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		565A033A1F284325000108DF /* osn_netpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 565A03371F284325000108DF /* osn_netpack.cpp */; };
+		565A033B1F284325000108DF /* osn_netpack.h in Headers */ = {isa = PBXBuildFile; fileRef = 565A03381F284325000108DF /* osn_netpack.h */; };
+		565A033C1F284325000108DF /* osn_socket_head.h in Headers */ = {isa = PBXBuildFile; fileRef = 565A03391F284325000108DF /* osn_socket_head.h */; };
 		F457818F1F0354300060683D /* osn_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781851F0354300060683D /* osn_arr_manager.h */; };
 		F45781901F0354300060683D /* osn_cache_arr_manager.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781861F0354300060683D /* osn_cache_arr_manager.h */; };
 		F45781911F0354300060683D /* osn_common.h in Headers */ = {isa = PBXBuildFile; fileRef = F45781871F0354300060683D /* osn_common.h */; };
@@ -31,6 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		565A03371F284325000108DF /* osn_netpack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_netpack.cpp; path = ../../osn/osn_src/osn_socket/osn_netpack.cpp; sourceTree = "<group>"; };
+		565A03381F284325000108DF /* osn_netpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_netpack.h; path = ../../osn/osn_src/osn_socket/osn_netpack.h; sourceTree = "<group>"; };
+		565A03391F284325000108DF /* osn_socket_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_socket_head.h; path = ../../osn/osn_src/osn_socket/osn_socket_head.h; sourceTree = "<group>"; };
 		F457817D1F0353AB0060683D /* libAgent.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAgent.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45781851F0354300060683D /* osn_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_arr_manager.h; path = ../../osn/osn_lib/osn_arr_manager.h; sourceTree = "<group>"; };
 		F45781861F0354300060683D /* osn_cache_arr_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_cache_arr_manager.h; path = ../../osn/osn_lib/osn_cache_arr_manager.h; sourceTree = "<group>"; };
@@ -67,6 +73,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		565A03361F28430B000108DF /* osn_socket */ = {
+			isa = PBXGroup;
+			children = (
+				565A03371F284325000108DF /* osn_netpack.cpp */,
+				565A03381F284325000108DF /* osn_netpack.h */,
+				565A03391F284325000108DF /* osn_socket_head.h */,
+			);
+			name = osn_socket;
+			sourceTree = "<group>";
+		};
 		F45781741F0353AB0060683D = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +134,7 @@
 		F45781A41F03545D0060683D /* osn_src */ = {
 			isa = PBXGroup;
 			children = (
+				565A03361F28430B000108DF /* osn_socket */,
 				F45781A51F0354680060683D /* osn_service */,
 			);
 			name = osn_src;
@@ -163,11 +180,13 @@
 				F45781911F0354300060683D /* osn_common.h in Headers */,
 				F45781AB1F0354850060683D /* osn_service.h in Headers */,
 				F45781A31F03544B0060683D /* I_osn.h in Headers */,
+				565A033B1F284325000108DF /* osn_netpack.h in Headers */,
 				F457819F1F03544B0060683D /* I_osn_coroutine.h in Headers */,
 				F45781921F0354300060683D /* osn_macro.h in Headers */,
 				F457818F1F0354300060683D /* osn_arr_manager.h in Headers */,
 				F45781B01F0354B10060683D /* agent.h in Headers */,
 				F45781941F0354300060683D /* osn_prepared_statement.h in Headers */,
+				565A033C1F284325000108DF /* osn_socket_head.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +249,7 @@
 			files = (
 				F45781931F0354300060683D /* osn_prepared_statement.cpp in Sources */,
 				F45781AF1F0354B10060683D /* agent.cpp in Sources */,
+				565A033A1F284325000108DF /* osn_netpack.cpp in Sources */,
 				F45781AA1F0354850060683D /* osn_service.cpp in Sources */,
 				F45781961F0354300060683D /* osn_spin_lock.cpp in Sources */,
 			);

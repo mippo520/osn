@@ -34,13 +34,15 @@ void Gate::funcSocketData(const stOsnSocketMsg *msg)
     oUINT8 *pBuffer = (oUINT8*)msg->pBuffer;
     oINT32 nSize = msg->nSize;
     oINT32 fd = msg->id;
-    printf("msg fd is %d\n", fd);
     
     std::map<oINT32, stConnectInfo>::iterator itr = m_mapConnect.find(fd);
     if (itr != m_mapConnect.end())
     {
         stConnectInfo &info = itr->second;
         OsnPreparedStatement arg;
+        arg.setInt32(0, fd);
+        arg.setUInt64(1, (oUINT64)pBuffer);
+        arg.setInt32(2, nSize);
         g_Osn->redirect(info.agent, info.client, ePType_Client, 1, arg);
     }
     else
@@ -51,12 +53,13 @@ void Gate::funcSocketData(const stOsnSocketMsg *msg)
         while (m_sockQueue.queNetpack.size() > 0)
         {
             stNetPack &pack = m_sockQueue.queNetpack.front();
-            printf("fd = %d\n", pack.id);
+            printf("gate fd = %d\n", pack.id);
             for (oINT32 i = 0; i < pack.size; ++i)
             {
                 printf("%c", pack.pBuffer[i]);
             }
             printf("\n");
+            SAFE_FREE(pack.pBuffer);
             m_sockQueue.queNetpack.pop();
         }
     }

@@ -361,7 +361,6 @@ void OsnService::pushToCoroutinePool(ID_COROUTINE co)
 {
     s_CoQueSpinLock.lock();
     s_queCoroutine.push(co);
-    printf("OsnService::pushToCoroutinePool ====> in pool coroutine count is %lu\n", s_queCoroutine.size());
     s_CoQueSpinLock.unlock();
 }
 
@@ -373,7 +372,6 @@ ID_COROUTINE OsnService::popFromCoroutinePool()
     {
         co = s_queCoroutine.front();
         s_queCoroutine.pop();
-        printf("OsnService::popFromCoroutinePool ====> in pool coroutine count is %lu\n", s_queCoroutine.size());
     }
     s_CoQueSpinLock.unlock();
     return co;

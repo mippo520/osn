@@ -23,6 +23,8 @@ public:
     static void closeUncomplete(LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd);
     static oINT32 readSize(oUINT8 *pBuffer);
     static void filterData(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd, oUINT8 *pBuffer, oINT32 nSize);
+private:
+    static void filterData_(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd, oUINT8 *pBuffer, oINT32 nSize);
 };
 
 #endif /* osn_netpack_hpp */

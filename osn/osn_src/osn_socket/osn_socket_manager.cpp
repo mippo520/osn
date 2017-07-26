@@ -67,7 +67,6 @@ oINT32 OsnSocketManager::poll()
     oBOOL bMore = true;
     stSocketMessage result;
     oINT32 nType = pollResult(result, bMore);
-    printf("OsnSocketManager::poll ===================> nType = %d\n", nType);
     switch (nType)
     {
         case eSockStatus_Exit:

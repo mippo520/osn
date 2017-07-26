@@ -9,6 +9,7 @@
 #include "agent.h"
 #include "osn_agent_head.h"
 #include "osn_gate_head.h"
+#include "osn_netpack.h"
 
 AddService_Instance(Agent)
 
@@ -43,7 +44,6 @@ void Agent::funcUserStart(const OsnPreparedStatement &stmt)
 
 void Agent::funcUserDisconnect(const OsnPreparedStatement &stmt)
 {
-    // todo: do something before exit
     g_Osn->exit();
 }
 
@@ -56,9 +56,45 @@ void Agent::start(const OsnPreparedStatement &stmt)
     m_vecUserDispatchFunc[osn_agent::Func_Disconnect] = std::bind(&Agent::funcUserDisconnect, this, std::placeholders::_1);
 }
 
+void Agent::exit()
+{
+    OsnNetpack::closeUncomplete(m_lstUncomplete, m_nClientFD);
+}
+
 void Agent::dispatchClient(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
-    printf("Agent::dispatchClien ===========> !\n");
+    oINT32 fd = stmt.getInt32(0);
+    assert(fd == m_nClientFD);
+    oUINT8 *pBuffer = (oUINT8*)stmt.getUInt64(1);
+    oINT32 nSize = stmt.getInt32(2);
+    
+//    printf("agent nsize = %d\n", nSize);
+//    for (int i = 0; i < nSize; ++i)
+//    {
+//        printf("%c", pBuffer[i]);
+//    }
+//    printf("\n");
+//    SAFE_FREE(pBuffer);
+    OsnNetpack::filterData(m_queNetpack, m_lstUncomplete, fd, pBuffer, nSize);
+    while (m_queNetpack.size() > 0)
+    {
+        stNetPack &pack = m_queNetpack.front();
+//        printf("agent fd = %d\n", pack.id);
+//        for (oINT32 i = 0; i < pack.size; ++i)
+//        {
+//            printf("%c", pack.pBuffer[i]);
+//        }
+//        printf("\n");
+        SAFE_FREE(pack.pBuffer);
+        m_queNetpack.pop();
+        static oINT32 i = 0;
+        ++i;
+        if (i % 10000 == 0)
+        {
+            printf("agent catch %d!\n", i);
+        }
+    }
+
 }
 
 void Agent::dispatchUser(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)

@@ -125,7 +125,6 @@ ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSo
     {
         printf("OsnServiceManager::pushMsg Error! can not found service, from %llu to %llu, type is %d\n", unSource, unTargetId, type);
         assert(0);
-        unRet = 0;
     }
     
     return unRet;

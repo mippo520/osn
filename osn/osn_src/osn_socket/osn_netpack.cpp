@@ -117,7 +117,7 @@ oINT32 OsnNetpack::readSize(oUINT8 *pBuffer)
     return sz;
 }
 
-void OsnNetpack::filterData(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd, oUINT8 *pBuffer, oINT32 nSize)
+void OsnNetpack::filterData_(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd, oUINT8 *pBuffer, oINT32 nSize)
 {
     stUncomlete *pUC = findUncomplete(lstUncomplete, fd);
     if (NULL != pUC)
@@ -177,7 +177,7 @@ void OsnNetpack::filterData(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUnc
             return;
         }
         
-        pushData(queNetpack, fd, pBuffer, nPackSzie, 1);
+        pushData(queNetpack, fd, pBuffer, nPackSzie, true);
         if(nSize == nPackSzie)
         {
             return;
@@ -188,6 +188,12 @@ void OsnNetpack::filterData(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUnc
         pushMore(queNetpack, lstUncomplete, fd, pBuffer, nSize);
         return;
     }
+}
+
+void OsnNetpack::filterData(QUE_NETPACK &queNetpack, LST_SOCK_UNCOMPLETE &lstUncomplete, oINT32 fd, oUINT8 *pBuffer, oINT32 nSize)
+{
+    filterData_(queNetpack, lstUncomplete, fd, pBuffer, nSize);
+    SAFE_FREE(pBuffer);
 }
 
 
