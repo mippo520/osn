@@ -2,4 +2,84 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../osn/osn_src/osn_service/osn_service.cpp"
+            timestampString = "522770127.474665"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "OsnService::dispatchMessage(oINT32 &amp;nType)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnService::dispatchMessage(int&amp;)"
+                  moduleName = "osn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_service/osn_service.cpp"
+                  timestampString = "522839170.391276"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "628">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnService::dispatchMessage(int&amp;)"
+                  moduleName = "libTestService2.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_service/osn_service.cpp"
+                  timestampString = "522839170.743781"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "628">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnService::dispatchMessage(int&amp;)"
+                  moduleName = "libGate.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_service/osn_service.cpp"
+                  timestampString = "522839170.746904"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "628">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnService::dispatchMessage(int&amp;)"
+                  moduleName = "libAgent.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_service/osn_service.cpp"
+                  timestampString = "522839202.159757"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "628">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

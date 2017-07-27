@@ -50,7 +50,6 @@ ID_COROUTINE OsnCoroutineManager::create(const OSN_COROUTINE_FUNC &func) const
         pCo->setState(eCS_Ready);
         s_CoCountLock.lock();
         ++s_u64CoroutineCount;
-        printf("OsnCoroutineManager::create ====> coroutine count is %llu\n", s_u64CoroutineCount);
         s_CoCountLock.unlock();
     }
     return unId;

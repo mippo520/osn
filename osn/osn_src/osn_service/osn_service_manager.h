@@ -40,6 +40,7 @@ public:
     
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
     void addThread();
+    oBOOL pushMsg(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const;
 private:
     virtual ID_SERVICE getCurService() const;
     virtual void pushWarkingService(ID_SERVICE unId) const;

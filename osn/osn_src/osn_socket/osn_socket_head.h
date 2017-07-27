@@ -172,10 +172,6 @@ struct stOsnSocketMsg
 		{
 			pBuffer = (oINT8*)malloc(sz);
 		}
-		else
-		{
-			pBuffer = NULL;
-		}
 	}
     
     void clear() const

@@ -76,7 +76,7 @@ private:
     oBOOL getIsInGlobal();
     void setIsInGlobal(oBOOL value);
     oBOOL dispatchMessage(oINT32 &nType);
-    ID_SESSION pushMsg(stServiceMessage *pMsg);
+    void pushMsg(stServiceMessage *pMsg);
     oUINT32 getMsgSize();
     ID_COROUTINE createCO(OSN_SERVICE_CO_FUNC func);
     oINT32 suspend(ID_COROUTINE co, const OSN_CO_ARG &arg);
@@ -90,6 +90,8 @@ private:
     void setCoroutineMsg(ID_COROUTINE co, ID_SESSION session, ID_SERVICE source);
     stMsgCoroutineInfo& getCoroutineMsg(ID_COROUTINE co);
     void removeCoroutineMsg(ID_COROUTINE co);
+    
+    ID_SESSION newSession();
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;

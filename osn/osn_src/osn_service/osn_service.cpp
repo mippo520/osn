@@ -182,15 +182,19 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
     }
 }
 
-ID_SESSION OsnService::pushMsg(stServiceMessage *pMsg)
+ID_SESSION OsnService::newSession()
 {
-    ID_SESSION unSession = pMsg->unSession;
-	while (0 == unSession)
-	{
-        unSession = ATOM_INC(&m_unSessionCount);
-		pMsg->unSession = unSession;
-	}
-    
+    ID_SESSION session = ++m_unSessionCount;
+    if (0 == session)
+    {
+        m_unSessionCount = 1;
+        return 1;
+    }
+    return session;
+}
+
+void OsnService::pushMsg(stServiceMessage *pMsg)
+{   
     m_QueMsgSpinLock.lock();
     m_queMsg.push(pMsg);
     
@@ -201,8 +205,6 @@ ID_SESSION OsnService::pushMsg(stServiceMessage *pMsg)
     }
     
     m_QueMsgSpinLock.unlock();
-    
-	return unSession;
 }
 
 oUINT32 OsnService::getMsgSize()

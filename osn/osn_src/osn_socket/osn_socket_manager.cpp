@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include "osn_prepared_statement.h"
 #include "osn_service_head.h"
+#include "osn_service_manager.h"
 
 #ifdef __APPLE__
 #include "osn_kqueue.h"
@@ -689,9 +690,9 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
 
     OsnPreparedStatement stmt;
     stmt.setUInt64(0, (oUINT64)pSM);
-    ID_SESSION unSession = g_Osn->send(result.opaque, ePType_Socket, stmt);
-    if (0 == unSession)
+    if (!g_ServiceManager.pushMsg(result.opaque, 0, ePType_Socket, 0, stmt))
     {
+        pSM->clear();
         SAFE_DELETE(pSM);
     }
 }

@@ -67,7 +67,7 @@ void Gate::funcSocketData(const stOsnSocketMsg *msg)
 
 void Gate::funcSocketConnect(const stOsnSocketMsg *msg)
 {
-    printf("Gate::funcSocketConnect ============>!\n");
+    printf("Gate::funcSocketConnect ============>! fd = %d\n", msg->id);
 }
 
 void Gate::funcSocketClose(const stOsnSocketMsg *msg)

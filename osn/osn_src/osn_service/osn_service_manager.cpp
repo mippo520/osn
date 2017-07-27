@@ -101,7 +101,7 @@ ID_SERVICE OsnServiceManager::startService(const std::string &strServiceName, co
 
 ID_SESSION OsnServiceManager::genId()
 {
-    return sendMessage(getCurService(), 0, ePType_None, 0);
+    return sendMessage(getCurService(), getCurService(), ePType_None, 0);
 }
 
 void OsnServiceManager::init()
@@ -109,9 +109,9 @@ void OsnServiceManager::init()
     OsnArrManager::init();
 }
 
-ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const
+oBOOL OsnServiceManager::pushMsg(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const
 {
-    ID_SESSION unRet = 0;
+    oBOOL bRet = false;
     OsnService *pService = getObject(unTargetId);
     if (NULL != pService)
     {
@@ -119,15 +119,32 @@ ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSo
         pServiceMsg->unSession = unSession;
         pServiceMsg->unSource = unSource;
         pServiceMsg->nType = type;
-        unRet = pService->pushMsg(pServiceMsg);
+        pService->pushMsg(pServiceMsg);
+        bRet = true;
     }
     else
     {
         printf("OsnServiceManager::pushMsg Error! can not found service, from %llu to %llu, type is %d\n", unSource, unTargetId, type);
         assert(0);
     }
+    return bRet;
+}
+
+ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const
+{
+
+    if (0 == unSession)
+    {
+        OsnService *pSourceService = getObject(unSource);
+        if (NULL != pSourceService)
+        {
+            unSession = pSourceService->newSession();
+        }
+    }
+
+    pushMsg(unTargetId, unSource, type, unSession, msg);
     
-    return unRet;
+    return unSession;
 }
 
 OsnService* OsnServiceManager::popWorkingService()
