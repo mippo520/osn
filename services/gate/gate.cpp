@@ -15,6 +15,7 @@ AddService_Instance(Gate)
 
 Gate::Gate()
     : m_SocketId(0)
+    , m_isNodelay(true)
 {
     
 }
@@ -101,6 +102,12 @@ void Gate::funcSocketAccept(const stOsnSocketMsg *msg)
     }
     assert(m_SocketId == msg->id);
     oINT32 fd = msg->ud;
+    
+    if (m_isNodelay)
+    {
+        g_SocketDriver->nodelay(fd);
+    }
+    
     std::string strContext(msg->pBuffer, msg->nSize);
     printf("Gate::funcSocketAccept ========> ud = %d, context = %s\n", msg->ud, strContext.c_str());
     stConnectInfo &connectInfo = m_mapConnect[fd];

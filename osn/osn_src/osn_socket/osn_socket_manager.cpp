@@ -18,6 +18,7 @@
 #include "osn_prepared_statement.h"
 #include "osn_service_head.h"
 #include "osn_service_manager.h"
+#include <netinet/tcp.h>
 
 #ifdef __APPLE__
 #include "osn_kqueue.h"
@@ -320,6 +321,9 @@ oINT32 OsnSocketManager::ctrlCmd(stSocketMessage &result)
             return sendSocket(*((stRequestSend*)buffer), result, eSPriority_Low);
         case 'O':
             return openSocket(*((stRequestOpen*)buffer), result);
+        case 'T':
+            setOptSocket(*((stRequestSetopt*)buffer));
+            return eSockStatus_None;
         default:
             printf("OsnSocketManager::ctrlCmd : unknown ctrl %c!\n", type);
             return eSockStatus_None;
@@ -1006,6 +1010,15 @@ oINT32 OsnSocketManager::connect(ID_SERVICE opaque, const char *szAddr, oINT32 p
     return request.u.open.id;
 }
 
+void OsnSocketManager::nodelay(oINT32 sock) const
+{
+    stRequestPackage request;
+    request.u.setopt.id = sock;
+    request.u.setopt.what = TCP_NODELAY;
+    request.u.setopt.value = 1;
+    sendRequest(request, 'T', sizeof(request.u.setopt));
+}
+
 oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &result)
 {
     oINT32 id = request.id;
@@ -1090,6 +1103,18 @@ oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &res
     
     freeaddrinfo(ai_list);
     return -1;
+}
+
+void OsnSocketManager::setOptSocket(stRequestSetopt &request)
+{
+    oINT32 id = request.id;
+    OsnSocketData &socket = m_Socket[hashId(id)];
+    if (socket.getType() == eSockType_Invalid || id != socket.getId())
+    {
+        return;
+    }
+    oINT32 v = request.value;
+    setsockopt(socket.getFd(), IPPROTO_TCP, request.what, &v, sizeof(v));
 }
 
 oINT32 OsnSocketManager::sendSocket(stRequestSend &request, stSocketMessage &result, oINT32 priority)

@@ -20,6 +20,7 @@ public:
     virtual void shutdown(oINT32 sock) const = 0;
     virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const = 0;
     virtual oINT32 connect(const char *szAddr, oINT32 port) const = 0;
+    virtual void nodelay(oINT32 fd) const = 0;
 };
 
 extern const IOsnSocket *g_SocketDriver;

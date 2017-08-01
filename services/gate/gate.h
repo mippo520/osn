@@ -70,6 +70,7 @@ private:
     std::map<oINT32, stConnectInfo> m_mapConnect;
     std::map<ID_SERVICE, stConnectInfo*> m_mapForward;
     std::map<oINT32, ID_SERVICE> m_mapFDService;
+    oBOOL m_isNodelay;
 };
 
 AddService_Declare(Gate)

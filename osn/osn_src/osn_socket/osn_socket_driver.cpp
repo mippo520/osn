@@ -57,3 +57,9 @@ oINT32 OsnSocketDriver::connect(const char *szAddr, oINT32 port) const
     ID_SERVICE svrId = g_Service->getCurService();
     return g_SocketManager.connect(svrId, szAddr, port);
 }
+
+void OsnSocketDriver::nodelay(oINT32 fd) const
+{
+    g_SocketManager.nodelay(fd);
+}
+

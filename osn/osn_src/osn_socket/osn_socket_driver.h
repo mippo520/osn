@@ -26,6 +26,7 @@ public:
     virtual void shutdown(oINT32 sock) const;
     virtual oINT64 send(oINT32 sock, const void *pBuff, oINT32 sz) const;
     virtual oINT32 connect(const char *szAddr, oINT32 port) const;
+    virtual void nodelay(oINT32 fd) const;
 };
 
 #endif /* osn_socket_driver_hpp */
