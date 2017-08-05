@@ -32,17 +32,22 @@ struct stCoThreadInfo {
     
     stCoThreadInfo()
         : m_Running(0)
+        , m_pArg(NULL)
     {
     }
     
     void setArg(const OSN_CO_ARG &arg)
     {
-        m_Arg = arg;
+        m_pArg = &arg;
     }
     
     const OSN_CO_ARG& getArg()
     {
-        return m_Arg;
+        if (NULL == m_pArg)
+        {
+            return STMT_NONE;
+        }
+        return *m_pArg;
     }
     
     oBOOL isRunning()
@@ -58,10 +63,10 @@ struct stCoThreadInfo {
     void printInfo()
     {
         printf("stCoThreadInfo ==========> addr = %llx, running = %llu, \n", (oUINT64)this, m_Running);
-        m_Arg.printContext();
+        m_pArg->printContext();
     }
 private:
-    OSN_CO_ARG m_Arg;
+    const OSN_CO_ARG *m_pArg;
 };
 
 //typedef std::map<std::thread::id, stCoThreadInfo> MAP_CO_THREAD_INFO;

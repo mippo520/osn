@@ -77,7 +77,7 @@ class OsnPreparedStatement
 public:
     OsnPreparedStatement();
     ~OsnPreparedStatement();
-
+    
     void setBool(const oUINT8 index, const oBOOL value);
 	void setUInt8(const oUINT8 index, const oUINT8 value);
 	void setUInt16(const oUINT8 index, const oUINT16 value);
@@ -131,7 +131,7 @@ private:
 	static void errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType);
 protected:
     typedef std::vector<PreparedStatementData> VEC_DATA;
-    mutable std::shared_ptr<VEC_DATA> m_vecStatementData;
+    mutable VEC_DATA m_vecStatementData;
 };
 
 #define STMT_NONE OsnSingleton<OsnPreparedStatement>::instance()

@@ -51,7 +51,7 @@ void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPr
     arg.setInt32(0, osn_gate::Func_Kick);
     arg.setInt32(1, fd);
     g_Osn->call(gate, ePType_User, arg);
-    printf("kick finish!\n");
+    printf("kick finish!\n");  
 //    ID_SERVICE ts2 = stmt.getUInt64(0);
 //    ID_SERVICE gate = stmt.getUInt64(1);
 //    g_Osn->redirect(gate, source, ePType_User, session, stmt);

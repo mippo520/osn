@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		563BFA351F30291E00FE11A3 /* libAgent.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA2D1F3028E500FE11A3 /* libAgent.dylib */; };
+		563BFA361F30291E00FE11A3 /* libGate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA2E1F3028E500FE11A3 /* libGate.dylib */; };
+		563BFA371F30291E00FE11A3 /* libTestService.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA2F1F3028E500FE11A3 /* libTestService.dylib */; };
+		563BFA381F30291E00FE11A3 /* libTestService2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA301F3028E500FE11A3 /* libTestService2.dylib */; };
 		922CDF851EAEF975003675CD /* osn_thread_socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922CDF831EAEF975003675CD /* osn_thread_socket.cpp */; };
 		92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */; };
 		92C918701E9491F3009BF419 /* osn_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C9186F1E9491F3009BF419 /* osn_main.cpp */; };
@@ -40,6 +44,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		563BFA2D1F3028E500FE11A3 /* libAgent.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libAgent.dylib; path = DerivedData/osn/Build/Products/Debug/libAgent.dylib; sourceTree = "<group>"; };
+		563BFA2E1F3028E500FE11A3 /* libGate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGate.dylib; path = DerivedData/osn/Build/Products/Debug/libGate.dylib; sourceTree = "<group>"; };
+		563BFA2F1F3028E500FE11A3 /* libTestService.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService.dylib; sourceTree = "<group>"; };
+		563BFA301F3028E500FE11A3 /* libTestService2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService2.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService2.dylib; sourceTree = "<group>"; };
 		922CDF831EAEF975003675CD /* osn_thread_socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_thread_socket.cpp; path = ../../osn/osn_src/osn_thread/osn_thread_socket.cpp; sourceTree = "<group>"; };
 		922CDF841EAEF975003675CD /* osn_thread_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_thread_socket.h; path = ../../osn/osn_src/osn_thread/osn_thread_socket.h; sourceTree = "<group>"; };
 		929736011E948F590067EE20 /* osn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osn; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,12 +106,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				563BFA351F30291E00FE11A3 /* libAgent.dylib in Frameworks */,
+				563BFA361F30291E00FE11A3 /* libGate.dylib in Frameworks */,
+				563BFA371F30291E00FE11A3 /* libTestService.dylib in Frameworks */,
+				563BFA381F30291E00FE11A3 /* libTestService2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		563BFA2C1F3028E500FE11A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				563BFA2D1F3028E500FE11A3 /* libAgent.dylib */,
+				563BFA2E1F3028E500FE11A3 /* libGate.dylib */,
+				563BFA2F1F3028E500FE11A3 /* libTestService.dylib */,
+				563BFA301F3028E500FE11A3 /* libTestService2.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		922CDF861EAEFAD4003675CD /* osn_socket */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +149,7 @@
 			children = (
 				92C9186D1E949164009BF419 /* osn */,
 				929736021E948F590067EE20 /* Products */,
+				563BFA2C1F3028E500FE11A3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -416,6 +440,10 @@
 					"_XOPEN_SOURCE=1",
 					"Debug=1",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/osn/Build/Products/Debug",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fnon-call-exceptions",
@@ -428,6 +456,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "_XOPEN_SOURCE=1";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/osn/Build/Products/Debug",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fnon-call-exceptions",

@@ -34,6 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		563BFA261F3028AD00FE11A3 /* libGate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGate.dylib; path = DerivedData/osn/Build/Products/Debug/libGate.dylib; sourceTree = "<group>"; };
+		563BFA271F3028AD00FE11A3 /* libTestService.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService.dylib; sourceTree = "<group>"; };
+		563BFA281F3028AD00FE11A3 /* libTestService2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService2.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService2.dylib; sourceTree = "<group>"; };
 		565A03371F284325000108DF /* osn_netpack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_netpack.cpp; path = ../../osn/osn_src/osn_socket/osn_netpack.cpp; sourceTree = "<group>"; };
 		565A03381F284325000108DF /* osn_netpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_netpack.h; path = ../../osn/osn_src/osn_socket/osn_netpack.h; sourceTree = "<group>"; };
 		565A03391F284325000108DF /* osn_socket_head.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_socket_head.h; path = ../../osn/osn_src/osn_socket/osn_socket_head.h; sourceTree = "<group>"; };
@@ -73,6 +76,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		563BFA251F3028AD00FE11A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				563BFA261F3028AD00FE11A3 /* libGate.dylib */,
+				563BFA271F3028AD00FE11A3 /* libTestService.dylib */,
+				563BFA281F3028AD00FE11A3 /* libTestService2.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		565A03361F28430B000108DF /* osn_socket */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +104,7 @@
 				F45781991F0354380060683D /* osn_interface */,
 				F45781841F03541C0060683D /* osn_lib */,
 				F457817E1F0353AB0060683D /* Products */,
+				563BFA251F3028AD00FE11A3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -351,6 +365,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/osn/Build/Products/Debug",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -361,6 +379,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/osn/Build/Products/Debug",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
