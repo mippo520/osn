@@ -129,15 +129,19 @@ private:
     
     static void errorInvalidIndex(const std::string &strFuncName, const oUINT8 index);
 	static void errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType);
+public:
+    static std::shared_ptr<OsnPreparedStatement> s_SharedPtr;
 protected:
     typedef std::vector<PreparedStatementData> VEC_DATA;
     mutable VEC_DATA m_vecStatementData;
 };
 
 #define STMT_NONE OsnSingleton<OsnPreparedStatement>::instance()
+#define SHARED_PTR_STMT_NONE OsnPreparedStatement::s_SharedPtr
 
 typedef std::function<void (ID_SERVICE, ID_SESSION, const OsnPreparedStatement &)> DISPATCH_FUNC;
 typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
 typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
+typedef std::shared_ptr<OsnPreparedStatement> SHARED_PTR_STMT;
 
 #endif//_PreparedStatement_h__

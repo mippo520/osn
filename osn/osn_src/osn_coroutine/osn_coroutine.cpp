@@ -49,7 +49,7 @@ ucontext_t* OsnCoroutine::getCtxPtr()
 }
 
 
-OSN_CO_ARG OsnCoroutine::run(const OSN_CO_ARG &arg)
+SHARED_PTR_STMT OsnCoroutine::run(SHARED_PTR_STMT arg)
 {
     return m_Func(getId(), arg);
 }

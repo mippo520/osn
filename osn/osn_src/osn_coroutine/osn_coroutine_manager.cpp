@@ -73,7 +73,7 @@ oBOOL OsnCoroutineManager::destroy(ID_COROUTINE co) const
     return bRet;
 }
 
-const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg) const
+SHARED_PTR_STMT OsnCoroutineManager::yield(SHARED_PTR_STMT arg) const
 {
     stCoThreadInfo *pInfo = getThreadInfo();
     
@@ -100,7 +100,7 @@ const OSN_CO_ARG& OsnCoroutineManager::yield(const OSN_CO_ARG &arg) const
     return pInfo->getArg();
 }
 
-const OSN_CO_ARG& OsnCoroutineManager::resume(ID_COROUTINE unId, const OSN_CO_ARG &arg) const
+SHARED_PTR_STMT OsnCoroutineManager::resume(ID_COROUTINE unId, SHARED_PTR_STMT arg) const
 {
     stCoThreadInfo *pInfo = getThreadInfo();
 
@@ -174,7 +174,7 @@ void OsnCoroutineManager::mainFunc(OsnCoroutineManager *pManager)
         pInfo->printInfo();
         return;
     }
-    OSN_CO_ARG arg = pCo->run(pInfo->getArg());
+    SHARED_PTR_STMT arg = pCo->run(pInfo->getArg());
     pInfo = pManager->getThreadInfo();
     pInfo->setRunning(0);
     pInfo->setArg(arg);

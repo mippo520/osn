@@ -32,8 +32,8 @@ public:
     
     virtual ID_COROUTINE create(const OSN_COROUTINE_FUNC &func) const;
     virtual oBOOL destroy(ID_COROUTINE co) const;
-    virtual const OSN_CO_ARG& yield(const OSN_CO_ARG &arg = OSN_CO_ARG()) const;
-    virtual const OSN_CO_ARG& resume(ID_COROUTINE unId, const OSN_CO_ARG &arg = OSN_CO_ARG()) const;
+    virtual SHARED_PTR_STMT yield(SHARED_PTR_STMT arg) const;
+    virtual SHARED_PTR_STMT resume(ID_COROUTINE unId, SHARED_PTR_STMT arg) const;
     virtual ID_COROUTINE running() const;
     void addThread();
 private:

@@ -83,6 +83,7 @@ PreparedStatementValueType PreparedStatementData::getType() const
 }
 
 
+std::shared_ptr<OsnPreparedStatement> OsnPreparedStatement::s_SharedPtr(&STMT_NONE);
 
 OsnPreparedStatement::OsnPreparedStatement()
 {

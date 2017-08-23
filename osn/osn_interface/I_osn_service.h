@@ -16,7 +16,7 @@ public:
 private:
     friend class OsnService;
     virtual void pushWarkingService(ID_SERVICE unId) const = 0;
-    virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = OsnPreparedStatement()) const = 0;
+    virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = STMT_NONE) const = 0;
 };
 
 extern const IOsnService *g_Service;

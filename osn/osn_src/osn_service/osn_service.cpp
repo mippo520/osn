@@ -53,6 +53,11 @@ void OsnService::setIsInGlobal(oBOOL value)
 
 OsnService::~OsnService()
 {
+    while (m_queForkInfo.size() > 0)
+    {
+        SAFE_DELETE(m_queForkInfo.front());
+        m_queForkInfo.pop();
+    }
 }
 
 void OsnService::exit()
@@ -168,18 +173,31 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
 		{
 			ID_COROUTINE co = createCO(std::bind(&OsnService::dispatch, this, std::placeholders::_1));
             setCoroutineMsg(co, pMsg->unSession, pMsg->unSource);
-            pMsg->stmt.pushBackInt32(pMsg->nType);
-            pMsg->stmt.pushBackUInt64(pMsg->unSource);
-            pMsg->stmt.pushBackUInt32(pMsg->unSession);
+            pMsg->stmt->pushBackInt32(pMsg->nType);
+            pMsg->stmt->pushBackUInt64(pMsg->unSource);
+            pMsg->stmt->pushBackUInt32(pMsg->unSession);
             nType = suspend(co, g_Coroutine->resume(co, pMsg->stmt));
 		}
 
         SAFE_DELETE(pMsg);
+        
+        while (m_queForkInfo.size() > 0)
+        {
+            stForkInfo *pInfo = m_queForkInfo.front();
+            m_queForkInfo.pop();
+            ID_COROUTINE co = createCO(pInfo->func);
+            pInfo->stmt->printContext();
+            suspend(co, g_Coroutine->resume(co, pInfo->stmt));
+            SAFE_DELETE(pInfo);
+        }
+        
         return true;
     }
     else{
         return false;
     }
+    
+
 }
 
 ID_SESSION OsnService::newSession()
@@ -215,51 +233,51 @@ oUINT32 OsnService::getMsgSize()
     return unSize;
 }
 
-ID_COROUTINE OsnService::createCO(OSN_SERVICE_CO_FUNC func)
+ID_COROUTINE OsnService::createCO(VOID_STMT_FUNC func)
 {
 	ID_COROUTINE curCo = popFromCoroutinePool();
 
     if (0 == curCo)
     {       
-        curCo = g_Coroutine->create([=](ID_COROUTINE co, const OsnPreparedStatement &arg){
-            func(arg);
+        curCo = g_Coroutine->create([=](ID_COROUTINE co, SHARED_PTR_STMT arg){
+            func(*arg);
             while (true) {
-                OsnPreparedStatement stmt;
-                stmt.pushBackInt32(eYT_Exit);
-                const OsnPreparedStatement &stmtFunc = g_Coroutine->yield(stmt);
-                OSN_SERVICE_CO_FUNC funcNew = stmtFunc.getFunction(0);
-                const OsnPreparedStatement &stmtArg = g_Coroutine->yield();
-                funcNew(stmtArg);
+                SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+                stmt->pushBackInt32(eYT_Exit);
+                SHARED_PTR_STMT stmtFunc = g_Coroutine->yield(stmt);
+                VOID_STMT_FUNC funcNew = stmtFunc->getFunction(0);
+                SHARED_PTR_STMT stmtArg = g_Coroutine->yield();
+                funcNew(*stmtArg);
             }
             return arg;
         });
     }
     else
     {
-        OsnPreparedStatement stmt;
-        stmt.setFunction(0, func);
+        SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+        stmt->setFunction(0, func);
 		g_Coroutine->resume(curCo, stmt);
     }
     
     return curCo;
 }
 
-oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
+oINT32 OsnService::suspend(ID_COROUTINE co, SHARED_PTR_STMT arg)
 {
-	if (arg.isEmpty())
+	if (arg->isEmpty())
 	{
 	}
-    oINT32 nType = arg.popBackInt32();
+    oINT32 nType = arg->popBackInt32();
     switch (nType) {
         case eYT_Call:
 		{
-			ID_SESSION unSession = arg.getUInt32(0);
+			ID_SESSION unSession = arg->getUInt32(0);
 			m_mapSessionCoroutine[unSession] = co;
 		}
             break;
         case eYT_Sleep:
         {
-            ID_SESSION unSession = arg.popBackUInt32();
+            ID_SESSION unSession = arg->popBackUInt32();
             m_mapSessionCoroutine[unSession] = co;
             m_mapSleepCoSession[co] = unSession;
         }
@@ -271,7 +289,7 @@ oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
             {
                 m_mapSleepCoSession.erase(itr);
             }
-            ID_SESSION unSession = arg.popBackUInt32();
+            ID_SESSION unSession = arg->popBackUInt32();
             MAP_SESSION_CO_ITR coItr = m_mapSessionCoroutine.find(unSession);
             if (coItr != m_mapSessionCoroutine.end())
             {
@@ -282,7 +300,7 @@ oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
             break;
         case eYT_Wakeup:
         {
-            ID_COROUTINE unCo = arg.popBackUInt64();
+            ID_COROUTINE unCo = arg->popBackUInt64();
             if (m_mapSleepCoSession.find(unCo) != m_mapSleepCoSession.end())
             {
                 m_queWakeup.push(unCo);
@@ -295,7 +313,7 @@ oINT32 OsnService::suspend(ID_COROUTINE co, const OSN_CO_ARG &arg)
             stMsgCoroutineInfo &info = getCoroutineMsg(co);
             if (!info.isNone())
             {
-                g_Service->sendMessage(info.source, 0, ePType_Response, info.session, arg);
+                g_Service->sendMessage(info.source, 0, ePType_Response, info.session, *arg);
                 info.clear();
             }
             else
@@ -353,9 +371,9 @@ oINT32 OsnService::dispatchWakeup()
     
     ID_SESSION unSession = itr->second;
     m_mapSessionCoroutine[unSession] = 0;
-    OsnPreparedStatement stmt;
-    stmt.setBool(0, false);
-    stmt.setString(1, "BREAK");
+    SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+    stmt->setBool(0, false);
+    stmt->setString(1, "BREAK");
     return suspend(co, g_Coroutine->resume(co, stmt));
 }
 
@@ -406,5 +424,19 @@ void OsnService::removeCoroutineMsg(ID_COROUTINE co)
     {
         m_mapCoroutineMsg.erase(co);
     }
+}
+
+ID_COROUTINE OsnService::fork(const VOID_STMT_FUNC &func, const OsnPreparedStatement &stmt)
+{
+    stForkInfo *pInfo = new stForkInfo();
+    pInfo->func = func;
+    pInfo->stmt = SHARED_PTR_STMT(new OsnPreparedStatement(stmt));
+    m_queForkInfo.push(pInfo);
+    return 0;
+}
+
+void OsnService::forkFunc(const OsnPreparedStatement &stmt)
+{
+    
 }
 

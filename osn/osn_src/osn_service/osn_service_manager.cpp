@@ -250,6 +250,21 @@ OsnService* OsnServiceManager::dispatchMessage(OsnService* pService, oINT32 nWei
     return pService;
 }
 
+ID_COROUTINE OsnServiceManager::fork(const VOID_STMT_FUNC &func, const OsnPreparedStatement &stmt) const
+{
+    ID_COROUTINE co = 0;
+    
+    ID_SERVICE unId = getCurService();
+    OsnService *pService = getObject(unId);
+    if (NULL != pService)
+    {
+        co = pService->fork(func, stmt);
+    }
+    
+    return co;
+}
+
+
 void OsnServiceManager::addThread()
 {
 //    std::thread::id curThread = std::this_thread::get_id();

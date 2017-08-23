@@ -30,7 +30,6 @@ class OsnService {
         eYT_Wakeup,
         eYT_CleanSleep,
     };
-    typedef std::function<void (const OsnPreparedStatement &)> OSN_SERVICE_CO_FUNC;
     static std::queue<ID_COROUTINE> s_queCoroutine;
     static OsnSpinLock s_CoQueSpinLock;
     
@@ -57,6 +56,12 @@ class OsnService {
         
         static stMsgCoroutineInfo NONE;
     };
+    
+    struct stForkInfo
+    {
+        VOID_STMT_FUNC func;
+        SHARED_PTR_STMT stmt;
+    };
 public:
     virtual ~OsnService();
 protected:
@@ -78,8 +83,8 @@ private:
     oBOOL dispatchMessage(oINT32 &nType);
     void pushMsg(stServiceMessage *pMsg);
     oUINT32 getMsgSize();
-    ID_COROUTINE createCO(OSN_SERVICE_CO_FUNC func);
-    oINT32 suspend(ID_COROUTINE co, const OSN_CO_ARG &arg);
+    ID_COROUTINE createCO(VOID_STMT_FUNC func);
+    oINT32 suspend(ID_COROUTINE co, SHARED_PTR_STMT arg);
     void pushToCoroutinePool(ID_COROUTINE co);
     ID_COROUTINE popFromCoroutinePool();
     stServiceMessage* popMessage();
@@ -92,6 +97,9 @@ private:
     void removeCoroutineMsg(ID_COROUTINE co);
     
     ID_SESSION newSession();
+    
+    ID_COROUTINE fork(const VOID_STMT_FUNC &func, const OsnPreparedStatement &stmt);
+    void forkFunc(const OsnPreparedStatement &stmt);
 private:
     std::queue<stServiceMessage*> m_queMsg;
     OsnSpinLock m_QueMsgSpinLock;
@@ -110,6 +118,8 @@ private:
     std::map<ID_COROUTINE, ID_SESSION> m_mapSleepCoSession;
     std::queue<ID_COROUTINE> m_queWakeup;
 	MAP_DISPATCH_FUNC m_mapDispatchFunc;
+    
+    std::queue<stForkInfo*> m_queForkInfo;
 };
 
 #endif /* osn_service_hpp */

@@ -41,10 +41,11 @@ public:
     OsnService* dispatchMessage(OsnService* pService, oINT32 nWeight);
     void addThread();
     oBOOL pushMsg(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg) const;
+    ID_COROUTINE fork(const VOID_STMT_FUNC &func, const OsnPreparedStatement &stmt) const;
 private:
     virtual ID_SERVICE getCurService() const;
     virtual void pushWarkingService(ID_SERVICE unId) const;
-    virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = OsnPreparedStatement()) const;
+    virtual ID_SESSION sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSource, oINT32 type, ID_SESSION unSession, const OsnPreparedStatement &msg = STMT_NONE) const;
     ID_SERVICE startService(const std::string &strServiceName, const OsnPreparedStatement &stmt);
     void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr);
     void unregistDispatchFunc(oINT32 nPType);

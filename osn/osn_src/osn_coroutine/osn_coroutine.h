@@ -28,7 +28,7 @@ private:
     void createContext(ucontext_t *pNextCtx);
     void setLastContext(ucontext_t *pLastCtx);
     ucontext_t* getCtxPtr();
-    OSN_CO_ARG run(const OSN_CO_ARG &arg);
+    SHARED_PTR_STMT run(SHARED_PTR_STMT arg);
     
     void printInfo();
 private:

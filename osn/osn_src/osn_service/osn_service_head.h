@@ -26,13 +26,13 @@ struct stServiceMessage
 	ID_SERVICE unSource;
 	ID_SESSION unSession;
 	oINT32	nType;
-	OsnPreparedStatement stmt;
+    SHARED_PTR_STMT stmt;
 
 	stServiceMessage(const OsnPreparedStatement &stmt)
 		: unSource(0)
 		, unSession(0)
 		, nType(ePType_None)
-        , stmt(stmt)
+        , stmt(new OsnPreparedStatement(stmt))
 	{}
     
     ~stServiceMessage() {}

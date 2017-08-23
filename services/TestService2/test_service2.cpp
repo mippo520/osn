@@ -91,13 +91,14 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    OsnPreparedStatement arg;
 //    arg.setUInt64(0, g_Osn->self());
 //    ID_SERVICE ts = g_Osn->startService("TestService", arg);
-    m_Gate = g_Osn->startService("Gate");
-    OsnPreparedStatement arg;
-    arg.setInt32(0, osn_gate::Func_Open);
-    arg.setString(1, "");
-    arg.setInt32(2, 12366);
-    g_Osn->call(m_Gate, ePType_User, arg);
-    printf("gate open finish!\n");
+    
+//    m_Gate = g_Osn->startService("Gate");
+//    OsnPreparedStatement arg;
+//    arg.setInt32(0, osn_gate::Func_Open);
+//    arg.setString(1, "");
+//    arg.setInt32(2, 12366);
+//    g_Osn->call(m_Gate, ePType_User, arg);
+//    printf("gate open finish!\n");
     
 //    printf("start TestService!\n");
     
@@ -111,6 +112,52 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 
     
 
+//    }
+    
+    
+    ID_SERVICE addr = g_Osn->startService("TestService");
+    OsnPreparedStatement arg1;
+    arg1.setInt32(0, 10086);
+    SHARED_PTR_STMT argCall1 = g_Osn->call(addr, ePType_User, arg1);
+    printf("argCall1 index 0 = %d\n", argCall1->getInt32(0));
+    
+    OsnPreparedStatement arg2;
+    arg2.setInt32(0, 10087);
+    SHARED_PTR_STMT argCall2 = g_Osn->call(addr, ePType_User, arg2);
+    printf("argCall2 index 0 = %d\n", argCall2->getInt32(0));
+    
+    OsnPreparedStatement arg3;
+    arg3.setInt32(0, 10088);
+    SHARED_PTR_STMT argCall3 = g_Osn->call(addr, ePType_User, arg3);
+    printf("argCall3 index 0 = %d\n", argCall3->getInt32(0));
+
+    printf("argCall1 index 1 = %d\n", argCall1->getInt32(1));
+    printf("argCall2 index 1 = %d\n", argCall2->getInt32(1));
+    printf("argCall3 index 1 = %d\n", argCall3->getInt32(1));
+
+//    for (oINT32 i = 0; i < 100; ++i)
+//    {
+//        printf("test2 for ========> 1\n");
+//
+//        const OsnPreparedStatement &argCall = g_Osn->call(addr, ePType_User);
+//        printf("test call back 1 %d\n", argCall.getInt32(0));
+//
+//        OsnPreparedStatement arg;
+//        arg.setInt32(0, i);
+//        g_Osn->fork([=](const OsnPreparedStatement &stmt1)
+//                    {
+//                        oINT32 i = stmt1.getInt32(0);
+//                        printf("Test2 fork %d\n", i);
+//                        const OsnPreparedStatement &argCall = g_Osn->call(addr, ePType_User);
+//                        printf("test call back 2 %d\n", argCall.getInt32(0));
+//
+//                        g_Osn->fork([=](const OsnPreparedStatement &stmt2)
+//                                    {
+//                                        oINT32 i = stmt2.getInt32(0);
+//                                        printf("Test2 fork step2 %d\n", i);
+//                                    }, stmt1);
+//                    }, arg);
+//        printf("test2 for ========> 2\n");
 //    }
 }
 

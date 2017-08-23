@@ -44,14 +44,40 @@ void TestService::start(const OsnPreparedStatement &stmt)
 
 void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
-    sleep(5);
-    oINT32 fd = stmt.getInt32(0);
-    ID_SERVICE gate = stmt.getUInt64(1);
-    OsnPreparedStatement arg;
-    arg.setInt32(0, osn_gate::Func_Kick);
-    arg.setInt32(1, fd);
-    g_Osn->call(gate, ePType_User, arg);
-    printf("kick finish!\n");  
+    printf("TestService::dispatchLua =========> \n");
+    oINT32 value = stmt.getInt32(0);
+    if (10086 == value)
+    {
+        OsnPreparedStatement arg1;
+        arg1.setInt32(0, 123);
+        arg1.setInt32(1, 234);
+        g_Osn->ret(arg1);
+    }
+    else if(10087 == value)
+    {
+        OsnPreparedStatement arg1;
+        arg1.setInt32(0, 345);
+        arg1.setInt32(1, 456);
+        g_Osn->ret(arg1);
+        
+    }
+    else if(10088 == value)
+    {
+        OsnPreparedStatement arg1;
+        arg1.setInt32(0, 567);
+        arg1.setInt32(1, 678);
+        g_Osn->ret(arg1);
+        
+    }
+    
+//    sleep(5);
+//    oINT32 fd = stmt.getInt32(0);
+//    ID_SERVICE gate = stmt.getUInt64(1);
+//    OsnPreparedStatement arg;
+//    arg.setInt32(0, osn_gate::Func_Kick);
+//    arg.setInt32(1, fd);
+//    g_Osn->call(gate, ePType_User, arg);
+//    printf("kick finish!\n");  
 //    ID_SERVICE ts2 = stmt.getUInt64(0);
 //    ID_SERVICE gate = stmt.getUInt64(1);
 //    g_Osn->redirect(gate, source, ePType_User, session, stmt);

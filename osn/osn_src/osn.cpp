@@ -112,19 +112,19 @@ ID_SESSION Osn::send(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &m
     return g_ServiceManager.sendMessage(addr, 0, type, 0, msg);
 }
 
-const OsnPreparedStatement& Osn::call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg) const
+SHARED_PTR_STMT Osn::call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &msg) const
 {
     ID_SESSION unSession = g_ServiceManager.sendMessage(addr, g_ServiceManager.getCurService(), type, 0, msg);
     if (unSession > 0)
     {
-        OSN_CO_ARG arg;
-        arg.setUInt32(0, unSession);
-        arg.pushBackInt32(OsnService::eYT_Call);
+        SHARED_PTR_STMT arg(new OsnPreparedStatement());
+        arg->setUInt32(0, unSession);
+        arg->pushBackInt32(OsnService::eYT_Call);
         return g_CorotineManager.yield(arg);
     }
     else
     {
-        return STMT_NONE;
+        return SHARED_PTR_STMT_NONE;
     }
 }
 
@@ -135,38 +135,39 @@ void Osn::redirect(ID_SERVICE addr, ID_SERVICE source, oINT32 type, ID_SESSION s
 
 void Osn::ret(const OsnPreparedStatement &msg) const
 {
-    msg.pushBackInt32(OsnService::eYT_Return);
-    g_CorotineManager.yield(msg);
+    SHARED_PTR_STMT arg(new OsnPreparedStatement(msg));
+    arg->pushBackInt32(OsnService::eYT_Return);
+    g_CorotineManager.yield(arg);
 }
 
 void Osn::exit() const
 {
-    OsnPreparedStatement stmt;
-    stmt.pushBackInt32(OsnService::eYT_Quit);
+    SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+    stmt->pushBackInt32(OsnService::eYT_Quit);
     g_CorotineManager.yield(stmt);
 }
 
 void Osn::wait(ID_SERVICE unId) const
 {
     ID_SESSION unSession = g_ServiceManager.genId();
-    OsnPreparedStatement stmt;
-    stmt.pushBackUInt32(unSession);
-    stmt.pushBackInt32(OsnService::eYT_Sleep);
+    SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+    stmt->pushBackUInt32(unSession);
+    stmt->pushBackInt32(OsnService::eYT_Sleep);
     g_CorotineManager.yield(stmt);
     
-    stmt.clear();
-    stmt.pushBackUInt32(unSession);
-    stmt.pushBackInt32(OsnService::eYT_CleanSleep);
+    stmt->clear();
+    stmt->pushBackUInt32(unSession);
+    stmt->pushBackInt32(OsnService::eYT_CleanSleep);
     g_CorotineManager.yield(stmt);
 }
 
 oBOOL Osn::wakeup(ID_SERVICE unId) const
 {
-    OsnPreparedStatement stmt;
-    stmt.pushBackUInt64(unId);
-    stmt.pushBackInt32(OsnService::eYT_Wakeup);
-    const OsnPreparedStatement &ret = g_CorotineManager.yield(stmt);
-    return ret.getBool(0);
+    SHARED_PTR_STMT stmt(new OsnPreparedStatement());
+    stmt->pushBackUInt64(unId);
+    stmt->pushBackInt32(OsnService::eYT_Wakeup);
+    SHARED_PTR_STMT ret = g_CorotineManager.yield(stmt);
+    return ret->getBool(0);
 }
 
 void Osn::registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr) const
@@ -183,3 +184,9 @@ ID_SERVICE Osn::self() const
 {
     return g_ServiceManager.getCurService();
 }
+
+ID_COROUTINE Osn::fork(VOID_STMT_FUNC func, const OsnPreparedStatement &stmt) const
+{
+    return g_ServiceManager.fork(func, stmt);
+}
+

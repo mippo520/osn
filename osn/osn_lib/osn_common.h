@@ -16,6 +16,6 @@
 #include "I_osn.h"
 
 typedef OsnPreparedStatement OSN_CO_ARG;
-typedef std::function<OSN_CO_ARG(ID_COROUTINE co, const OSN_CO_ARG&)> OSN_COROUTINE_FUNC;
+typedef std::function<SHARED_PTR_STMT(ID_COROUTINE, SHARED_PTR_STMT)> OSN_COROUTINE_FUNC;
 
 #endif /* osn_common_h */
