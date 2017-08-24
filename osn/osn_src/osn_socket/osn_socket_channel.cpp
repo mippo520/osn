@@ -118,7 +118,7 @@ oBOOL OsnSocketChannel::connectOnce()
     }
     
     m_Desc.nSock = fd;
-    m_Desc.dispatchThread = g_Osn->fork([=](), <#const OsnPreparedStatement &stmt#>)
+    m_Desc.dispatchThread = g_Osn->fork([=](), <#const OsnPreparedStatement &stmt#>) 
 }
 
 oINT32 OsnSocketChannel::connectBackup()
