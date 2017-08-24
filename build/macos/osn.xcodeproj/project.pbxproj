@@ -11,6 +11,7 @@
 		563BFA361F30291E00FE11A3 /* libGate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA2E1F3028E500FE11A3 /* libGate.dylib */; };
 		563BFA371F30291E00FE11A3 /* libTestService.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA2F1F3028E500FE11A3 /* libTestService.dylib */; };
 		563BFA381F30291E00FE11A3 /* libTestService2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563BFA301F3028E500FE11A3 /* libTestService2.dylib */; };
+		56DB7EA01F4EFBD0009FCB3D /* osn_socket_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56DB7E9E1F4EFBD0009FCB3D /* osn_socket_channel.cpp */; };
 		922CDF851EAEF975003675CD /* osn_thread_socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922CDF831EAEF975003675CD /* osn_thread_socket.cpp */; };
 		92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92BC05EF1EA857C4004C41B3 /* osn_spin_lock.cpp */; };
 		92C918701E9491F3009BF419 /* osn_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C9186F1E9491F3009BF419 /* osn_main.cpp */; };
@@ -48,6 +49,8 @@
 		563BFA2E1F3028E500FE11A3 /* libGate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGate.dylib; path = DerivedData/osn/Build/Products/Debug/libGate.dylib; sourceTree = "<group>"; };
 		563BFA2F1F3028E500FE11A3 /* libTestService.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService.dylib; sourceTree = "<group>"; };
 		563BFA301F3028E500FE11A3 /* libTestService2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTestService2.dylib; path = DerivedData/osn/Build/Products/Debug/libTestService2.dylib; sourceTree = "<group>"; };
+		56DB7E9E1F4EFBD0009FCB3D /* osn_socket_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_socket_channel.cpp; path = ../../osn/osn_src/osn_socket/osn_socket_channel.cpp; sourceTree = "<group>"; };
+		56DB7E9F1F4EFBD0009FCB3D /* osn_socket_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_socket_channel.h; path = ../../osn/osn_src/osn_socket/osn_socket_channel.h; sourceTree = "<group>"; };
 		922CDF831EAEF975003675CD /* osn_thread_socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = osn_thread_socket.cpp; path = ../../osn/osn_src/osn_thread/osn_thread_socket.cpp; sourceTree = "<group>"; };
 		922CDF841EAEF975003675CD /* osn_thread_socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osn_thread_socket.h; path = ../../osn/osn_src/osn_thread/osn_thread_socket.h; sourceTree = "<group>"; };
 		929736011E948F590067EE20 /* osn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osn; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +143,8 @@
 				F4DDFEDF1EAF387700CA94BB /* osn_socket.h */,
 				F46B42201ECEF3DC00E44999 /* osn_socket_driver.cpp */,
 				F46B42211ECEF3DC00E44999 /* osn_socket_driver.h */,
+				56DB7E9E1F4EFBD0009FCB3D /* osn_socket_channel.cpp */,
+				56DB7E9F1F4EFBD0009FCB3D /* osn_socket_channel.h */,
 			);
 			name = osn_socket;
 			sourceTree = "<group>";
@@ -292,7 +297,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = liqing;
+				ORGANIZATIONNAME = zenghui;
 				TargetAttributes = {
 					929736001E948F590067EE20 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -325,6 +330,7 @@
 				92C918891E94E41B009BF419 /* osn_service_manager.cpp in Sources */,
 				F4DDFEE51EAF3C5F00CA94BB /* osn_kqueue.cpp in Sources */,
 				92BC05F11EA857C4004C41B3 /* osn_spin_lock.cpp in Sources */,
+				56DB7EA01F4EFBD0009FCB3D /* osn_socket_channel.cpp in Sources */,
 				92C918811E94C373009BF419 /* osn_thread_timer.cpp in Sources */,
 				92C918821E94C373009BF419 /* osn_thread_worker.cpp in Sources */,
 				92F88F1D1EA0781700E62286 /* osn_prepared_statement.cpp in Sources */,

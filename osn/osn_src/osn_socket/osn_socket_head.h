@@ -265,4 +265,37 @@ struct stOsnSockQueue
 
 #define SOCKET_START_FUNC_BIND() std::bind(&TestService3::acceptFunc, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)
 
+struct stSocketAddr
+{
+    std::string strHost;
+    oINT32 nPort;
+};
+
+struct stChannelDesc
+{
+    std::string strHost;
+    oINT32 nPort;
+    oBOOL bSocket;
+    oBOOL bClosed;
+    ID_COROUTINE dispatchThread;
+    ID_COROUTINE connectingThread;
+    ID_COROUTINE authCoroutine;
+    oINT32  nSock;
+    std::queue<ID_COROUTINE> queConnecting;
+    oBOOL bNodelay;
+    std::vector<stSocketAddr> vecBackup;
+    
+    stChannelDesc()
+    : strHost("")
+    , nPort(0)
+    , bSocket(false)
+    , bClosed(false)
+    , dispatchThread(0)
+    , connectingThread(0)
+    , authCoroutine(0)
+    , nSock(0)
+    , bNodelay(false)
+    {}
+};
+
 #endif /* osn_socket_head_h */
