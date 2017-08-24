@@ -70,6 +70,10 @@ void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPr
         g_Osn->ret(arg1);
         
     }
+    else
+    {
+        g_Osn->ret(789, 890);
+    }
     
 //    sleep(5);
 //    oINT32 fd = stmt.getInt32(0);
