@@ -667,13 +667,17 @@ void OsnPreparedStatement::clear()
 	m_vecStatementData.clear();
 }
 
-void OsnPreparedStatement::printContext() const
+void OsnPreparedStatement::printContext(const std::string &context) const
 {
-	std::string strPrintInfo = "";
+	std::string strPrintInfo = context;
+    strPrintInfo += " OsnPreparedStatement ====================> ";
 	oUINT8 unCount = getPreparedStatementDataCount();
+    char sz[256];
+    sprintf(sz, "size = %d, value = [[[ ", unCount);
+    strPrintInfo += sz;
+    
 	for (oUINT8 i = 0; i < unCount; ++i)
 	{
-		char sz[256];
 		PreparedStatementValueType type = getType(i);
 		switch (type)
 		{
@@ -682,7 +686,7 @@ void OsnPreparedStatement::printContext() const
 			strPrintInfo += sz;
 			break;
 		case TYPE_INT8:
-			sprintf(sz, "INT8 = %d, ", getInt8(i));
+			sprintf(sz, "INT8 = %c, ", getInt8(i));
 			strPrintInfo += sz;
 			break;
 		case TYPE_UINT8:
@@ -738,7 +742,7 @@ void OsnPreparedStatement::printContext() const
 		}
 	}
 	strPrintInfo += "]]]\n";
-	printf("OsnPreparedStatement = %s\n", strPrintInfo.c_str());
+	printf("%s", strPrintInfo.c_str());
 }
 
 PreparedStatementValueType OsnPreparedStatement::getType( const oUINT8 index ) const
@@ -770,6 +774,176 @@ void OsnPreparedStatement::errorInvalidIndex(const std::string &strFuncName, con
 void OsnPreparedStatement::errorTypeMismatch(const std::string &strFuncName, const oUINT8 index, PreparedStatementValueType eType)
 {
 //	ccDebugLog("##error %s => type mismatch, index:%d, type:%d", pszFuncName, index, eType);
+}
+
+
+
+/***************************************************************************************************/
+/**************                          template                          *************************/
+/***************************************************************************************************/
+
+
+oBOOL OsnPreparedStatement::pushBack(oBOOL value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.boolean = value;
+    m_vecStatementData[unSize].type = TYPE_BOOL;
+    
+    return m_vecStatementData[unSize].data.boolean;
+}
+
+oINT8 OsnPreparedStatement::pushBack(oINT8 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.i8 = value;
+    m_vecStatementData[unSize].type = TYPE_INT8;
+    
+    return m_vecStatementData[unSize].data.i8;
+    
+}
+
+oINT16 OsnPreparedStatement::pushBack(oINT16 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.i16 = value;
+    m_vecStatementData[unSize].type = TYPE_INT16;
+    
+    return m_vecStatementData[unSize].data.i16;
+    
+}
+
+oINT32 OsnPreparedStatement::pushBack(oINT32 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.i32 = value;
+    m_vecStatementData[unSize].type = TYPE_INT32;
+    
+    return m_vecStatementData[unSize].data.i32;
+}
+
+oINT64 OsnPreparedStatement::pushBack(oINT64 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.i64 = value;
+    m_vecStatementData[unSize].type = TYPE_INT64;
+    
+    return m_vecStatementData[unSize].data.i64;
+    
+}
+
+oUINT8 OsnPreparedStatement::pushBack(oUINT8 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.ui8 = value;
+    m_vecStatementData[unSize].type = TYPE_UINT8;
+    
+    return m_vecStatementData[unSize].data.ui8;
+    
+}
+
+oUINT16 OsnPreparedStatement::pushBack(oUINT16 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.ui16 = value;
+    m_vecStatementData[unSize].type = TYPE_UINT16;
+    
+    return m_vecStatementData[unSize].data.ui16;
+    
+}
+
+oUINT32 OsnPreparedStatement::pushBack(oUINT32 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.ui32 = value;
+    m_vecStatementData[unSize].type = TYPE_UINT32;
+    
+    return m_vecStatementData[unSize].data.ui32;
+    
+}
+
+oUINT64 OsnPreparedStatement::pushBack(oUINT64 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.ui64 = value;
+    m_vecStatementData[unSize].type = TYPE_UINT64;
+    
+    return m_vecStatementData[unSize].data.ui64;
+    
+}
+
+oFLOAT32 OsnPreparedStatement::pushBack(oFLOAT32 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.f = value;
+    m_vecStatementData[unSize].type = TYPE_FLOAT32;
+    
+    return m_vecStatementData[unSize].data.f;
+    
+}
+
+oFLOAT64 OsnPreparedStatement::pushBack(oFLOAT64 value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].data.d = value;
+    m_vecStatementData[unSize].type = TYPE_FLOAT64;
+    
+    return m_vecStatementData[unSize].data.d;
+    
+}
+
+const std::string& OsnPreparedStatement::pushBack(const std::string &value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].str = value;
+    m_vecStatementData[unSize].type = TYPE_STRING;
+
+    return m_vecStatementData[unSize].str;
+}
+
+const oINT8* OsnPreparedStatement::pushBack(const oINT8* value)
+{
+    oUINT32 unSize = m_vecStatementData.size();
+    m_vecStatementData.resize(unSize + 1);
+    
+    m_vecStatementData[unSize].str = value;
+    m_vecStatementData[unSize].type = TYPE_STRING;
+    return m_vecStatementData[unSize].str.c_str();
+}
+
+const OsnPreparedStatement& OsnPreparedStatement::pushBack(const OsnPreparedStatement &value)
+{
+    m_vecStatementData.insert(m_vecStatementData.end(), value.m_vecStatementData.begin(), value.m_vecStatementData.end());
+    return *this;
+}
+
+SHARED_PTR_STMT OsnPreparedStatement::pushBack(SHARED_PTR_STMT value)
+{
+    pushBack(*value);
+    return value;
 }
 
 

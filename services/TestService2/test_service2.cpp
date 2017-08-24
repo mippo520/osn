@@ -118,22 +118,24 @@ void TestService2::start(const OsnPreparedStatement &stmt)
     ID_SERVICE addr = g_Osn->startService("TestService");
     OsnPreparedStatement arg1;
     arg1.setInt32(0, 10086);
-    SHARED_PTR_STMT argCall1 = g_Osn->call(addr, ePType_User, arg1);
+//    SHARED_PTR_STMT argCall1 = g_Osn->call(addr, ePType_User, arg1);
+    SHARED_PTR_STMT argCall1 = g_Osn->call(addr, eProtoType::ePType_User, 10086, "a", arg1, 'b', eProtoType::ePType_User);
     printf("argCall1 index 0 = %d\n", argCall1->getInt32(0));
     
     OsnPreparedStatement arg2;
     arg2.setInt32(0, 10087);
-    SHARED_PTR_STMT argCall2 = g_Osn->call(addr, ePType_User, arg2);
+    SHARED_PTR_STMT argCall2 = g_Osn->call(addr, eProtoType::ePType_User, arg2);
     printf("argCall2 index 0 = %d\n", argCall2->getInt32(0));
     
     OsnPreparedStatement arg3;
     arg3.setInt32(0, 10088);
-    SHARED_PTR_STMT argCall3 = g_Osn->call(addr, ePType_User, arg3);
+    SHARED_PTR_STMT argCall3 = g_Osn->call(addr, eProtoType::ePType_User, arg3);
     printf("argCall3 index 0 = %d\n", argCall3->getInt32(0));
 
     printf("argCall1 index 1 = %d\n", argCall1->getInt32(1));
     printf("argCall2 index 1 = %d\n", argCall2->getInt32(1));
     printf("argCall3 index 1 = %d\n", argCall3->getInt32(1));
+    
 
 //    for (oINT32 i = 0; i < 100; ++i)
 //    {

@@ -48,6 +48,7 @@ void TestService::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPr
     oINT32 value = stmt.getInt32(0);
     if (10086 == value)
     {
+        stmt.printContext("TestService 10086");
         OsnPreparedStatement arg1;
         arg1.setInt32(0, 123);
         arg1.setInt32(1, 234);

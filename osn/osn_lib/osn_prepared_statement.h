@@ -5,6 +5,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <assert.h>
 #include "osn_type.h"
 #include "osn_singleton.h"
 
@@ -72,6 +73,9 @@ private:
     VOID_STMT_FUNC func;
 };
 
+class OsnPreparedStatement;
+typedef std::shared_ptr<OsnPreparedStatement> SHARED_PTR_STMT;
+
 class OsnPreparedStatement
 {
 public:
@@ -117,11 +121,47 @@ public:
     
 	oBOOL isEmpty() const;
 	void clear();
-	void printContext() const;
+	void printContext(const std::string &context) const;
 
 	// 返回类型，调试用
 	PreparedStatementValueType getType( const oUINT8 index ) const;
 	oUINT8 getPreparedStatementDataCount() const;
+    
+    /***************************************************************************************************/
+    /**************                          template                          *************************/
+    /***************************************************************************************************/
+
+    template<typename T>
+    const T& pushBack(const T &value)
+    {
+        if (std::is_enum<T>::value)
+        {
+            pushBack((oINT32)value);
+            return value;
+        }
+        else
+        {
+            printf("OsnPreparedStatement set error type! type = %s\n", typeid(T).name());
+            assert(0);
+        }
+        return value;
+    }
+    
+    oBOOL pushBack(oBOOL value);
+    oINT8 pushBack(oINT8 value);
+    oINT16 pushBack(oINT16 value);
+    oINT32 pushBack(oINT32 value);
+    oINT64 pushBack(oINT64 value);
+    oUINT8 pushBack(oUINT8 value);
+    oUINT16 pushBack(oUINT16 value);
+    oUINT32 pushBack(oUINT32 value);
+    oUINT64 pushBack(oUINT64 value);
+    oFLOAT32 pushBack(oFLOAT32 value);
+    oFLOAT64 pushBack(oFLOAT64 value);
+    const oINT8* pushBack(const oINT8* value);
+    const std::string& pushBack(const std::string &value);
+    const OsnPreparedStatement& pushBack(const OsnPreparedStatement &value);
+    SHARED_PTR_STMT pushBack(SHARED_PTR_STMT value);
 private:
     friend class OsnService;
     void setFunction(const oUINT8 index, const VOID_STMT_FUNC &func);
@@ -142,6 +182,5 @@ protected:
 typedef std::function<void (ID_SERVICE, ID_SESSION, const OsnPreparedStatement &)> DISPATCH_FUNC;
 typedef std::map<oINT32, DISPATCH_FUNC> MAP_DISPATCH_FUNC;
 typedef MAP_DISPATCH_FUNC::iterator MAP_DISPATCH_FUNC_ITR;
-typedef std::shared_ptr<OsnPreparedStatement> SHARED_PTR_STMT;
 
 #endif//_PreparedStatement_h__

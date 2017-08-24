@@ -186,7 +186,6 @@ oBOOL OsnService::dispatchMessage(oINT32 &nType)
             stForkInfo *pInfo = m_queForkInfo.front();
             m_queForkInfo.pop();
             ID_COROUTINE co = createCO(pInfo->func);
-            pInfo->stmt->printContext();
             suspend(co, g_Coroutine->resume(co, pInfo->stmt));
             SAFE_DELETE(pInfo);
         }
