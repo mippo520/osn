@@ -94,6 +94,7 @@ void OsnKqueue::write(oINT32 kfd, oINT32 sock, void *ud, oBOOL enable)
     if (kevent(kfd, &ke, 1, NULL, 0, NULL) == -1 || ke.flags & EV_ERROR)
     {
         // todo: check error
+        printf("OsnKqueue::write Error!\n");
     }
 }
 

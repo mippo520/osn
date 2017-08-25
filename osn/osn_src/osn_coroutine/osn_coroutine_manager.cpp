@@ -149,7 +149,7 @@ SHARED_PTR_STMT OsnCoroutineManager::resume(ID_COROUTINE unId, SHARED_PTR_STMT a
             str = backtrace_symbols(buffer, nptrs);
             for (int i = 0; i < nptrs; ++i)
             {
-                printf("%s\n", str[i]);
+                printf("OsnCoroutineManager::resume %s\n", str[i]);
             }
         }
             break;

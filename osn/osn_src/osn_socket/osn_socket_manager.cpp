@@ -287,7 +287,7 @@ oINT32 OsnSocketManager::pollResult(stSocketMessage &result, oBOOL &bMore)
                     }
                     else
                     {
-                        result.data = "Unknown error!";
+                        result.data = (oINT8*)"Unknown error!";
                     }
                     forceClose(*pSocket, result);
                     return eSockStatus_Error;
@@ -673,7 +673,7 @@ void OsnSocketManager::forwardMessage(oINT32 nType, oBOOL bPadding, stSocketMess
         }
         else
         {
-            result.data = "";
+            result.data = (oINT8*)"";
         }
     }
 
@@ -887,7 +887,7 @@ oINT32 OsnSocketManager::listenSocket(stRequestListen &request, stSocketMessage 
         result.opaque = request.opaque;
         result.id = request.id;
         result.ud = 0;
-        result.data = "reach skynet socket number limit";
+        result.data = (oINT8*)"reach skynet socket number limit";
         m_Socket[hashId(id)].setType(eSockType_Invalid);
         return eSockStatus_Error;
     }
@@ -905,7 +905,7 @@ oINT32 OsnSocketManager::startSocket(stRequestStart &request, stSocketMessage &r
     OsnSocketData &socket = m_Socket[hashId(id)];
     if (eSockType_Invalid == socket.getType() || socket.getId() != id)
     {
-        result.data = "invalid socket";
+        result.data = (oINT8*)"invalid socket";
         return eSockStatus_Error;
     }
     if (eSockType_PAccept == socket.getType() || eSockType_PListen == socket.getType())
@@ -918,13 +918,13 @@ oINT32 OsnSocketManager::startSocket(stRequestStart &request, stSocketMessage &r
         }
         socket.setType(eSockType_PAccept == socket.getType() ? eSockType_Connected : eSockType_Listen);
         socket.setOpaque(request.opaque);
-        result.data = "start";
+        result.data = (oINT8*)"start";
         return eSockStatus_Open;
     }
     if (eSockType_Connected == socket.getType())
     {
         socket.setOpaque(request.opaque);
-        result.data = "transfer";
+        result.data = (oINT8*)"transfer";
         return eSockStatus_Open;
     }
     return -1;
@@ -1077,7 +1077,7 @@ oINT32 OsnSocketManager::openSocket(stRequestOpen &request, stSocketMessage &res
     if (NULL == pSock)
     {
         ::close(nSock);
-        result.data = "reach skynet socket number limit";
+        result.data = (oINT8*)"reach skynet socket number limit";
         freeaddrinfo( ai_list );
         m_Socket[hashId(id)].setType(eSockType_Invalid);
         return eSockStatus_Error;

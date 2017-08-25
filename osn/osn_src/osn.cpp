@@ -147,7 +147,7 @@ void Osn::exit() const
     g_CorotineManager.yield(stmt);
 }
 
-void Osn::wait(ID_SERVICE unId) const
+void Osn::wait(ID_COROUTINE co) const
 {
     ID_SESSION unSession = g_ServiceManager.genId();
     SHARED_PTR_STMT stmt(new OsnPreparedStatement());
@@ -161,10 +161,10 @@ void Osn::wait(ID_SERVICE unId) const
     g_CorotineManager.yield(stmt);
 }
 
-oBOOL Osn::wakeup(ID_SERVICE unId) const
+oBOOL Osn::wakeup(ID_COROUTINE co) const
 {
     SHARED_PTR_STMT stmt(new OsnPreparedStatement());
-    stmt->pushBackUInt64(unId);
+    stmt->pushBackUInt64(co);
     stmt->pushBackInt32(OsnService::eYT_Wakeup);
     SHARED_PTR_STMT ret = g_CorotineManager.yield(stmt);
     return ret->getBool(0);

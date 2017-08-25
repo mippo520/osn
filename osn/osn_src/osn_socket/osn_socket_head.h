@@ -271,6 +271,8 @@ struct stSocketAddr
     oINT32 nPort;
 };
 
+class OsnSocketChannel;
+
 struct stChannelDesc
 {
     std::string strHost;
@@ -284,6 +286,8 @@ struct stChannelDesc
     std::queue<ID_COROUTINE> queConnecting;
     oBOOL bNodelay;
     std::vector<stSocketAddr> vecBackup;
+    VOID_STMT_FUNC response;
+    std::function<oBOOL (OsnSocketChannel*, std::string &strErr)> auth;
     
     stChannelDesc()
     : strHost("")
@@ -295,6 +299,8 @@ struct stChannelDesc
     , authCoroutine(0)
     , nSock(0)
     , bNodelay(false)
+    , response(nullptr)
+    , auth(nullptr)
     {}
 };
 

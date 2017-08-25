@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "I_osn_coroutine.h"
 #include "osn_gate_head.h"
+#include "osn_socket_channel.h"
 
 AddService_Instance(TestService2)
 
@@ -17,10 +18,7 @@ TestService2::~TestService2()
 
 void TestService2::dispatchLua(ID_SERVICE source, ID_SESSION session, const OsnPreparedStatement &stmt)
 {
-    g_Osn->exit();
-//    g_Osn->ret();
-//    g_Osn->ret();
-    return;
+
 //    printf("ret fun ========>");
 //	stmt.printContext();
 //	OsnPreparedStatement msg;
@@ -115,7 +113,7 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    }
     
     
-    ID_SERVICE addr = g_Osn->startService("TestService");
+//    ID_SERVICE addr = g_Osn->startService("TestService");
 //    OsnPreparedStatement arg1;
 //    arg1.setInt32(0, 10086);
 //    SHARED_PTR_STMT argCall1 = g_Osn->call(addr, eProtoType::ePType_User, 10086, "a", arg1, 'b', eProtoType::ePType_User);
@@ -136,28 +134,39 @@ void TestService2::start(const OsnPreparedStatement &stmt)
 //    printf("argCall3 index 1 = %d\n", argCall3->getInt32(1));
     
 
-    for (oINT32 i = 0; i < 100; ++i)
-    {
-        printf("test2 for ========> 1\n");
+//    for (oINT32 i = 0; i < 100; ++i)
+//    {
+//        printf("test2 for ========> 1\n");
+//
+//        SHARED_PTR_STMT argCall = g_Osn->call(addr, ePType_User);
+//        printf("test call back 1 %d\n", argCall->getInt32(0));
+//
+//        g_Osn->fork([=](const OsnPreparedStatement &stmt1)
+//                    {
+//                        oINT32 i = stmt1.getInt32(0);
+//                        printf("Test2 fork %d\n", i);
+//                        SHARED_PTR_STMT argCall = g_Osn->call(addr, ePType_User);
+//                        printf("test call back 2 %d\n", argCall->getInt32(0));
+//
+//                        g_Osn->fork([=](const OsnPreparedStatement &stmt2)
+//                                    {
+//                                        oINT32 i = stmt2.getInt32(0);
+//                                        printf("Test2 fork step2 %d\n", i);
+//                                    }, stmt1);
+//                    }, i);
+//        printf("test2 for ========> 2\n");
+//    }
+    
+    stChannelDesc desc;
+    desc.strHost = "127.0.0.1";
+    desc.nPort = 8888;
+    OsnSocketChannel channel(desc);
+    channel.init();
+    channel.connect(false);
 
-        SHARED_PTR_STMT argCall = g_Osn->call(addr, ePType_User);
-        printf("test call back 1 %d\n", argCall->getInt32(0));
-
-        g_Osn->fork([=](const OsnPreparedStatement &stmt1)
-                    {
-                        oINT32 i = stmt1.getInt32(0);
-                        printf("Test2 fork %d\n", i);
-                        SHARED_PTR_STMT argCall = g_Osn->call(addr, ePType_User);
-                        printf("test call back 2 %d\n", argCall->getInt32(0));
-
-                        g_Osn->fork([=](const OsnPreparedStatement &stmt2)
-                                    {
-                                        oINT32 i = stmt2.getInt32(0);
-                                        printf("Test2 fork step2 %d\n", i);
-                                    }, stmt1);
-                    }, i);
-        printf("test2 for ========> 2\n");
-    }
+    int i = 0;
+    ++i;
+    
 }
 
 void TestService2::exit()

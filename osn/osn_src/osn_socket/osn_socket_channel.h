@@ -19,17 +19,24 @@ class OsnSocketChannel
         eCS_True,
         eCS_False
     };
+    
+    const static std::string s_strSocketErr;
 public:
     OsnSocketChannel(const stChannelDesc &desc);
     ~OsnSocketChannel();
     
+    void init();
     oBOOL connect(oBOOL bOnce);
 private:
     oBOOL blockConnect(oBOOL bOnce);
     eConnectState checkConnect();
-    oBOOL tryConnect(oBOOL bOnce);
-    oBOOL connectOnce();
+    std::string tryConnect(oBOOL bOnce);
+    oBOOL connectOnce(std::string &errCode);
     oINT32 connectBackup();
+    VOID_STMT_FUNC dispatchFunction();
+    void closeChannelSocket();
+    void dispatchBySession(const OsnPreparedStatement &stmt);
+    void dispatchByOrder(const OsnPreparedStatement &stmt);
 private:
     stChannelDesc m_Desc;
     OsnSocket m_Socket;

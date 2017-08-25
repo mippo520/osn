@@ -101,7 +101,7 @@ ID_SERVICE OsnServiceManager::startService(const std::string &strServiceName, co
 
 ID_SESSION OsnServiceManager::genId()
 {
-    return sendMessage(getCurService(), getCurService(), ePType_None, 0);
+    return sendMessage(0, getCurService(), ePType_None, 0);
 }
 
 void OsnServiceManager::init()
@@ -142,7 +142,10 @@ ID_SESSION OsnServiceManager::sendMessage(ID_SERVICE unTargetId, ID_SERVICE unSo
         }
     }
 
-    pushMsg(unTargetId, unSource, type, unSession, msg);
+    if (0 != unTargetId)
+    {
+        pushMsg(unTargetId, unSource, type, unSession, msg);
+    }
     
     return unSession;
 }

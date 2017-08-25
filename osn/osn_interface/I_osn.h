@@ -68,8 +68,8 @@ public:
     virtual void redirect(ID_SERVICE addr, ID_SERVICE source, oINT32 type, ID_SESSION session, const OsnPreparedStatement &msg) const = 0;
     virtual void ret(const OsnPreparedStatement &msg) const = 0;
     virtual void exit() const = 0;
-    virtual void wait(ID_SERVICE unId = 0) const = 0;
-    virtual oBOOL wakeup(ID_SERVICE unId) const = 0;
+    virtual void wait(ID_COROUTINE co = 0) const = 0;
+    virtual oBOOL wakeup(ID_COROUTINE co) const = 0;
     virtual void registDispatchFunc(oINT32 nPType, DISPATCH_FUNC funcPtr) const = 0;
     virtual void unregistDispatchFunc(oINT32 nPType) const = 0;
     virtual ID_SERVICE self() const = 0;

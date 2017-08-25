@@ -14,9 +14,71 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "948"
-            endingLineNumber = "948"
-            landmarkName = "OsnPreparedStatement::pushBack(SHARED_PTR_STMT value)"
+            endingLineNumber = "948">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../osn/osn_src/osn.cpp"
+            timestampString = "525340251.411208"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "Osn::call(ID_SERVICE addr, oINT32 type, const OsnPreparedStatement &amp;msg)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../osn/osn_src/osn_socket/osn_socket_channel.cpp"
+            timestampString = "525345278.478205"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "OsnSocketChannel::connect(oBOOL bOnce)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnSocketChannel::connect(bool)"
+                  moduleName = "osn"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_socket/osn_socket_channel.cpp"
+                  timestampString = "525345552.634689"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "188">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OsnSocketChannel::connect(bool)"
+                  moduleName = "libTestService2.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mippo/osn/osn/osn_src/osn_socket/osn_socket_channel.cpp"
+                  timestampString = "525345552.66331"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "188">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
