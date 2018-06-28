@@ -19,6 +19,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{9305abdc-877d-4ba2-bef1-e8c1046d67d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{54bf556b-feed-4e79-8192-6152d13fbcc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\osn\osn_interface\I_osn.h">
@@ -74,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\services\TestService\test_service.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h">
+      <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

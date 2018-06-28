@@ -83,6 +83,7 @@
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h" />
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h" />
     <ClInclude Include="..\..\..\services\TestService\test_service.h" />
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +95,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../../osn/osn_interface;../../../osn/osn_lib;../../../osn/osn_src;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_socket;../../../services/$(ProjectName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../osn/osn_interface;../../../osn/osn_lib;../../../osn/osn_src;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_socket;../../../services/$(ProjectName);../../../services/gate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-fPIC -shared</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>

@@ -16,6 +16,12 @@
     <Filter Include="osn_src\osn_service">
       <UniqueIdentifier>{5bd86556-a8a0-4d8f-8347-1928ea1bcdab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="osn_src\osn_socket">
+      <UniqueIdentifier>{58dc37e2-efe9-4960-b589-b4f3f6c1cac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{ba64f61d-1e1c-4554-ad2c-030082492ee3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h">
@@ -57,14 +63,26 @@
     <ClInclude Include="..\..\..\osn\osn_interface\I_osn_socket.h">
       <Filter>osn_interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\services\gate\gate.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h">
       <Filter>osn_src\osn_service</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h">
       <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\agent\osn_agent_head.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\gate\gate.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +92,14 @@
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp">
       <Filter>osn_lib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\services\gate\gate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp">
       <Filter>osn_src\osn_service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.cpp">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\services\gate\gate.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

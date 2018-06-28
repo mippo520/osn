@@ -9,7 +9,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestService", "TestService\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestService2", "TestService2\TestService2.vcxproj", "{5434EE3B-1E90-4B74-8246-5C10CE4F2445}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gate", "gate\gate.vcxproj", "{A2F73BEA-B99D-403B-952B-904D09ECF52B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gate", "gate\gate.vcxproj", "{A2F73BEA-B99D-403B-952B-904D09ECF52B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "agent", "Agent\Agent.vcxproj", "{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,8 +71,23 @@ Global
 		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x64.Build.0 = Release|x64
 		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x86.ActiveCfg = Release|x86
 		{A2F73BEA-B99D-403B-952B-904D09ECF52B}.Release|x86.Build.0 = Release|x86
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|ARM.Build.0 = Debug|ARM
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|x64.ActiveCfg = Debug|x64
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|x64.Build.0 = Debug|x64
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|x86.ActiveCfg = Debug|x86
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Debug|x86.Build.0 = Debug|x86
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|ARM.ActiveCfg = Release|ARM
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|ARM.Build.0 = Release|ARM
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|x64.ActiveCfg = Release|x64
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|x64.Build.0 = Release|x64
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|x86.ActiveCfg = Release|x86
+		{83C30EC4-8064-459A-BB5F-A9B5F7E6600F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {175A7F94-B477-4CAD-874E-C40EA439A204}
 	EndGlobalSection
 EndGlobal

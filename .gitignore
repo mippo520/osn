@@ -2,3 +2,5 @@ DerivedData/
 bin/
 obj/
 .gitign
+*.ipch
+build/win/osn.VC.db

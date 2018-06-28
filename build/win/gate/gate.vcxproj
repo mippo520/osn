@@ -82,17 +82,22 @@
     <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h" />
     <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h" />
+    <ClInclude Include="..\..\..\services\agent\osn_agent_head.h" />
     <ClInclude Include="..\..\..\services\gate\gate.h" />
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
     <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
     <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.cpp" />
     <ClCompile Include="..\..\..\services\gate\gate.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../../osn/osn_interface;../../../osn/osn_lib;../../../osn/osn_src;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_socket;../../../services/$(ProjectName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../osn/osn_interface;../../../osn/osn_lib;../../../osn/osn_src;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_socket;../../../services/gate;../../../services/agent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-fPIC -shared</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>

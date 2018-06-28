@@ -7,6 +7,7 @@
 //
 
 #include "osn_netpack.h"
+#include <string.h>
 
 oINT32 OsnNetpack::hashFD(oINT32 fd)
 {
