@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="osn_interface">
+      <UniqueIdentifier>{e297b288-5741-42af-ae7b-1d52d2b93573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_lib">
+      <UniqueIdentifier>{ba84a1c2-f788-481f-8750-2eabaf443dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{a4fb45eb-1f50-480b-85bb-87837d9ea200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{cfa1241e-2684-4c6f-b7fb-e602ac446369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src">
+      <UniqueIdentifier>{3117a0a1-4151-4383-9485-b3aac26e82e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src\osn_socket">
+      <UniqueIdentifier>{29c01469-e753-4303-a0d2-d1259c34bca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="osn_src\osn_service">
+      <UniqueIdentifier>{455d2950-9069-41cd-a321-7c25198821a9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_coroutine.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service_factory.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_socket.h">
+      <Filter>osn_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_cache_arr_manager.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h">
+      <Filter>osn_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\agent\agent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\agent\osn_agent_head.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h">
+      <Filter>osn_src\osn_service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.h">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp">
+      <Filter>osn_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp">
+      <Filter>osn_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\services\agent\agent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp">
+      <Filter>osn_src\osn_service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.cpp">
+      <Filter>osn_src\osn_socket</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

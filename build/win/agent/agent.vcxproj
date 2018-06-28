@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{83c30ec4-8064-459a-bb5f-a9b5f7e6600f}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>Agent</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+    <ProjectName>Agent</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetExt>.so</TargetExt>
+    <OutDir>$(ProjectDir)..\bin\$(Configuration)/</OutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_coroutine.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_service_factory.h" />
+    <ClInclude Include="..\..\..\osn\osn_interface\I_osn_socket.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_arr_manager.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_cache_arr_manager.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_common.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_macro.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_prepared_statement.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_singleton.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_spin_lock.h" />
+    <ClInclude Include="..\..\..\osn\osn_lib\osn_type.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_service\osn_service_head.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket.h" />
+    <ClInclude Include="..\..\..\osn\osn_src\osn_socket\osn_socket_head.h" />
+    <ClInclude Include="..\..\..\services\agent\agent.h" />
+    <ClInclude Include="..\..\..\services\agent\osn_agent_head.h" />
+    <ClInclude Include="..\..\..\services\gate\osn_gate_head.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_prepared_statement.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_lib\osn_spin_lock.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_service\osn_service.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_netpack.cpp" />
+    <ClCompile Include="..\..\..\osn\osn_src\osn_socket\osn_socket.cpp" />
+    <ClCompile Include="..\..\..\services\agent\agent.cpp" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../../osn/osn_interface;../../../osn/osn_lib;../../../osn/osn_src;../../../osn/osn_src/osn_service;../../../osn/osn_src/osn_socket;../../../services/gate;../../../services/agent;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
